@@ -1519,18 +1519,19 @@
 </head>
 <body>
 
-    <div id="dailyPromoPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.7); z-index: 9999999; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
-        <div style="position: relative; width: 85%; max-width: 350px; text-align: center;">
-            
-            <button onclick="closeDailyPromo()" style="position: absolute; top: -15px; right: -15px; background: rgba(0,0,0,0.6); color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 10;">X</button>
+   <div id="dailyPromoPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.7); z-index: 9999999; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
+    <div style="position: relative; width: 85%; max-width: 350px; text-align: center;">
+        
+        <!-- ปุ่ม X เรียก closePopup() -->
+        <button onclick="closePopup()" style="position: absolute; top: -15px; right: -15px; background: rgba(0,0,0,0.6); color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 10;">X</button>
 
-            <img src="th1.jpeg" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);" alt="Promo">
+        <img src="th1.jpeg" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);" alt="Promo">
 
- <button onclick="closeDailyPromo()" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: white; color: #000; border: none; padding: 8px 40px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">TradingLand</button>
-
-        </div>
+        <!-- ปุ่ม TradingLand เรียก closePopup() เช่นกัน -->
+        <button onclick="closePopup()" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: white; color: #000; border: none; padding: 8px 40px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">TradingLand</button>
 
     </div>
+</div>
     
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
@@ -2558,19 +2559,27 @@ setInterval(initMarketPrices, 2000);
     renderMarket();
     updateWalletUI();
     
-    // ✅ วางตรงนี้ (หลัง updateWalletUI, ก่อน switchTab)
     const acc = getMyAccount();
     if (acc && !acc.initialBonus) {
         acc.initialBonus = true;
         acc.thb = 1000000;
         saveHistory('deposit', 'เงินคืนจากที่เดิม', '+43,890 THB', true);
-        showCustomPopup('🎉 ยินดีต้อนรับกลับ!', 'คุณได้รับเงินคืนจากที่เดิม 43,890 THB', 'home', 'gold');
+        
+        // แสดง popup เงินคืน
+        showCustomPopup('🎉 ยินดีต้อนรับกลับ!', 'คุณได้รับเงินคืนจากที่เดิม 43,890 THB', '', 'gold');
+        
+        // ใช้ setTimeout รอให้กดปิด popup (กะเวลาประมาณ 3 วินาที)
+        setTimeout(() => {
+            document.getElementById('dailyPromoPopup').style.display = 'flex';
+        }, 3000);
+    } else {
+        // ถ้าเคยได้โบนัสแล้ว ให้ขึ้นโฆษณาเลย
+        setTimeout(() => {
+            document.getElementById('dailyPromoPopup').style.display = 'flex';
+        }, 800);
     }
     
     switchTab('home');
-    
-    // 👇 เติมคำสั่งเรียกโปรโมชั่นตรงนี้ (หน่วง 0.8 วินาทีให้หน้าหลักโหลดเสร็จก่อน)
-    setTimeout(checkDailyPromo, 800);
 }
 
         function switchTab(tab) {
