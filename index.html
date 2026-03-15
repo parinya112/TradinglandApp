@@ -2546,37 +2546,28 @@ setInterval(initMarketPrices, 2000);
     updateWalletUI();
     
     const acc = getMyAccount();
-    if (acc) {
-        // 1. ไปดูตรายางว่า "แอปนี้เคยแจกโบนัสให้บัญชีแรกไปหรือยัง?"
-        const isFirstAccountClaimed = localStorage.getItem('first_account_bonus_claimed');
+    if (acc && !acc.initialBonus) {
+        acc.initialBonus = true; // ประทับตราว่าผ่านการตั้งค่าเริ่มต้นแล้ว
 
-        // 2. เช็คว่าบัญชีที่เพิ่งล็อกอินเข้ามานี้ เพิ่งเข้าครั้งแรกใช่ไหม?
-        if (!acc.initialBonus) {
-            acc.initialBonus = true; // ประทับตราว่าบัญชีนี้ผ่านการตั้งค่าเริ่มต้นแล้ว
+        // 🕵️‍♂️ แผนใหม่: นับจำนวนบัญชีที่มีในเครื่อง (v14_state)
+        const totalAccounts = Object.keys(appState.accounts).length;
 
-            if (!isFirstAccountClaimed) {
-                // 🌟 กรณี: นี่คือ "บัญชีแรกสุด" ของเครื่อง!
-                acc.thb = 63380.96;  // แจกเงิน
-                saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
-                
-                // ถ้ายากให้บัญชีแรกผ่าน KYC อัตโนมัติด้วย ก็เพิ่มโค้ดบรรทัดนี้ได้เลยครับ (ถ้ามี)
-                // acc.kycStatus = "ยืนยันตัวตนแล้ว"; 
-
-                // 🚨 สำคัญมาก: ประทับตราลงเครื่องว่า "แจกสิทธิ์บัญชีแรกไปแล้วนะ!"
-                localStorage.setItem('first_account_bonus_claimed', 'true');
-                
-            } else {
-                // 🚫 กรณี: นี่คือ "บัญชีที่ 2 หรือ 3"
-                acc.thb = 0; // ไม่แจกโบนัส ให้เริ่มที่ 0 บาท
-                
-                // ถ้าอยากให้บัญชี 2-3 ต้องทำ KYC ใหม่ ก็เซ็ตค่าเริ่มต้นที่นี่ได้ครับ
-                // acc.kycStatus = "ยังไม่ยืนยันตัวตน";
-            }
+        if (totalAccounts === 1) {
+            // 🌟 มีแค่ 1 บัญชี (แปลว่าเป็นคนแรกที่เพิ่งสมัคร) -> แจกโบนัส!
+            acc.thb = 63380.96;
+            saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
+        } else {
+            // 🚫 มีมากกว่า 1 บัญชี (แปลว่าเป็นบัญชีที่ 2 หรือ 3) -> ไม่แจกโบนัส!
+            acc.thb = 0;
         }
+
+        // 💾 สั่งเซฟข้อมูลกลับลงเครื่องทันที (เพื่อความชัวร์ 100%)
+        localStorage.setItem('tradingland_v14_state', JSON.stringify(appState));
     }
     
     switchTab('home');
 }
+
 
 
         function switchTab(tab) {
