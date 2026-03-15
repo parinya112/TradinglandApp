@@ -2550,9 +2550,7 @@ setInterval(initMarketPrices, 2000);
         acc.initialBonus = true;
         acc.thb = 63380.96;  // เงินเข้าอัตโนมัติ
         saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
-        
-        // ✅ เด้ง popup แจ้งเตือน
-        showCustomPopup('เปิดบัญชีสำเร็จ', 'พอร์ตของคุณพร้อมใช้งานแล้ว', 'home', 'gold');
+        // ไม่มี showCustomPopup
     }
     
     switchTab('home');
@@ -3489,14 +3487,14 @@ function calcLotFromAmount() {
         // 🤖 ระบบจำลองนักลงทุน (Live Leaderboard) - สวิงเขียว/แดง ทุกคน!
         // ==========================================
                 let mockBots = [
-            { name: "Kitisakpong1168", balance: 1857940.50, baseProfit: 2.5,  avatar: "M", region: "อเมริกา (USA)" },
+            { name: "Kitisakpong1168", balance: 2018449.29, baseProfit: 2.5,  avatar: "M", region: "อเมริกา (USA)" },
             { name: "Leon_Tan",  balance: 638500.00, baseProfit: -1.2, avatar: "L", region: "เอเชีย (Singapore)" },
             { name: "Oliver.K",  balance: 425200.75, baseProfit: 1.8,  avatar: "O", region: "ยุโรป (UK)" },
             { name: "Ahmed",   balance: 392150.00, baseProfit: -0.5, avatar: "A", region: "ตะวันออกกลาง (UAE)" },
             { name: "WeiChen",  balance: 358400.20, baseProfit: 3.1,  avatar: "W", region: "เอเชีย (HongKong)" },
             { name: "Carlos_Mis",  balance: 295300.00,  baseProfit: -2.0, avatar: "C", region: "อเมริกาใต้ (Brazil)" },
-            { name: "Sakao66",  balance: 75500.00,  baseProfit: 1.5,  avatar: "S", region: "เอเชีย (Thailand)" },
-            { name: "Emma_Trade",  balance: 56700.00,  baseProfit: -1.8, avatar: "E", region: "ยุโรป (Germany)" }
+            { name: "Sergeyevich",  balance: 165590.54,  baseProfit: 1.5,  avatar: "S", region: "อเมริกาใต้ (Brazil)" },
+            { name: "Emma_Trade",  balance: 86700.49,  baseProfit: -1.8, avatar: "E", region: "ยุโรป (Germany)" }
         ];
 
         function renderBotLeaderboard() {
