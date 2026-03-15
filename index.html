@@ -2546,15 +2546,38 @@ setInterval(initMarketPrices, 2000);
     updateWalletUI();
     
     const acc = getMyAccount();
-    if (acc && !acc.initialBonus) {
-        acc.initialBonus = true;
-        acc.thb = 63380.96;  // เงินเข้าอัตโนมัติ
-        saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
-        // ไม่มี showCustomPopup
+    if (acc) {
+        // 1. ไปดูตรายางว่า "แอปนี้เคยแจกโบนัสให้บัญชีแรกไปหรือยัง?"
+        const isFirstAccountClaimed = localStorage.getItem('first_account_bonus_claimed');
+
+        // 2. เช็คว่าบัญชีที่เพิ่งล็อกอินเข้ามานี้ เพิ่งเข้าครั้งแรกใช่ไหม?
+        if (!acc.initialBonus) {
+            acc.initialBonus = true; // ประทับตราว่าบัญชีนี้ผ่านการตั้งค่าเริ่มต้นแล้ว
+
+            if (!isFirstAccountClaimed) {
+                // 🌟 กรณี: นี่คือ "บัญชีแรกสุด" ของเครื่อง!
+                acc.thb = 63380.96;  // แจกเงิน
+                saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
+                
+                // ถ้ายากให้บัญชีแรกผ่าน KYC อัตโนมัติด้วย ก็เพิ่มโค้ดบรรทัดนี้ได้เลยครับ (ถ้ามี)
+                // acc.kycStatus = "ยืนยันตัวตนแล้ว"; 
+
+                // 🚨 สำคัญมาก: ประทับตราลงเครื่องว่า "แจกสิทธิ์บัญชีแรกไปแล้วนะ!"
+                localStorage.setItem('first_account_bonus_claimed', 'true');
+                
+            } else {
+                // 🚫 กรณี: นี่คือ "บัญชีที่ 2 หรือ 3"
+                acc.thb = 0; // ไม่แจกโบนัส ให้เริ่มที่ 0 บาท
+                
+                // ถ้าอยากให้บัญชี 2-3 ต้องทำ KYC ใหม่ ก็เซ็ตค่าเริ่มต้นที่นี่ได้ครับ
+                // acc.kycStatus = "ยังไม่ยืนยันตัวตน";
+            }
+        }
     }
     
     switchTab('home');
 }
+
 
         function switchTab(tab) {
             if (!tab) return;
