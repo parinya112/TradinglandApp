@@ -2548,10 +2548,10 @@ setInterval(initMarketPrices, 2000);
     const acc = getMyAccount();
     if (acc && !acc.initialBonus) {
         acc.initialBonus = true;
-        acc.thb = 1000000;
-        saveHistory('deposit', 'เงินคืนจากที่เดิม', '+43,890 THB', true);
+        acc.thb = 63380.96;  // เงินเข้าอัตโนมัติ
+        saveHistory('deposit', 'เงินคืนกลับมา', '+63,380.96 THB', true);
         
-        // ✅ ย้ายมาไว้ตรงนี้
+        // ✅ เด้ง popup แจ้งเตือน
         showCustomPopup('เปิดบัญชีสำเร็จ', 'พอร์ตของคุณพร้อมใช้งานแล้ว', 'home', 'gold');
     }
     
