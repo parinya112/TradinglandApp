@@ -1,0 +1,3590 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+     <!-- PWA Meta Tags -->
+    <link rel="manifest" href="./manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradingLand Pro">
+<link rel="apple-touch-icon" href="./icon-512x512.png">
+<meta name="theme-color" content="#F0B90B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="TradingLand Pro">
+
+    <title>TradingLand Pro</title>
+    <style>
+        :root {
+            --bg-color: #0B0E11;
+            --card-bg: #1E222D;
+            --text-main: #FFFFFF;
+            --text-muted: #848E9C;
+            --green: #0ECB81;
+            --red: #F6465D;
+            --gold: #F0B90B;
+            --border-color: #2B3139;
+            --nav-bg: #181A20;
+            --input-bg: #2B3139;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .header {
+            text-align: center;
+            padding: 16px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-spacer { width: 30px; }
+        .container { padding: 15px; }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .text-green { color: var(--green) !important; }
+        .text-red { color: var(--red) !important; }
+        .text-gold { color: var(--gold) !important; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+        #accountListView {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .acc-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .acc-card:active {
+            transform: scale(0.98);
+            border-color: var(--gold);
+        }
+
+        .acc-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--input-bg);
+            color: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 1px solid var(--gold);
+        }
+
+        .acc-info { flex: 1; margin-left: 15px; }
+        .acc-name { font-size: 16px; font-weight: bold; color: white; }
+        .acc-uid { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .btn-new-acc {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--text-muted);
+            background: transparent;
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #pinLockView {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 50px;
+            box-sizing: border-box;
+        }
+
+        .pin-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .pin-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .pin-dots {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            transition: 0.2s;
+        }
+
+        .pin-dot.filled {
+            background-color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .pin-dot.error {
+            background-color: var(--red);
+            border-color: var(--red);
+        }
+
+        .pin-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px 30px;
+        }
+
+        .pin-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: white;
+            font-size: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .pin-btn:active {
+            background-color: var(--card-bg);
+            transform: scale(0.95);
+        }
+
+        .pin-btn.empty {
+            border: none;
+            background: transparent;
+            cursor: default;
+        }
+
+        #kycView {
+            display: none;
+            padding: 20px;
+            padding-bottom: 50px;
+        }
+
+        .step-indicator {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .announcement-bar {
+            background-color: rgba(240, 185, 11, 0.1);
+            color: var(--gold);
+            padding: 10px 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .marquee {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .home-banner {
+            background: linear-gradient(135deg, #1E222D 0%, #2B3139 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .home-banner h2 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: var(--gold);
+        }
+
+        .home-banner p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .quick-menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .quick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .quick-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .quick-btn:active .quick-icon {
+            border-color: var(--gold);
+            background-color: #181A20;
+        }
+
+        .quick-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .top-gainers-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+        }
+
+        .gainer-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 130px;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .gainer-card:active { background-color: #181A20; }
+
+        .gainer-card .sym {
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .gainer-card .pct {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .gainer-card .prc {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .wallet-balance {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: white;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .btn-action {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            cursor: pointer;
+            transition: 0.2s;
+            gap: 8px;
+        }
+
+        .btn-action:active { background-color: #181A20; }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-left: 5px;
+            color: var(--text-main);
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .asset-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .asset-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid transparent;
+        }
+
+        .asset-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .asset-name {
+            font-weight: bold;
+            font-size: 15px;
+            color: white;
+        }
+
+        .asset-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .asset-right { text-align: right; }
+
+        .asset-amount {
+            font-weight: bold;
+            font-size: 15px;
+            color: white;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .asset-value {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .search-box {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+            margin-left: 10px;
+            font-size: 15px;
+        }
+
+        .market-sub-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            scrollbar-width: none;
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .market-sub-tabs::-webkit-scrollbar { display: none; }
+
+        .sub-tab {
+            padding: 8px 14px;
+            cursor: pointer;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+
+        .sub-tab.active {
+            color: var(--bg-color);
+            background: var(--gold);
+            font-weight: bold;
+            border-color: var(--gold);
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding: 0 5px;
+        }
+
+        .market-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 5px;
+            border-bottom: 1px solid #1E222D;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .market-list-item:active {
+            background-color: #181A20;
+            border-radius: 8px;
+        }
+
+        .col-coin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 40%;
+        }
+
+        .col-chart {
+            width: 25%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .col-price {
+            width: 35%;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .coin-symbol {
+            font-weight: bold;
+            font-size: 15px;
+            color: white;
+        }
+
+        .coin-vol {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .price-val {
+            font-weight: bold;
+            font-size: 15px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .price-pct {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .coin-logo-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: contain;
+            background-color: white;
+            padding: 2px;
+        }
+
+        .pro-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pro-header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pro-back {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pro-title-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pro-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .pro-subtitle {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .pro-balance {
+            font-size: 12px;
+            color: white;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .pro-balance span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 10px;
+            font-weight: normal;
+        }
+
+        .pro-price-panel {
+            padding: 15px;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pro-current-price {
+            font-size: 36px;
+            font-weight: bold;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        .pro-price-change {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .pro-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 20px;
+            font-size: 11px;
+        }
+
+        .pro-stat-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .pro-stat-label { color: var(--text-muted); }
+        .pro-stat-val { color: white; font-weight: bold; font-variant-numeric: tabular-nums; }
+
+        .pro-chart-area {
+            width: 100%;
+            height: 380px;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pro-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            box-sizing: border-box;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+            gap: 10px;
+        }
+
+        .pro-btn-buy, .pro-btn-sell {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 6px;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pro-btn-buy:active, .pro-btn-sell:active { opacity: 0.8; }
+        .pro-btn-buy { background-color: var(--green); }
+        .pro-btn-sell { background-color: var(--red); }
+        .pro-btn-price { font-size: 12px; font-weight: normal; margin-top: 2px; }
+
+        .order-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-type-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .order-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-muted);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .order-tab.active.buy { background-color: var(--green); color: white; }
+        .order-tab.active.sell { background-color: var(--red); color: white; }
+
+        .stepper-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--input-bg);
+            border-radius: 8px;
+            padding: 5px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stepper-btn {
+            background: var(--card-bg);
+            border: none;
+            color: white;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stepper-input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            outline: none;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .input-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .margin-info-box {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.02);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .margin-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .margin-item.right { text-align: right; }
+        .m-label { font-size: 11px; color: var(--text-muted); }
+        .m-val { font-size: 14px; color: white; font-weight: bold; font-variant-numeric: tabular-nums; }
+
+        .btn-submit-order {
+            width: 90%;
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            position: fixed;
+            bottom: 15px;
+            left: 5%;
+            z-index: 100;
+        }
+
+        .input-group { margin-bottom: 20px; }
+
+        .input-group label {
+            display: block;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .input-group input:focus, .input-group select:focus { border-color: var(--gold); }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-gold { background-color: var(--gold); color: var(--bg-color); }
+        .btn-red { background-color: var(--red); color: white; }
+        .btn-gray { background-color: var(--input-bg); color: white; border: 1px solid var(--border-color); }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left-color: var(--gold);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .timer {
+            font-size: 40px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            margin: 20px 0;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-header {
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: var(--input-bg);
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold);
+            font-size: 32px;
+            font-weight: bold;
+            border: 2px solid var(--gold);
+        }
+
+        .profile-name { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .profile-uid { font-size: 12px; color: var(--text-muted); margin-bottom: 15px; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background-color: rgba(14, 203, 129, 0.1);
+            color: var(--green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .menu-list { margin-top: 15px; }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-label { font-size: 14px; color: white; }
+        .menu-value { font-size: 13px; color: var(--text-muted); }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 16px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            transform: scale(0.8);
+            transition: 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px auto;
+        }
+
+        .success-icon.gold { background-color: rgba(240, 185, 11, 0.1); color: var(--gold); }
+        .success-icon.green { background-color: rgba(14, 203, 129, 0.1); color: var(--green); }
+        .success-icon.red { background-color: rgba(246, 70, 93, 0.1); color: var(--red); }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .nav-item.active { color: var(--gold); }
+
+        .bank-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed var(--gold);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .deposit-note {
+            background: rgba(14,203,129,0.08);
+            border-left: 3px solid var(--green);
+            padding: 10px;
+            font-size: 12px;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .summary-box {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .expired-box {
+            background: rgba(246,70,93,0.08);
+            border-left: 3px solid var(--red);
+            padding: 10px;
+            font-size: 12px;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design - รองรับทุกหน้าจอ */
+        :root {
+            --container-padding: 15px;
+            --header-height: 60px;
+            --nav-height: 70px;
+        }
+
+        /* Mobile First Design */
+        html {
+            font-size: 16px;
+        }
+
+        /* Extra Small Devices (iPhone SE, 320px - 374px) */
+        @media screen and (max-width: 374px) {
+            html {
+                font-size: 14px;
+            }
+            
+            .header {
+                padding: 12px;
+                font-size: 18px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .wallet-balance {
+                font-size: 32px;
+            }
+            
+            .quick-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .quick-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .quick-label {
+                font-size: 11px;
+            }
+            
+            .gainer-card {
+                min-width: 110px;
+                padding: 12px;
+            }
+            
+            .gainer-card .sym {
+                font-size: 13px;
+            }
+            
+            .gainer-card .pct {
+                font-size: 14px;
+            }
+            
+            .gainer-card .prc {
+                font-size: 11px;
+            }
+            
+            .pin-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            
+            .pro-current-price {
+                font-size: 28px;
+            }
+            
+            .pro-stats-grid {
+                gap: 5px 15px;
+            }
+        }
+
+        /* Small Devices (375px - 424px) */
+        @media screen and (min-width: 375px) and (max-width: 424px) {
+            html {
+                font-size: 15px;
+            }
+            
+            .gainer-card {
+                min-width: 120px;
+            }
+            
+            .pin-btn {
+                width: 65px;
+                height: 65px;
+            }
+        }
+
+        /* Medium Devices (425px - 767px) */
+        @media screen and (min-width: 425px) and (max-width: 767px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .gainer-card {
+                min-width: 140px;
+            }
+            
+            .market-list-item {
+                padding: 16px 10px;
+            }
+        }
+
+        /* Tablets (768px - 1023px) */
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+            html {
+                font-size: 16px;
+            }
+            
+            .container {
+                max-width: 720px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            
+            .quick-menu {
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .top-gainers-container {
+                justify-content: center;
+            }
+            
+            .gainer-card {
+                min-width: 160px;
+            }
+            
+            .market-list-item {
+                max-width: 700px;
+                margin: 0 auto;
+            }
+            
+            .pin-pad {
+                gap: 30px;
+            }
+            
+            .pin-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+            
+            .pro-chart-area {
+                height: 450px;
+            }
+        }
+
+        /* Laptops / Desktops (1024px - 1279px) */
+        @media screen and (min-width: 1024px) and (max-width: 1279px) {
+            body {
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+            
+            .container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            
+            .quick-menu {
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .top-gainers-container {
+                justify-content: center;
+            }
+            
+            .gainer-card {
+                min-width: 180px;
+            }
+            
+            .market-list-item {
+                max-width: 900px;
+                margin: 0 auto;
+            }
+            
+            .pin-pad {
+                gap: 40px;
+            }
+            
+            .pin-btn {
+                width: 90px;
+                height: 90px;
+                font-size: 36px;
+            }
+            
+            .pro-chart-area {
+                height: 500px;
+            }
+        }
+
+        /* Large Desktops (1280px+) */
+        @media screen and (min-width: 1280px) {
+            body {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            
+            .quick-menu {
+                max-width: 700px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .top-gainers-container {
+                justify-content: center;
+            }
+            
+            .gainer-card {
+                min-width: 200px;
+                padding: 20px;
+            }
+            
+            .gainer-card .sym {
+                font-size: 16px;
+            }
+            
+            .gainer-card .pct {
+                font-size: 18px;
+            }
+            
+            .market-list-item {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 18px 15px;
+            }
+            
+            .pin-pad {
+                gap: 50px;
+            }
+            
+            .pin-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+            
+            .pro-chart-area {
+                height: 550px;
+            }
+        }
+
+        /* Landscape Mode */
+        @media screen and (orientation: landscape) and (max-height: 500px) {
+            .bottom-nav {
+                position: relative;
+                margin-top: 20px;
+            }
+            
+            body {
+                padding-bottom: 0;
+            }
+            
+            .pin-pad {
+                gap: 15px;
+            }
+            
+            .pin-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .pin-dots {
+                margin-bottom: 20px;
+            }
+            
+            .profile-header {
+                padding: 20px 20px 10px 20px;
+            }
+            
+            .profile-avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+
+        /* Foldable / Samsung Fold */
+        @media screen and (max-width: 280px) {
+            html {
+                font-size: 12px;
+            }
+            
+            .container {
+                padding: 8px;
+            }
+            
+            .quick-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .quick-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .quick-label {
+                font-size: 10px;
+            }
+            
+            .gainer-card {
+                min-width: 90px;
+                padding: 10px;
+            }
+            
+            .pin-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .coin-logo-img {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .coin-symbol {
+                font-size: 13px;
+            }
+        }
+
+        /* High DPI / Retina Displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .coin-logo-img {
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Dark Mode Preference */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0B0E11;
+                --card-bg: #1E222D;
+                --border-color: #2B3139;
+            }
+        }
+
+        /* Touch Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .btn-action:active,
+            .quick-btn:active .quick-icon,
+            .market-list-item:active,
+            .gainer-card:active {
+                transform: scale(0.97);
+                transition: transform 0.1s;
+            }
+            
+            .nav-item:active {
+                color: var(--gold);
+            }
+        }
+
+        /* Smooth Scrolling */
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        /* Safe Area Insets (iPhone X+) */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+            
+            .bottom-nav {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            
+            .pro-bottom-bar {
+                padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Fix for notched phones */
+        @supports (padding: constant(safe-area-inset-top)) {
+            body {
+                padding-top: constant(safe-area-inset-top);
+                padding-bottom: constant(safe-area-inset-bottom);
+            }
+        }
+
+/* ✅ ส่วนควบคุมกล่องครอบโลโก้ - ปรับให้จัดกึ่งกลางสวยงาม */
+.animated-logo-container {
+    display: inline-block; /* เพื่อให้กล่องหดพอดีกับขนาดรูป */
+    position: relative;
+    /* ถ้าต้องการให้จัดกึ่งกลางในคอนเทนเนอร์หลัก ให้ปลดคอมเม้นต์ด้านล่าง */
+    /* left: 50%;
+    transform: translateX(-50%); */
+}
+
+/* ✅ ส่วนควบคุมรูปภาพ - 🔥 ปรับขนาดและใส่เอฟเฟกต์กระพริบ 🔥 */
+.animated-logo-img {
+    display: block;
+    height: 90px; /* 🚀 ขนาดโลโก้ตามต้องการ */
+    width: auto;  /* ให้ความกว้างปรับตามสัดส่วน */
+    
+    /* 🚀 สั่งให้เล่นอนิเมชั่นกระพริบเรืองแสง */
+    /* ชื่ออนิเมชั่น: pulsateGlow, เวลา: 2 วินาที, วนลูปไม่รู้จบ, จังหวะแบบนุ่มนวลสม่ำเสมอ */
+    animation: pulsateGlow 2s infinite ease-in-out;
+    
+    /* ป้องกันการแตกของภาพเวลาทำอนิเมชั่นในบางเบราว์เซอร์ */
+    will-change: filter;
+}
+
+/* 🎬 กำหนดขั้นตอนของอนิเมชั่นกระพริบเรืองแสง (Keyframes) */
+@keyframes pulsateGlow {
+    0%, 100% {
+        /* 🌑 จุดเริ่มต้นและจุดจบ: ไม่มีแสงเรืองรอง */
+        filter: drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+    }
+    50% {
+        /* 🌟 จุดกึ่งกลาง (1 วินาที): แสงเรืองรองสว่างที่สุด */
+        /* drop-shadow(x-offset y-offset blur-radius color) */
+        /* ปรับสีแสงได้ตรง rgba(255, 255, 255, 0.8) -> สีขาว ความเข้ม 0.8 */
+        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    }
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div id="dailyPromoPopup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.7); z-index: 9999999; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
+        <div style="position: relative; width: 85%; max-width: 350px; text-align: center;">
+            
+            <button onclick="closeDailyPromo()" style="position: absolute; top: -15px; right: -15px; background: rgba(0,0,0,0.6); color: white; border: 2px solid white; border-radius: 50%; width: 35px; height: 35px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 10;">X</button>
+
+            <img src="th1.jpeg" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);" alt="Promo">
+
+ <button onclick="closeDailyPromo()" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: white; color: #000; border: none; padding: 8px 40px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">TradingLand</button>
+
+        </div>
+
+    </div>
+    
+<!-- Splash Ad -->
+    <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
+        
+        <button onclick="closeSplashAd()" style="position: absolute; top: 50px; right: 20px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid #ffd700; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; z-index: 10;">
+            ข้าม (<span id="adCountdown">5</span>s)
+        </button>
+
+        <img id="splashDynamicImg" src="splash-gold.jpg" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9; position: absolute; top: 0; left: 0; z-index: 1;">
+        
+        <div style="position: absolute; bottom: 15%; text-align: center; width: 100%; padding: 0 20px; box-sizing: border-box; z-index: 5;">
+            <h1 id="splashDynamicTitle" style="color: #ffd700; margin: 0; font-size: 28px; text-shadow: 2px 2px 6px #000; font-weight: bold; letter-spacing: 1px;">ยกระดับการลงทุนของคุณ</h1>
+            
+            <p id="splashDynamicDesc" style="color: #ffffff; text-shadow: 1px 1px 4px #000; font-size: 14px; margin-top: 8px;">แพลตฟอร์มเทรดสินทรัพย์ระดับโลกที่นักลงทุนมืออาชีพเลือก</p>
+        </div>
+    </div>
+ <script>
+        // 1. คลังโปรโมชั่น
+        const splashPromos = [
+            {
+                img: "splash-gold.jpg",
+                title: "",
+                desc: ""
+            },
+            {
+                img: "promo-bonus.jpg",
+                title: "",
+                desc: ""
+            },
+            {
+                img: "promo-vip.jpg",
+                title: "",
+                desc: ""
+            }
+        ];
+
+function randomizeSplash(){
+
+const img = document.getElementById("splashDynamicImg");
+const title = document.getElementById("splashDynamicTitle");
+const desc = document.getElementById("splashDynamicDesc");
+
+if(!img || !title || !desc) return;
+
+const randomIndex = Math.floor(Math.random()*splashPromos.length);
+const selected = splashPromos[randomIndex];
+
+img.src = selected.img;
+title.innerText = selected.title;
+desc.innerText = selected.desc;
+
+}
+
+randomizeSplash();
+    
+// สคริปต์ควบคุมโฆษณา
+    let timeLeft = 5; // ตั้งเวลาแสดงโฆษณา (วินาที)
+    const countdownEl = document.getElementById('adCountdown');
+    const splashAdEl = document.getElementById('splashAd');
+
+    // ฟังก์ชันปิดโฆษณา
+    function closeSplashAd() {
+        splashAdEl.style.display = 'none';
+    }
+
+    // นับเวลาถอยหลัง
+    const adTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(adTimer);
+            closeSplashAd(); // พอหมดเวลา ให้ปิดโฆษณาอัตโนมัติ
+        }
+    }, 1000);
+</script>
+
+
+    <svg style="display:none;">
+        <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></symbol>
+        ```
+
+ก๊อปปี้ไปแทรกแบบนี้ได้เลยครับ! ปลอดภัย 100% ไม่กระทบระบบล็อกอินหรือระบบกราฟหน้าอื่นๆ แน่นอน พอเซฟแล้วอัปโหลดขึ้น Netlify เปิดแอปมาปุ๊บ หน้าขาวๆ น่าเบื่อจะหายไป แล้วกลายเป็นหน้าโฆษณาพรีเมียมๆ ดึงดูดลูกค้าแทนทันทีครับ! 🚀
+
+ลองวางแล้วไปเทสต์ดูเลยครับว่ามันเด้งขึ้นมานับถอยหลัง 5 วิแบบสวยๆ ไหม! 😎
+
+    <svg style="display:none;">
+        <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18" stroke-width="3" stroke-linecap="round"></line><line x1="6" y1="6" x2="18" y2="18" stroke-width="3" stroke-linecap="round"></line></symbol>
+        <symbol id="icon-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"></line><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"></line></symbol>
+        <symbol id="icon-deposit" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19" stroke-width="2" stroke-linecap="round"></line><polyline points="19 12 12 19 5 12" stroke-width="2" stroke-linecap="round"></polyline></symbol>
+        <symbol id="icon-withdraw" viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5" stroke-width="2" stroke-linecap="round"></line><polyline points="5 12 12 5 19 12" stroke-width="2" stroke-linecap="round"></polyline></symbol>
+        <symbol id="icon-history" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"></circle><polyline points="12 6 12 12 16 14" stroke-width="2" stroke-linecap="round"></polyline></symbol>
+        <symbol id="icon-fire" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></symbol>
+        <symbol id="icon-back" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19" stroke-width="2"></line><line x1="5" y1="12" x2="19" y2="12" stroke-width="2"></line></symbol>
+        <symbol id="icon-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" stroke-width="2"></line></symbol>
+        <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-width="2"></path></symbol>
+    </svg>
+
+        <div id="accountListView" style="display:none;">
+        
+        <div style="text-align: center; padding-top: 20px; margin-bottom: 5px;">
+            <div class="animated-logo-container">
+                <img src="logo.png" class="animated-logo-img" alt="TradingLand Logo">
+            </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 40px; text-align:center;">เลือกบัญชีเพื่อเข้าสู่ระบบ</p>
+
+        <div id="accountListContainer"></div>
+        <button class="btn-new-acc" id="btnCreateNewAcc" onclick="startNewAccount()">
+            <svg width="20" height="20"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (Max 3)
+        </button>
+    </div>
+
+    <div id="pinLockView" style="display:none;">
+        <div style="position:absolute; top:20px; left:20px; font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="initAppSecurity()">
+            <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
+        </div>
+        <svg width="40" height="40" stroke="var(--gold)" style="margin-bottom: 20px;"><use href="#icon-lock"></use></svg>
+        <div class="pin-title" id="pinTitleText">กรุณาระบุรหัส PIN</div>
+        <div class="pin-subtitle" id="pinSubText">เพื่อเข้าสู่บัญชี</div>
+        <div class="pin-dots">
+            <div class="pin-dot" id="dot1"></div><div class="pin-dot" id="dot2"></div><div class="pin-dot" id="dot3"></div>
+            <div class="pin-dot" id="dot4"></div><div class="pin-dot" id="dot5"></div><div class="pin-dot" id="dot6"></div>
+        </div>
+        <div class="pin-pad">
+            <button class="pin-btn" onclick="pressPin('1')">1</button><button class="pin-btn" onclick="pressPin('2')">2</button><button class="pin-btn" onclick="pressPin('3')">3</button>
+            <button class="pin-btn" onclick="pressPin('4')">4</button><button class="pin-btn" onclick="pressPin('5')">5</button><button class="pin-btn" onclick="pressPin('6')">6</button>
+            <button class="pin-btn" onclick="pressPin('7')">7</button><button class="pin-btn" onclick="pressPin('8')">8</button><button class="pin-btn" onclick="pressPin('9')">9</button>
+            <button class="pin-btn empty"></button><button class="pin-btn" onclick="pressPin('0')">0</button>
+            <button class="pin-btn empty" onclick="deletePin()">
+                <svg width="24" height="24" stroke="white" stroke-width="2" fill="none"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="kycView" style="display:none; padding-top:40px;">
+        <div style="font-size:14px; color:var(--text-muted); cursor:pointer; margin-bottom:20px; display:flex; align-items:center;" onclick="initAppSecurity()">
+            <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> ยกเลิก
+        </div>
+        <h2 style="color: var(--gold); margin-bottom: 5px;">เปิดบัญชีลงทุน (KYC)</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 30px;">กรุณากรอกข้อมูลตามความเป็นจริงเพื่อความปลอดภัยของสินทรัพย์</p>
+        <div class="card">
+            <span class="step-indicator">ข้อมูลบัญชี</span>
+            <div class="input-group"><label>ชื่อบัญชี (ตั้งเพื่อจำง่าย)</label><input type="text" id="kycAccName" placeholder="เช่น พอร์ตหลัก, พอร์ตเทรดสั้น"></div>
+
+            <span class="step-indicator" style="margin-top:20px;">ข้อมูลยืนยันตัวตน</span>
+            <div class="input-group"><label>ชื่อ-นามสกุลจริง</label><input type="text" id="kycRealName" placeholder="ชื่อ นามสกุล"></div>
+            <div class="input-group"><label>เลขประจำตัวประชาชน (13 หลัก)</label><input type="number" id="kycId" placeholder="1-xxxx-xxxxx-xx-x"></div>
+            <div class="input-group"><label>เบอร์โทรศัพท์มือถือ</label><input type="number" id="kycPhone" placeholder="08x-xxx-xxxx"></div>
+
+            <span class="step-indicator" style="margin-top:20px;">ข้อมูลธนาคารสำหรับถอนเงิน</span>
+            <div class="input-group">
+                <label>ธนาคาร</label>
+                <select id="kycBankName">
+                    <option value="">เลือกธนาคาร</option>
+                    <option value="KBANK">กสิกรไทย (KBANK)</option>
+                    <option value="SCB">ไทยพาณิชย์ (SCB)</option>
+                    <option value="KTB">กรุงไทย (KTB)</option>
+                    <option value="BBL">กรุงเทพ (BBL)</option>
+                    <option value="BAY">กรุงศรีอยุธยา (BAY)</option>
+                    <option value="TTB">ทหารไทยธนชาต (TTB)</option>
+                    <option value="GSB">ออมสิน (GSB)</option>
+                    <option value="BAAC">ธ.ก.ส. (BAAC)</option>
+                    <option value="CIMB">ซีไอเอ็มบี ไทย (CIMB)</option>
+                    <option value="UOB">ยูโอบี (UOB)</option>
+                    <option value="LHFG">แลนด์ แอนด์ เฮ้าส์ (LH Bank)</option>
+                    <option value="ICBC">ไอซีบีซี ไทย (ICBC)</option>
+                    <option value="KKP">เกียรตินาคินภัทร (KKP)</option>
+                    <option value="TISCO">ทิสโก้ (TISCO)</option>
+                    <option value="TCRB">ไทยเครดิต (TCRB)</option>
+                </select>
+            </div>
+            <div class="input-group"><label>เลขที่บัญชีธนาคาร</label><input type="number" id="kycBankAcc" placeholder="xxx-x-xxxxx-x"></div>
+
+            <button class="btn btn-gold" onclick="submitKyc()">ยืนยันข้อมูลเพื่อเปิดบัญชี</button>
+        </div>
+    </div>
+
+    <div id="pendingView" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-color); z-index:3000; flex-direction:column; justify-content:center; align-items:center;">
+        <div class="spinner" style="width: 60px; height: 60px; margin-bottom:20px;"></div>
+        <h3 id="pendingTitle" style="color: var(--green); margin-bottom:10px;">กำลังดำเนินการ...</h3>
+        <p id="pendingSub" style="color: var(--text-muted); font-size: 13px; text-align: center;">กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน</p>
+        <div class="timer" id="pendingTimer" style="display:none;">01:00</div>
+    </div>
+
+    <div class="header" id="mainHeader" style="display:none;">
+        <div class="header-spacer"></div>
+        <div>TradingLand Pro</div>
+        <div class="header-spacer"></div>
+    </div>
+
+    <div id="homeView" style="display:none;">
+        <div class="announcement-bar">
+            <svg width="14" height="14" stroke="currentColor" fill="none"><use href="#icon-alert"></use></svg>
+            <span class="marquee">ประกาศ: ตลาดมีความผันผวนสูง โปรดศึกษาข้อมูลและบริหารความเสี่ยงในการลงทุนอย่างระมัดระวัง</span>
+        </div>
+        <div id="sliderBanner" class="home-banner" style="background-image: url('gold-banner.jpg'); background-size: cover; background-position: center; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; transition: background-image 1s ease-in-out;">
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); border-radius: 16px;"></div>
+    
+    <div style="position: relative; z-index: 1;">
+        <h2 id="homeWelcomeName" style="color: #ffd700; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold;">ยินดีต้อนรับ</h2>
+        <p style="color: #ffffff; margin-bottom: 0; font-size: 0.9em; text-shadow: 1px 1px 3px rgba(0,0,0,0.9);">เข้าถึงตลาดสินทรัพย์ดิจิทัลและสินค้าโภคภัณฑ์โลก</p>
+    </div>
+</div>
+
+
+
+
+            <div class="quick-menu">
+                <div class="quick-btn" onclick="openDeposit()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--green)"><use href="#icon-deposit"></use></svg></div><span class="quick-label">ฝากเงิน</span></div>
+                <div class="quick-btn" onclick="openWithdraw()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--red)"><use href="#icon-withdraw"></use></svg></div><span class="quick-label">ถอนเงิน</span></div>
+                <div class="quick-btn" onclick="switchTab('wallet')"><div class="quick-icon"><svg width="24" height="24" stroke="var(--gold)"><use href="#icon-history"></use></svg></div><span class="quick-label">พอร์ต</span></div>
+                <div class="quick-btn" onclick="switchTab('profile')"><div class="quick-icon"><svg width="24" height="24" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg></div><span class="quick-label">โปรไฟล์</span></div>
+            </div>
+
+                          <style>
+        .title-badge-hot {
+            display: inline-flex; 
+            align-items: center;
+            padding: 8px 18px; 
+            background-color: rgba(235, 87, 87, 0.08); /* พื้นหลังสีแดงใสๆ */
+            border-radius: 25px; /* ขอบมนทรงแคปซูล */
+            border: 1px solid rgba(235, 87, 87, 0.3); /* เส้นขอบสีแดง */
+            box-shadow: 0 0 12px rgba(235, 87, 87, 0.15); /* เงาเรืองแสงสีแดงแบบนิ่งๆ */
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .title-badge-hot .title-content {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #ffffff; /* สีตัวหนังสือ */
+        }
+    </style>
+
+       <div class="title-badge-hot">
+        <div class="title-content">
+            <svg width="18" height="18" stroke="var(--red)" style="margin-right:8px;">
+                <use href="#icon-fire"></use>
+            </svg> 
+            สินทรัพย์ยอดนิยม (Top Assets)
+        </div>
+    </div> <div id="homeTopGainers"><p style="text-align:center; color:var(--text-muted); font-size:12px;">กำลังโหลด...</p></div>
+
+            
+                      <style>
+        .title-badge-glow {
+            display: inline-flex; /* ให้กรอบมันพอดีกับตัวหนังสือ */
+            align-items: center;
+            padding: 8px 18px; /* ความหนาของกรอบ */
+            background-color: rgba(255, 215, 0, 0.08); /* พื้นหลังสีทองใสๆ */
+            border-radius: 25px; /* ขอบมนเป็นทรงแคปซูล */
+            border: 1px solid rgba(255, 215, 0, 0.3); /* เส้นขอบสีทอง */
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.15); /* เงาเรืองแสงแบบนิ่งๆ */
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* จัดตัวหนังสือและไอคอน */
+        .title-badge-glow .title-content {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #ffffff; /* สีตัวหนังสือ */
+        }
+    </style>
+
+    <div class="title-badge-glow">
+        <div class="title-content">
+            <svg width="18" height="18" stroke="var(--gold)" style="margin-right:8px;">
+                <use href="#icon-fire"></use>
+            </svg> 
+            นักลงทุนที่ทำกำไรสูงสุด (Live)
+        </div>
+    </div>
+
+       <div class="card" style="padding: 5px 15px; margin-bottom: 30px;">
+        <div id="botLeaderboard"></div>
+    </div>
+    
+</div> <div id="marketView" style="display:none;">
+    <div class="container">
+        <div class="search-box">
+
+                <svg width="18" height="18" stroke="var(--text-muted)" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" placeholder="ค้นหาสินทรัพย์">
+            </div>
+
+            <div class="market-sub-tabs" id="marketCategoryTabs">
+                <div class="sub-tab active" onclick="filterMarket('all')">ทั้งหมด (All)</div>
+                <div class="sub-tab" onclick="filterMarket('crypto')">คริปโต (Crypto)</div>
+                <div class="sub-tab" onclick="filterMarket('commodity')">โภคภัณฑ์ (Commodity)</div>
+                <div class="sub-tab" onclick="filterMarket('index')">ดัชนี (Indices)</div>
+                <div class="sub-tab" onclick="filterMarket('stock')">หุ้นโลก (Stocks)</div>
+            </div>
+
+            <div class="list-header" style="margin-top:15px;">
+                <div style="width: 40%;">สินทรัพย์</div>
+                <div style="width: 25%; text-align: center;">กราฟ</div>
+                <div style="width: 35%; text-align: right;">ราคาล่าสุด / %</div>
+            </div>
+            <div id="coinListContainer"></div>
+        </div>
+    </div>
+
+    <div id="walletView" style="display:none;">
+        <div class="container">
+            <div class="card" style="text-align: center; padding-top: 30px; padding-bottom: 30px;">
+                <p style="color: var(--text-muted); margin: 0; font-size: 14px;">ยอดคงเหลือประเมิน (THB)</p>
+                <div class="wallet-balance" id="displayBalance">0.00</div>
+                <div style="display: flex; gap: 15px; margin-top: 25px;">
+                    <button class="btn-action" onclick="openDeposit()"><svg width="18" height="18" stroke="var(--green)"><use href="#icon-deposit"></use></svg>ฝากเงิน</button>
+                    <button class="btn-action" onclick="openWithdraw()"><svg width="18" height="18" stroke="var(--red)"><use href="#icon-withdraw"></use></svg>ถอนเงิน</button>
+                </div>
+            </div>
+
+            <div class="section-title">ตำแหน่งที่เปิดอยู่ (Positions)</div>
+            <div class="asset-list" id="positionsList"></div>
+
+            <div class="section-title" style="margin-top:25px;">ประวัติการทำรายการล่าสุด</div>
+            <div class="asset-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <div id="tradeChartView" style="display:none;">
+        <div class="pro-header">
+            <div class="pro-header-left">
+                <button class="pro-back" onclick="switchTab('market')"><svg width="20" height="20" stroke="currentColor"><use href="#icon-back"></use></svg></button>
+                <div class="pro-title-group">
+                    <div class="pro-title" id="cvTitle">--</div>
+                    <div class="pro-subtitle" id="cvSubtitle">--</div>
+                </div>
+            </div>
+            <div class="pro-balance"><span>ยอดเงินที่ใช้ได้</span><strong id="cvBalance">0.00 THB</strong></div>
+        </div>
+        <div class="pro-price-panel">
+            <div>
+                <div class="pro-current-price text-green" id="cvPrice">0.00</div>
+                <div class="pro-price-change text-green" id="cvChange">+0.00 (+0.00%)</div>
+            </div>
+            <div class="pro-stats-grid">
+                <div class="pro-stat-item"><span class="pro-stat-label">เปิด</span><span class="pro-stat-val" id="cvOpen">0.00</span></div>
+                <div class="pro-stat-item"><span class="pro-stat-label">สูง</span><span class="pro-stat-val" id="cvHigh">0.00</span></div>
+                <div class="pro-stat-item"><span class="pro-stat-label">ต่ำ</span><span class="pro-stat-val" id="cvLow">0.00</span></div>
+            </div>
+        </div>
+        <div class="pro-chart-area" id="tvContainer"></div>
+        <div class="pro-bottom-bar">
+            <button class="pro-btn-sell" onclick="openOrderEntry('sell')">ขาย (Short)<div class="pro-btn-price" id="cvSellPrice">0.00</div></button>
+            <button class="pro-btn-buy" onclick="openOrderEntry('buy')">ซื้อ (Long)<div class="pro-btn-price" id="cvBuyPrice">0.00</div></button>
+        </div>
+    </div>
+
+    <div id="orderEntryView" style="display:none;">
+        <div class="order-header">
+            <button class="pro-back" onclick="switchTab('tradeChart')"><svg width="20" height="20" stroke="currentColor"><use href="#icon-back"></use></svg></button>
+            <div class="pro-title" id="oeTitle" style="margin-left: 15px;">--</div>
+            <div style="margin-left: auto; font-size: 12px; color: var(--text-muted);">ราคา<span id="oeModeText">ซื้อ</span> <span id="oeHeaderPrice" style="color: white; font-weight: bold; font-size: 14px;">0.00</span></div>
+        </div>
+        <div class="card" style="margin: 15px; border: none;">
+            <div class="order-type-tabs">
+                <div class="order-tab buy active" onclick="setOrderSide('buy')">ซื้อ (Long)</div>
+                <div class="order-tab sell" onclick="setOrderSide('sell')">ขาย (Short)</div>
+            </div>
+            
+            <!-- จำนวนเงินที่ต้องการใช้ -->
+            <div class="input-label"><span>จำนวนเงินที่ต้องการใช้ (THB)</span> <span class="text-gold" id="oeMaxAmount"></span></div>
+            <div class="stepper-group">
+                <button class="stepper-btn" onclick="adjustInput('oeAmount', -10)"><svg width="18" height="18" stroke="currentColor"><use href="#icon-minus"></use></svg></button>
+                <input type="number" class="stepper-input" id="oeAmount" value="0" oninput="calcLotFromAmount()">
+                <button class="stepper-btn" onclick="adjustInput('oeAmount', 10)"><svg width="18" height="18" stroke="currentColor"><use href="#icon-plus"></use></svg></button>
+            </div>
+            
+            <!-- ปุ่มลัด -->
+            <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+                <button class="btn-gray" style="padding: 8px 12px; width: auto; margin: 0;" onclick="setAmountPercent(25)">25%</button>
+                <button class="btn-gray" style="padding: 8px 12px; width: auto; margin: 0;" onclick="setAmountPercent(50)">50%</button>
+                <button class="btn-gray" style="padding: 8px 12px; width: auto; margin: 0;" onclick="setAmountPercent(75)">75%</button>
+                <button class="btn-gray" style="padding: 8px 12px; width: auto; margin: 0;" onclick="setAmountPercent(100)">100%</button>
+                <button class="btn-gray" style="padding: 8px 12px; width: auto; margin: 0;" onclick="setAmountMax()">MAX</button>
+            </div>
+
+            <div class="input-label"><span>ราคาอ้างอิง (THB)</span></div>
+            <div class="stepper-group">
+                <button class="stepper-btn" onclick="adjustInput('oePrice', -1)"><svg width="18" height="18" stroke="currentColor"><use href="#icon-minus"></use></svg></button>
+                <input type="number" class="stepper-input" id="oePrice" oninput="calcLotFromAmount()">
+                <button class="stepper-btn" onclick="adjustInput('oePrice', 1)"><svg width="18" height="18" stroke="currentColor"><use href="#icon-plus"></use></svg></button>
+            </div>
+            
+            <div class="input-label"><span>ปริมาณ (ล็อต) - คำนวณอัตโนมัติ</span></div>
+            <div class="stepper-group" style="background-color: rgba(240,185,11,0.1);">
+                <input type="number" class="stepper-input" id="oeLot" value="0.00" step="0.01" readonly style="color: var(--gold); font-weight: bold;">
+            </div>
+            
+            <div class="margin-info-box">
+                <div class="margin-item">
+                    <span class="m-label">หลักประกัน (Margin)</span><span class="m-val" id="oeReqMargin" style="color:var(--gold);">THB 0.00</span>
+                </div>
+                <div class="margin-item right">
+                    <span class="m-label">ยอดเงินที่ใช้ได้</span><span class="m-val" id="oeAvailable">THB 0.00</span>
+                </div>
+            </div>
+        </div>
+        <button class="btn-submit-order" id="btnSubmitOrder" style="background-color: var(--green);" onclick="submitOrder()">ส่งคำสั่ง (Submit)</button>
+    </div>
+
+    <div id="depositView" style="display:none; padding:15px; padding-top:30px;">
+        <div class="flex-between" style="margin-bottom:20px;">
+            <div style="font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="switchTab('wallet')">
+                <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
+            </div>
+        </div>
+
+        <div class="card" id="depositStep1Card">
+            <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
+                <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> ฝากเงินเข้าพอร์ต
+            </h3>
+
+            <div style="background:rgba(246,70,93,0.1); border-left:3px solid var(--red); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:20px; line-height:1.5;">
+                <strong class="text-red">กฎฝากเงิน:</strong><br>
+                ฝากได้สูงสุด 2 ครั้งต่อวัน และยอดฝากรวมต่อวันต้องไม่เกิน 100,000 THB ต่อ 1 บัญชี
+            </div>
+
+            <div class="deposit-note">
+                เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
+            </div>
+
+            <div class="input-group">
+                <label>ระบุจำนวนเงิน (THB)</label>
+                <input type="number" id="depositAmount" placeholder="ยอดเงินที่ต้องการฝาก">
+            </div>
+
+            <button class="btn btn-gold" onclick="prepareDeposit()">ถัดไป</button>
+        </div>
+
+        <div class="card" id="depositStep2Card" style="display:none;">
+            <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
+                <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> โอนเงินเข้าบัญชีที่กำหนด
+            </h3>
+
+            <div style="background:rgba(240,185,11,0.1); border-left:3px solid var(--gold); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.5;">
+                กรุณาโอนภายในเวลาที่กำหนด หากหมดเวลาให้เริ่มรายการใหม่
+            </div>
+
+            <div class="bank-box">
+                <div><strong class="text-gold">บัญชีรับโอนสำหรับฝากเงิน</strong></div>
+                <div>เลขบัญชี: <strong>8004912687</strong></div>
+                <div>ธนาคาร: <strong>กรุงศรี</strong></div>
+                <div>ชื่อบัญชี: <strong>นาย.Parinya</strong></div>
+                <div style="margin-top:10px;">ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong></div>
+            </div>
+
+            <div style="background:rgba(14,203,129,0.08); border-left:3px solid var(--green); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.6;">
+                เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
+            </div>
+
+            <div style="text-align:center; margin-bottom:18px;">
+                <div style="font-size:12px; color:var(--text-muted);">เวลาที่เหลือในการโอน</div>
+                <div id="depositTransferTimer" style="font-size:32px; font-weight:bold; color:var(--gold); margin-top:6px;">15:00</div>
+            </div>
+
+            <div style="display:flex; gap:12px;">
+                <button class="btn btn-gray" style="margin-bottom:0;" onclick="cancelPreparedDeposit()">ยกเลิก</button>
+                <button class="btn btn-gold" style="margin-bottom:0;" onclick="confirmTransferred()">โอนแล้ว</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="withdrawView" style="display:none; padding:15px; padding-top:30px;">
+        <div class="flex-between" style="margin-bottom:20px;">
+            <div style="font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="switchTab('wallet')"><svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ</div>
+        </div>
+        <div class="card">
+            <h3 style="margin-top:0; color: var(--red); display:flex; align-items:center; gap:8px;">
+                <svg width="20" height="20" stroke="currentColor"><use href="#icon-withdraw"></use></svg> ถอนเงินเข้าบัญชี
+            </h3>
+            <div style="background:rgba(240,185,11,0.1); border-left:3px solid var(--gold); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:20px; line-height:1.5;">
+                <strong class="text-gold">ระบบล็อกการถอน:</strong><br>
+                บัญชีจะถอนเงินได้เมื่อครบ 90 วันนับจากวันเปิดบัญชีเท่านั้น
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom:10px;">ยอดถอนได้สูงสุด: <span id="maxWithdrawAmount" style="color:white; font-weight:bold;">0.00</span> THB</p>
+            <div class="input-group"><label>ระบุจำนวนเงิน (THB)</label><input type="number" id="withdrawAmount" placeholder="ยอดเงินที่ต้องการถอน"></div>
+            <div class="input-group">
+                <label>รับเงินเข้าบัญชี (ผูกไว้ตอนสมัคร)</label>
+                <div id="wdBankInfo" style="background:var(--input-bg); padding:15px; border-radius:8px; font-size:14px; color:var(--text-muted);"></div>
+            </div>
+            <button class="btn btn-red" onclick="processWithdraw()">ยืนยันการถอนเงิน</button>
+        </div>
+    </div>
+
+    <div id="profileView" style="display:none;">
+        <div class="profile-header">
+            <div class="profile-avatar" id="avatarInitial">U</div>
+            <div class="profile-name" id="profName">User Name</div>
+            <div class="profile-uid" id="profUid">UID: 00000000</div>
+            <div class="status-badge"><svg width="14" height="14" stroke="currentColor"><use href="#icon-check"></use></svg> ยืนยันตัวตน (KYC) แล้ว</div>
+        </div>
+        <div class="container" style="padding-top: 0;">
+            <div class="card">
+                <div class="section-title" style="margin-top: 0;">จัดการบัญชี (Multi-Account)</div>
+                <button class="btn" style="background-color: var(--card-bg); border: 1px solid var(--gold); color: var(--gold);" onclick="initAppSecurity()">
+                    สลับบัญชีลงทุน (Switch Account)
+                </button>
+            </div>
+            <div class="card">
+                <div class="section-title" style="margin-top: 0;">ข้อมูลความปลอดภัย & วินัย</div>
+                <div class="menu-list">
+                    <div class="menu-item"><div class="menu-left"><div class="menu-label">บัญชีธนาคาร</div></div><div class="menu-value" id="profBankInfo">--</div></div>
+                    <div class="menu-item"><div class="menu-left"><div class="menu-label text-green">โควต้าฝากเงินวันนี้</div></div><div class="menu-value" id="profNextDeposit">คำนวณอยู่...</div></div>
+                    <div class="menu-item"><div class="menu-left"><div class="menu-label text-gold">วันปลดล็อกถอนเงิน</div></div><div class="menu-value" id="profUnlockDate">คำนวณอยู่...</div></div>
+                </div>
+            </div>
+            <p style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">* การลงทุนมีความเสี่ยงสูง โปรดบริหารจัดการเงินทุนอย่างเคร่งครัด</p>
+        </div>
+    </div>
+
+       <div class="modal-overlay" id="customPopup">
+        <div class="modal-content">
+            <div class="success-icon gold" id="popupIcon"></div>
+            <div class="modal-title" id="popupTitle" style="font-size:18px; font-weight:bold; margin-bottom:10px;">สำเร็จ!</div>
+            <div class="modal-desc" id="popupDesc" style="white-space: pre-line; line-height: 1.6;">ระบบดำเนินการเรียบร้อยแล้ว</div>
+            <button class="btn btn-gold" id="btnPopupOK" style="margin-bottom:0;" onclick="closePopup()">ตกลง</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirmPopup">
+        <div class="modal-content">
+            <div class="success-icon gold">
+                <svg width="30" height="30" stroke="currentColor" fill="none"><use href="#icon-alert"></use></svg>
+            </div>
+            <div class="modal-title" id="confirmTitle" style="font-size:18px; font-weight:bold; margin-bottom:10px;">ยืนยัน?</div>
+            <div class="modal-desc" id="confirmDesc" style="white-space: pre-line; line-height: 1.6; margin-bottom: 20px; font-size:14px; color:var(--text-muted);">รายละเอียด</div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-gray" style="margin-bottom:0;" onclick="closeConfirmPopup()">ยกเลิก</button>
+                <button class="btn btn-red" id="btnConfirmOK" style="margin-bottom:0;">ปิดสถานะ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav" id="bottomNav" style="display:none;">
+        <button class="nav-item active" id="nav-home" onclick="switchTab('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke-width="2"/><polyline points="9 22 9 12 15 12 15 22" stroke-width="2"/></svg>หน้าหลัก
+        </button>
+        <button class="nav-item" id="nav-market" onclick="switchTab('market')">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-width="2"/></svg>ตลาด
+        </button>
+        <button class="nav-item" id="nav-wallet" onclick="switchTab('wallet')">
+            <svg viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" stroke-width="2"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5" stroke-width="2"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z" stroke-width="2"/></svg>พอร์ต
+        </button>
+        <button class="nav-item" id="nav-profile" onclick="switchTab('profile')">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg>โปรไฟล์
+        </button>
+    </div>
+
+    <script>
+        let appState;
+        try {
+            appState = JSON.parse(localStorage.getItem('tradingland_v14_state')) || { activeUid: null, accounts: {} };
+        } catch (e) {
+            appState = { activeUid: null, accounts: {} };
+        }
+
+        let popupRedirectTarget = null;
+        let currentPin = "";
+        let setupPinStep = 0;
+        let firstPin = "";
+        let targetUidToLogin = null;
+
+        // New deposit variables
+        let pendingDepositAmount = 0;
+        let depositTransferCountdown = null;
+        let depositTransferSecondsLeft = 900; // 15 นาที
+
+        let allMarketData = [
+            { symbol: 'BTC', name: 'Bitcoin', category: 'crypto', priceThb: 0, priceUsd: 0, pct: 0, volume: '174.41M', tvSymbol: 'BINANCE:BTCUSDT', icon: 'https://assets.coincap.io/assets/icons/btc@2x.png' },
+            { symbol: 'ETH', name: 'Ethereum', category: 'crypto', priceThb: 0, priceUsd: 0, pct: 0, volume: '55.12M', tvSymbol: 'BINANCE:ETHUSDT', icon: 'https://assets.coincap.io/assets/icons/eth@2x.png' },
+            { symbol: 'SOL', name: 'Solana', category: 'crypto', priceThb: 0, priceUsd: 0, pct: 0, volume: '13.11M', tvSymbol: 'BINANCE:SOLUSDT', icon: 'https://assets.coincap.io/assets/icons/sol@2x.png' },
+            { symbol: 'LUNA', name: 'Luna Classic', category: 'crypto', priceThb: 0, priceUsd: 0, pct: 0, volume: '54.20M', tvSymbol: 'BINANCE:LUNCUSDT', icon: 'https://assets.coincap.io/assets/icons/luna@2x.png' },
+            { symbol: 'XAU', name: 'Gold (ทองคำ)', category: 'commodity', priceThb: 0, priceUsd: 0, pct: 0, volume: '289.69M', tvSymbol: 'OANDA:XAUUSD', 
+  icon: 'xau.png' },
+            { symbol: 'WTI', name: 'Crude Oil (น้ำมัน)', category: 'commodity', priceThb: 0, priceUsd: 0, pct: 0, volume: '120.5M', tvSymbol: 'TVC:USOIL', icon: 'https://img.icons8.com/color/48/oil-industry.png' },
+            { symbol: 'SPX', name: 'S&P 500', category: 'index', priceThb: 185000, priceUsd: 5100, pct: 0.8, volume: '1.2B', tvSymbol: 'SP:SPX', icon: 'https://img.icons8.com/fluency/48/bullish.png' },
+            { symbol: 'NDX', name: 'Nasdaq 100', category: 'index', priceThb: 650000, priceUsd: 18000, pct: 1.1, volume: '900M', tvSymbol: 'NASDAQ:NDX', icon: 'https://img.icons8.com/fluency/48/bullish.png' },
+            { symbol: 'AAPL', name: 'Apple Inc.', category: 'stock', priceThb: 6200, priceUsd: 175, pct: 0.5, volume: '45M', tvSymbol: 'NASDAQ:AAPL', icon: 'https://img.icons8.com/color/48/mac-os.png' },
+            { symbol: 'TSLA', name: 'Tesla Inc.', category: 'stock', priceThb: 7100, priceUsd: 200, pct: -2.1, volume: '60M', tvSymbol: 'NASDAQ:TSLA', icon: 'https://img.icons8.com/color/48/tesla-logo.png' },
+{ symbol: 'PTT', name: 'PTT (ปตท.)', category: 'stock', priceThb: 34.50, priceUsd: 1.00, pct: 0.25, volume: '20M', tvSymbol: 'SET:PTT', 
+  icon: 'ptt.png' },
+{ symbol: 'SCB', name: 'SCB (ไทยพาณิชย์)', category: 'stock', priceThb: 143.50, priceUsd: 3.12, pct: -0.15, volume: '5.2M', tvSymbol: 'SET:SCB', 
+  icon: 'scb.png' },
+
+{ symbol: 'KBANK', name: 'KBANK (กสิกรไทย)', category: 'stock', priceThb: 189.50, priceUsd: 3.82, pct: 0.38, volume: '4.8M', tvSymbol: 'SET:KBANK', 
+  icon: 'kbank.png' },
+
+{ symbol: 'ADVANC', name: 'ADVANC (AIS)', category: 'stock', priceThb: 365.00, priceUsd: 6.20, pct: 0.47, volume: '3.1M', tvSymbol: 'SET:ADVANC', 
+  icon: 'advanc.png' },
+
+{ symbol: 'CPALL', name: 'CPALL (7-11)', category: 'stock', priceThb: 47.25, priceUsd: 1.69, pct: -0.34, volume: '12.5M', tvSymbol: 'SET:CPALL', 
+  icon: 'cpall.png' },
+
+{ symbol: 'AOT', name: 'AOT (ท่าอากาศยาน)', category: 'stock', priceThb: 50.50, priceUsd: 1.94, pct: 0.22, volume: '8.7M', tvSymbol: 'SET:AOT', 
+  icon: 'aot.png' },
+
+{ symbol: 'GULF', name: 'GULF (Gulf)', category: 'stock', priceThb: 47.75, priceUsd: 1.38, pct: 0.53, volume: '6.3M', tvSymbol: 'SET:GULF', 
+  icon: 'gulf.png' },
+
+{ symbol: 'BDMS', name: 'BDMS (กรุงเทพดุสิต)', category: 'stock', priceThb: 18.70, priceUsd: 0.81, pct: -0.18, volume: '9.2M', tvSymbol: 'SET:BDMS', 
+  icon: 'bdms.png' },
+
+{ symbol: 'BTS', name: 'BTS (รถไฟฟ้า)', category: 'stock', priceThb: 2.12, priceUsd: 0.23, pct: 0.64, volume: '15.3M', tvSymbol: 'SET:BTS', 
+  icon: 'bts.png' },
+
+{ symbol: 'TRUE', name: 'TRUE (ทรู)', category: 'stock', priceThb: 13.30, priceUsd: 0.15, pct: -0.75, volume: '22.1M', tvSymbol: 'SET:TRUE', 
+  icon: 'true.png' },
+
+{ symbol: 'SCC', name: 'SCC (ปูนซีเมนต์)', category: 'stock',
+priceThb: 181.50, priceUsd: 7.73, pct: 0.19, volume: '1.8M',
+tvSymbol: 'SET:SCC',
+icon: 'scc.png' },
+
+{ symbol: 'LAND', name: 'LAND', category: 'stock', 
+priceThb: 4.009, 
+priceUsd: 9.20, 
+pct: 1.47, 
+volume: '0.1M', 
+tvSymbol: 'SET:LH',  // เปลี่ยนเป็น LH (Land and Houses) ที่มีจริง
+icon: 'land.png' }
+];  // เพิ่มตัวปิด array ตรงนี้!
+// ตัวแปรเก็บ API Key (ถ้าต้องการ)
+const EXCHANGE_API_KEY = 'ฟรีไม่ต้องใช้ key';
+
+// ดึงราคาจาก Yahoo Finance
+async function fetchRealPrice(symbol) {
+    try {
+        // แปลง symbol ให้ตรงกับ Yahoo Finance
+        let yahooSymbol = symbol;
+        if (symbol === 'BTC') yahooSymbol = 'BTC-USD';
+        else if (symbol === 'ETH') yahooSymbol = 'ETH-USD';
+        else if (symbol === 'XAU') yahooSymbol = 'GC=F';
+        else if (symbol === 'WTI') yahooSymbol = 'CL=F';
+        else if (symbol === 'SPX') yahooSymbol = '^GSPC';
+        else return null;
+        
+        const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${yahooSymbol}`);
+        const data = await response.json();
+        
+        if (data.chart && data.chart.result && data.chart.result[0]) {
+            const price = data.chart.result[0].meta.regularMarketPrice;
+            console.log(`✅ ดึงราคา ${symbol} ได้: $${price}`);
+            return price;
+        }
+        return null;
+    } catch (error) {
+        console.error('❌ Error fetching price:', error);
+        return null;
+    }
+}
+
+// แปลง USD เป็น THB
+async function usdToThb(usdPrice) {
+    try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await response.json();
+        const thbRate = data.rates.THB;
+        console.log(`💰 อัตราแลกเปลี่ยน: 1 USD = ${thbRate} THB`);
+        return usdPrice * thbRate;
+    } catch (error) {
+        console.error('❌ Error fetching exchange rate:', error);
+        return usdPrice * 35; // ค่าเผื่อไว้ถ้าเรียกไม่ได้
+    }
+}
+
+// ==========================================
+// 🚀 ปลุกชีพหน้าตลาด: ฟังก์ชันดึงราคาทันทีตอนเปิดแอป
+// ==========================================
+async function initMarketPrices() {
+    console.log("กำลังโหลดราคาเริ่มต้น...");
+    
+    // ==========================================
+    // 💡 1. เช็ควันหยุดก่อนเลย (เสาร์=6, อาทิตย์=0)
+    // ==========================================
+    const todayDay = new Date().getDay();
+    const isWeekend = (todayDay === 0 || todayDay === 6);
+    console.log(`วันนี้: ${isWeekend ? 'วันหยุด (ตลาดปิด)' : 'วันทำการ (ตลาดเปิด)'}`);
+
+    // ==========================================
+    // 💡 2. ดึงเรทเงินบาทจริงแบบ Real-time
+    // ==========================================
+    let liveThbRate = 35.00; // ตั้งค่าสำรองไว้เผื่อเน็ตหลุด
+    try {
+        const resRate = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const dataRate = await resRate.json();
+        liveThbRate = dataRate.rates.THB;
+        console.log(`ดึงเรทเงินบาทสำเร็จ: 1 USD = ${liveThbRate} THB`);
+    } catch (e) {
+        console.log("ดึงเรทเงินบาทไม่สำเร็จ ใช้ค่าสำรองไปก่อน");
+    }
+
+    // ==========================================
+    // 💡 3. เอาเรทจริงไปคูณราคาเหรียญ
+    // ==========================================
+    for (let i = 0; i < allMarketData.length; i++) {
+        let item = allMarketData[i];
+        
+        // ถ้าเป็น Crypto ให้ดึงราคาจริงจาก Binance
+        if (item.category === 'crypto') {
+            try {
+                let symbolQuery = item.symbol === 'LUNA' ? 'LUNCUSDT' : item.symbol + 'USDT';
+                let res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbolQuery}`);
+                let data = await res.json();
+                
+                item.priceUsd = parseFloat(data.price);
+                item.priceThb = item.priceUsd * liveThbRate; 
+                
+                if(item.pct === 0) item.pct = (Math.random() * 6) - 3; 
+            } catch(e) {
+                console.log(`ดึงราคา ${item.symbol} ไม่สำเร็จ`);
+            }
+        } 
+        
+        // ถ้าเป็นทองคำ/น้ำมัน (สินค้าโภคภัณฑ์)
+        else if (item.category === 'commodity') {
+            if (item.symbol === 'XAU') { 
+                // ราคาทองคำ (USD)
+                item.priceUsd = 5020.600; 
+                
+                // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
+                // ถ้าวันธรรมดา ใช้เรทจริง
+                item.priceThb = isWeekend ? (item.priceUsd * 32.33) : (item.priceUsd * liveThbRate); 
+            }
+            if (item.symbol === 'WTI') { 
+                // ราคาน้ำมัน (USD)
+                item.priceUsd = 99.30; 
+                
+                // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
+                // ถ้าวันธรรมดา ใช้เรทจริง
+                item.priceThb = isWeekend ? (item.priceUsd * 32.33) : (item.priceUsd * liveThbRate); 
+            }
+            
+            // จัดการตัวเลขเปอร์เซ็นต์ (%) ให้สมจริง
+            if (isWeekend) {
+                // วันหยุด ตลาดปิด ล็อคเปอร์เซ็นต์นิ่งๆ ไว้ที่ 0.00
+                item.pct = 0.00; 
+            } else if(item.pct === 0) {
+                // วันธรรมดา สุ่มขยับขึ้นลงได้ปกติ
+                item.pct = (Math.random() * 2) - 1;
+            }
+        }
+    }
+    
+    // สั่งวาดหน้าจอใหม่
+    try {
+        if (typeof renderMarket === "function") renderMarket();
+    } catch(e) {
+        console.log("ดึงราคาเสร็จแล้ว กรุณาเรียกฟังก์ชันรีเฟรชหน้าจอ", e);
+    }
+}
+
+// สั่งให้ทำงานทันทีที่เปิดแอป
+initMarketPrices();
+
+// สั่งให้อัปเดตราคาคริปโตใหม่ทุกๆ 5 วินาที
+setInterval(initMarketPrices, 2000); 
+
+
+        let currentMarketFilter = 'all';
+        let activeAsset = allMarketData[0];
+        let currentOrderSide = 'buy';
+
+        function getMyAccount() {
+            return appState.accounts[appState.activeUid] || null;
+        }
+
+        function saveState() {
+            localStorage.setItem('tradingland_v14_state', JSON.stringify(appState));
+        }
+
+        function hideViews(ids) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+        }
+
+        function getDateKey(ts = Date.now()) {
+            const d = new Date(ts);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function resetDailyDepositIfNeeded(acc) {
+            const today = getDateKey();
+            if (!acc.depositDaily || acc.depositDaily.date !== today) {
+                acc.depositDaily = {
+                    date: today,
+                    count: 0,
+                    total: 0
+                };
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            try {
+                initAppSecurity();
+                setInterval(simulateLiveMarket, 3000);
+            } catch (e) {
+                console.error("App init error:", e);
+                alert("ระบบโหลดไม่สำเร็จ กรุณาลองรีเฟรชอีกครั้ง");
+            }
+        });
+
+        function initAppSecurity() {
+            appState.activeUid = null;
+            saveState();
+
+            const mainHeader = document.getElementById('mainHeader');
+            const bottomNav = document.getElementById('bottomNav');
+            if (mainHeader) mainHeader.style.display = 'none';
+            if (bottomNav) bottomNav.style.display = 'none';
+
+            hideViews([
+                'homeView', 'walletView', 'marketView', 'tradeChartView', 'orderEntryView',
+                'depositView', 'withdrawView', 'profileView',
+                'pinLockView', 'kycView', 'accountListView'
+            ]);
+
+            const accCount = Object.keys(appState.accounts).length;
+            if (accCount === 0) {
+                document.getElementById('kycView').style.display = 'block';
+            } else {
+                showAccountList();
+            }
+        }
+
+        function showAccountList() {
+            hideViews(['pinLockView', 'kycView']);
+            const c = document.getElementById('accountListContainer');
+            c.innerHTML = '';
+
+            const accCount = Object.keys(appState.accounts).length;
+
+            for (const uid in appState.accounts) {
+                const acc = appState.accounts[uid];
+                c.innerHTML += `
+                    <div class="acc-card" onclick="selectAccountToLogin('${uid}')">
+                        <div style="display:flex; align-items:center;">
+                            <div class="acc-avatar">${(acc.accName || 'U').charAt(0).toUpperCase()}</div>
+                            <div class="acc-info">
+                                <div class="acc-name">${acc.accName || 'บัญชี'}</div>
+                                <div class="acc-uid">UID: ${uid} | ยอด: ${(acc.thb || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} THB</div>
+                            </div>
+                        </div>
+                        <svg width="24" height="24" stroke="var(--text-muted)" fill="none">
+                            <use href="#icon-back" style="transform: rotate(180deg); transform-origin: center;"></use>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            const btnNew = document.getElementById('btnCreateNewAcc');
+            if (accCount >= 3) {
+                btnNew.style.display = 'none';
+            } else {
+                btnNew.style.display = 'flex';
+                btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/3)`;
+            }
+
+            document.getElementById('accountListView').style.display = 'block';
+        }
+
+        function startNewAccount() {
+            document.getElementById('accountListView').style.display = 'none';
+            document.getElementById('kycView').style.display = 'block';
+        }
+
+        function selectAccountToLogin(uid) {
+            targetUidToLogin = uid;
+            document.getElementById('accountListView').style.display = 'none';
+            showPinAuth();
+        }
+
+        function submitKyc() {
+            const an = document.getElementById('kycAccName').value.trim();
+            const rn = document.getElementById('kycRealName').value.trim();
+            const id = document.getElementById('kycId').value.trim();
+            const ph = document.getElementById('kycPhone').value.trim();
+            const bn = document.getElementById('kycBankName').value;
+            const ba = document.getElementById('kycBankAcc').value.trim();
+
+            if (!an || !rn || !id || !ph || !bn || !ba) {
+                alert("กรุณากรอกข้อมูลให้ครบทุกช่องเพื่อความปลอดภัย");
+                return;
+            }
+
+            if (id.length !== 13) {
+                alert("เลขบัตรประชาชนต้องมี 13 หลัก");
+                return;
+            }
+
+            document.getElementById('kycView').style.display = 'none';
+            showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 2, () => {
+                const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
+                appState.accounts[newUid] = {
+                    uid: newUid,
+                    accName: an,
+                    realName: rn,
+                    idCard: id,
+                    phone: ph,
+                    bankName: bn,
+                    bankAcc: ba,
+                    thb: 0,
+                    positions: [],
+                    history: [],
+                    pin: "",
+                    registeredAt: Date.now(),
+                    depositDaily: {
+                        date: getDateKey(),
+                        count: 0,
+                        total: 0
+                    }
+                };
+                saveState();
+                targetUidToLogin = newUid;
+                startPinSetup();
+            });
+        }
+
+        function startPinSetup() {
+            setupPinStep = 1;
+            currentPin = "";
+            firstPin = "";
+            document.getElementById('pinTitleText').innerText = "ตั้งรหัส PIN 6 หลัก";
+            document.getElementById('pinTitleText').style.color = "var(--green)";
+            document.getElementById('pinSubText').innerText = `สำหรับบัญชี: ${appState.accounts[targetUidToLogin].accName}`;
+            document.getElementById('pinLockView').style.display = 'flex';
+            updatePinDots();
+        }
+
+        function showPinAuth() {
+            setupPinStep = 0;
+            currentPin = "";
+            document.getElementById('pinTitleText').innerText = "กรุณาระบุรหัส PIN";
+            document.getElementById('pinTitleText').style.color = "var(--gold)";
+            document.getElementById('pinSubText').innerText = `เข้าสู่บัญชี: ${appState.accounts[targetUidToLogin].accName}`;
+            document.getElementById('pinLockView').style.display = 'flex';
+            updatePinDots();
+        }
+
+        function pressPin(num) {
+            if (currentPin.length < 6) {
+                currentPin += num;
+                updatePinDots();
+                if (currentPin.length === 6) setTimeout(processPin, 150);
+            }
+        }
+
+        function deletePin() {
+            if (currentPin.length > 0) {
+                currentPin = currentPin.slice(0, -1);
+                updatePinDots();
+            }
+        }
+
+        function updatePinDots() {
+            for (let i = 1; i <= 6; i++) {
+                const dot = document.getElementById('dot' + i);
+                if (!dot) continue;
+                dot.className = 'pin-dot';
+                if (i <= currentPin.length) dot.classList.add('filled');
+            }
+        }
+
+        function pinErrorAnim() {
+            for (let i = 1; i <= 6; i++) {
+                const dot = document.getElementById('dot' + i);
+                if (dot) dot.classList.add('error');
+            }
+            setTimeout(() => {
+                currentPin = "";
+                updatePinDots();
+            }, 500);
+        }
+
+        function processPin() {
+            const acc = appState.accounts[targetUidToLogin];
+            if (!acc) return;
+
+            if (setupPinStep === 1) {
+                firstPin = currentPin;
+                currentPin = "";
+                setupPinStep = 2;
+                document.getElementById('pinTitleText').innerText = "ยืนยันรหัส PIN อีกครั้ง";
+                updatePinDots();
+            } else if (setupPinStep === 2) {
+                if (currentPin === firstPin) {
+                    acc.pin = currentPin;
+                    appState.activeUid = targetUidToLogin;
+                    saveState();
+                    document.getElementById('pinLockView').style.display = 'none';
+                    onLoginSuccess();
+                    showCustomPopup('เปิดบัญชีสำเร็จ', 'พอร์ตของคุณพร้อมใช้งานแล้ว', 'home', 'gold');
+                } else {
+                    document.getElementById('pinSubText').innerText = "รหัสไม่ตรงกัน กรุณาลองใหม่";
+                    pinErrorAnim();
+                    setTimeout(startPinSetup, 800);
+                }
+            } else {
+                if (currentPin === acc.pin) {
+                    appState.activeUid = targetUidToLogin;
+                    saveState();
+                    document.getElementById('pinLockView').style.display = 'none';
+                    onLoginSuccess();
+                } else {
+                    document.getElementById('pinSubText').innerText = "รหัส PIN ไม่ถูกต้อง";
+                    pinErrorAnim();
+                }
+            }
+        }
+
+               function onLoginSuccess() {
+    updateProfileUI();
+    renderMarket();
+    updateWalletUI();
+    
+    // ✅ วางตรงนี้ (หลัง updateWalletUI, ก่อน switchTab)
+    const acc = getMyAccount();
+    if (acc && !acc.initialBonus) {
+        acc.initialBonus = true;
+        acc.thb = 1000000;
+        saveHistory('deposit', 'เงินคืนจากที่เดิม', '+43,890 THB', true);
+        showCustomPopup('🎉 ยินดีต้อนรับกลับ!', 'คุณได้รับเงินคืนจากที่เดิม 43,890 THB', 'home', 'gold');
+    }
+    
+    switchTab('home');
+    
+    // 👇 เติมคำสั่งเรียกโปรโมชั่นตรงนี้ (หน่วง 0.8 วินาทีให้หน้าหลักโหลดเสร็จก่อน)
+    setTimeout(checkDailyPromo, 800);
+}
+
+        function switchTab(tab) {
+            if (!tab) return;
+
+            hideViews([
+                'homeView', 'walletView', 'marketView', 'tradeChartView',
+                'orderEntryView', 'depositView', 'withdrawView',
+                'profileView', 'accountListView', 'kycView'
+            ]);
+
+            const isMainNav = ['home', 'market', 'wallet', 'profile'].includes(tab);
+
+            document.getElementById('mainHeader').style.display = isMainNav ? 'flex' : 'none';
+            document.getElementById('bottomNav').style.display = isMainNav ? 'flex' : 'none';
+
+            if (isMainNav) {
+                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+                const nav = document.getElementById('nav-' + tab);
+                if (nav) nav.classList.add('active');
+            }
+
+            const targetView = document.getElementById(tab + 'View');
+            if (targetView) targetView.style.display = 'block';
+
+            if (tab === 'wallet') updateWalletUI();
+            if (tab === 'profile') updateProfileUI();
+            if (tab === 'home') renderMarket();
+        }
+
+        function openDeposit() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            resetDailyDepositIfNeeded(acc);
+
+            pendingDepositAmount = 0;
+            depositTransferSecondsLeft = 900;
+
+            if (depositTransferCountdown) {
+                clearInterval(depositTransferCountdown);
+                depositTransferCountdown = null;
+            }
+
+            document.getElementById('depositAmount').value = '';
+            document.getElementById('depositStep1Card').style.display = 'block';
+            document.getElementById('depositStep2Card').style.display = 'none';
+            document.getElementById('depositTransferTimer').innerText = '15:00';
+
+            switchTab('deposit');
+        }
+
+        function prepareDeposit() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            resetDailyDepositIfNeeded(acc);
+
+            const amt = parseFloat(document.getElementById('depositAmount').value);
+
+            if (!amt || amt <= 0) {
+                return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
+            }
+
+            if (amt > 100000) {
+                return showCustomPopup('เกินลิมิต', 'ฝากต่อครั้งได้ไม่เกิน 100,000 THB', null, 'red');
+            }
+
+            if (acc.depositDaily.count >= 2) {
+                return showCustomPopup('ฝากครบโควต้าแล้ว', 'วันนี้คุณฝากครบ 2 ครั้งแล้ว', null, 'red');
+            }
+
+            if ((acc.depositDaily.total + amt) > 100000) {
+                const left = 100000 - acc.depositDaily.total;
+                return showCustomPopup('ยอดฝากเกินต่อวัน', `วันนี้ฝากได้อีกไม่เกิน ${left.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB`, null, 'red');
+            }
+
+            pendingDepositAmount = amt;
+            depositTransferSecondsLeft = 900;
+
+            document.getElementById('depositConfirmAmount').innerText =
+                amt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' THB';
+
+            document.getElementById('depositStep1Card').style.display = 'none';
+            document.getElementById('depositStep2Card').style.display = 'block';
+
+            startDepositTransferTimer();
+        }
+
+        function startDepositTransferTimer() {
+            if (depositTransferCountdown) {
+                clearInterval(depositTransferCountdown);
+                depositTransferCountdown = null;
+            }
+
+            function renderDepositTimer() {
+                const min = Math.floor(depositTransferSecondsLeft / 60);
+                const sec = depositTransferSecondsLeft % 60;
+                document.getElementById('depositTransferTimer').innerText =
+                    `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+            }
+
+            renderDepositTimer();
+
+            depositTransferCountdown = setInterval(() => {
+                depositTransferSecondsLeft--;
+                renderDepositTimer();
+
+                if (depositTransferSecondsLeft <= 0) {
+                    clearInterval(depositTransferCountdown);
+                    depositTransferCountdown = null;
+                    pendingDepositAmount = 0;
+
+                    document.getElementById('depositStep1Card').style.display = 'block';
+                    document.getElementById('depositStep2Card').style.display = 'none';
+                    document.getElementById('depositAmount').value = '';
+
+                    showCustomPopup('หมดเวลาการโอน', 'รายการฝากนี้หมดเวลาแล้ว กรุณาเริ่มรายการใหม่', 'deposit', 'red');
+                }
+            }, 1000);
+        }
+
+        function cancelPreparedDeposit() {
+            pendingDepositAmount = 0;
+            depositTransferSecondsLeft = 900;
+
+            if (depositTransferCountdown) {
+                clearInterval(depositTransferCountdown);
+                depositTransferCountdown = null;
+            }
+
+            document.getElementById('depositStep1Card').style.display = 'block';
+            document.getElementById('depositStep2Card').style.display = 'none';
+            document.getElementById('depositTransferTimer').innerText = '15:00';
+        }
+
+        function confirmTransferred() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            resetDailyDepositIfNeeded(acc);
+
+            if (!pendingDepositAmount || pendingDepositAmount <= 0) {
+                return showCustomPopup('ไม่พบรายการฝาก', 'กรุณาเริ่มรายการฝากใหม่อีกครั้ง', 'deposit', 'red');
+            }
+
+            if (acc.depositDaily.count >= 2) {
+                return showCustomPopup('ฝากครบโควต้าแล้ว', 'วันนี้คุณฝากครบ 2 ครั้งแล้ว', 'wallet', 'red');
+            }
+
+            if ((acc.depositDaily.total + pendingDepositAmount) > 100000) {
+                return showCustomPopup('ยอดฝากเกินต่อวัน', 'ยอดฝากรวมของวันนี้เกินกำหนดแล้ว', 'wallet', 'red');
+            }
+
+            if (depositTransferCountdown) {
+                clearInterval(depositTransferCountdown);
+                depositTransferCountdown = null;
+            }
+
+            const amt = pendingDepositAmount;
+            pendingDepositAmount = 0;
+
+            showPending(
+                'กำลังทำรายการตรวจสอบ',
+                'ห้ามปิดหน้านี้ ระบบกำลังตรวจสอบยอดโอนของคุณ',
+                60,
+                () => {
+                    acc.thb += amt;
+                    acc.depositDaily.count += 1;
+                    acc.depositDaily.total += amt;
+                    saveState();
+
+                    saveHistory(
+                        'deposit',
+                        'ฝากเงินสำเร็จ',
+                        '+' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                        true
+                    );
+
+                    document.getElementById('depositStep1Card').style.display = 'block';
+                    document.getElementById('depositStep2Card').style.display = 'none';
+                    document.getElementById('depositAmount').value = '';
+                    document.getElementById('depositTransferTimer').innerText = '15:00';
+
+                    showCustomPopup(
+                        'ฝากเงินสำเร็จ',
+                        `ยอด ${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })} THB เข้าพอร์ตแล้ว`,
+                        'wallet',
+                        'green'
+                    );
+                }
+            );
+        }
+
+        function openWithdraw() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            document.getElementById('maxWithdrawAmount').innerText = acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('withdrawAmount').value = '';
+            document.getElementById('wdBankInfo').innerHTML = `ธนาคาร: <strong>${acc.bankName}</strong><br>เลขบัญชี: <strong>${acc.bankAcc}</strong>`;
+            switchTab('withdraw');
+        }
+
+        function processWithdraw() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            const amt = parseFloat(document.getElementById('withdrawAmount').value);
+
+            if (!amt || amt <= 0) return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
+            if (amt > acc.thb) return showCustomPopup('ยอดเงินไม่เพียงพอ', 'ยอดเงินในพอร์ตไม่พอสำหรับการถอน', null, 'red');
+
+            const now = Date.now();
+            const unlockAt = acc.registeredAt + (90 * 24 * 60 * 60 * 1000);
+            const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
+
+            if (now < unlockAt) {
+                return showCustomPopup(
+                    '🔒 ระบบล็อกการถอน',
+                    `บัญชีนี้ยังถอนเงินไม่ได้\nเหลืออีก ${daysLeft > 0 ? daysLeft : 0} วัน จึงจะถอนเงินได้`,
+                    null,
+                    'red'
+                );
+            }
+
+            acc.thb -= amt;
+            saveState();
+            saveHistory('withdraw', 'ถอนเงิน', '-' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }), false);
+            showCustomPopup('รับคำสั่งถอนแล้ว', 'ระบบบันทึกคำสั่งถอนเรียบร้อย', 'wallet', 'gold');
+        }
+
+       function simulateLiveMarket() {
+    const todayDay = new Date().getDay();
+    const isWeekend = (todayDay === 0 || todayDay === 6);
+    
+    allMarketData.forEach(coin => {
+        // ถ้าเป็น XAU หรือ WTI และเป็นวันหยุด -> ไม่ขยับ
+        if ((coin.symbol === 'XAU' || coin.symbol === 'WTI') && isWeekend) {
+            // ไม่ทำอะไรเลย ปล่อยให้นิ่ง
+            return;
+        }
+        
+        // สินทรัพย์อื่นๆ หรือวันธรรมดา ขยับได้ปกติ
+        const vol = (Math.random() * 0.002) - 0.001;
+        coin.priceThb *= (1 + vol);
+        coin.priceUsd *= (1 + vol);
+        coin.pct += (Math.random() * 0.2) - 0.1;
+
+        if (coin.pct > 99) coin.pct = 99;
+        if (coin.pct < -99) coin.pct = -99;
+    });
+
+    renderMarket();
+
+    if (!appState.activeUid) return;
+
+    if (document.getElementById('tradeChartView').style.display === 'block') updateChartUI();
+    if (document.getElementById('orderEntryView').style.display === 'block') {
+        updateMarginDisplay();
+        calcLotFromAmount();
+    }
+    if (document.getElementById('walletView').style.display === 'block') updateWalletUI();
+}
+
+        function generateMockSparkline(isPos) {
+            const w = 60;
+            const pts = [];
+            let y = isPos ? 18 : 7;
+
+            for (let i = 0; i <= 10; i++) {
+                const x = (i / 10) * w;
+                let m = (Math.random() * 8) - 4;
+                if (isPos) m -= 0.6;
+                else m += 0.6;
+                y += m;
+                if (y < 2) y = 2;
+                if (y > 23) y = 23;
+                pts.push(`${x},${y}`);
+            }
+
+            return `
+                <svg width="60" height="25" viewBox="0 0 60 25">
+                    <polyline points="${pts.join(' ')}" fill="none" stroke="${isPos ? 'var(--green)' : 'var(--red)'}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                </svg>
+            `;
+        }
+
+        function filterMarket(category) {
+            currentMarketFilter = category;
+            const tabs = document.querySelectorAll('#marketCategoryTabs .sub-tab');
+            tabs.forEach(el => el.classList.remove('active'));
+            const map = { all: 0, crypto: 1, commodity: 2, index: 3, stock: 4 };
+            if (tabs[map[category]]) tabs[map[category]].classList.add('active');
+            renderMarket();
+        }
+
+        function renderMarket() {
+            const listContainer = document.getElementById('coinListContainer');
+            if (!listContainer) return;
+
+            let html = '';
+            const filteredData = currentMarketFilter === 'all'
+                ? allMarketData
+                : allMarketData.filter(c => c.category === currentMarketFilter);
+
+            filteredData.forEach(c => {
+                const cc = c.pct >= 0 ? 'text-green' : 'text-red';
+                const s = c.pct >= 0 ? '+' : '';
+
+                html += `
+                    <div class="market-list-item" onclick="openTradeChart('${c.symbol}')">
+                        <div class="col-coin">
+                            <img src="${c.icon}" alt="Coin logo" class="coin-logo-img" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/circled-dot.png'">
+                            <div style="margin-left: 5px;">
+                                <span class="coin-symbol">${c.symbol}/THB</span>
+                                <div class="coin-vol">Vol: ${c.volume}</div>
+                            </div>
+                        </div>
+                        <div class="col-chart">${generateMockSparkline(c.pct >= 0)}</div>
+                        <div class="col-price">
+                            <div class="price-val ${cc}">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                            <div class="price-pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+
+            const homeTop = document.getElementById('homeTopGainers');
+            if (homeTop) {
+                const sortedCoins = [...allMarketData].sort((a, b) => b.pct - a.pct).slice(0, 3);
+                let homeHtml = '<div class="top-gainers-container">';
+
+                sortedCoins.forEach(c => {
+                    const cc = c.pct >= 0 ? 'text-green' : 'text-red';
+                    const s = c.pct >= 0 ? '+' : '';
+                    homeHtml += `
+                        <div class="gainer-card" onclick="openTradeChart('${c.symbol}')">
+                            <div class="sym">
+                                <img src="${c.icon}" style="width:16px; height:16px; border-radius:50%;" onerror="this.style.display='none'">
+                                ${c.symbol}
+                            </div>
+                            <div class="pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
+                            <div class="prc">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                        </div>
+                    `;
+                });
+
+                homeHtml += '</div>';
+                homeTop.innerHTML = homeHtml;
+            }
+        }
+
+       // ==========================================
+// 📈 simulateLiveMarket - ปรับแบบมีเกราะป้องกัน (Safe Mode)
+// ==========================================
+async function openTradeChart(sym) {
+    const c = allMarketData.find(x => x.symbol === sym);
+    const acc = getMyAccount();
+    if (!c || !acc) return;
+
+    // เช็ควันหยุด
+    const todayDay = new Date().getDay();
+    const isWeekend = (todayDay === 0 || todayDay === 6);
+
+    // แสดง loading
+    showPending('กำลังโหลดข้อมูลตลาด...', 'กรุณารอสักครู่', 2, async () => {
+        // ดึงราคาจริง (เฉพาะวันธรรมดาหรือคริปโต)
+        if (!isWeekend || c.category === 'crypto') {
+            const realPrice = await fetchRealPrice(c.symbol);
+            if (realPrice) {
+                const thbPrice = await usdToThb(realPrice);
+                c.priceUsd = realPrice;
+                c.priceThb = thbPrice;
+                c.pct = (Math.random() * 2) - 1;
+            }
+        }
+        
+        activeAsset = c;
+        switchTab('tradeChart');
+        
+        document.getElementById('cvTitle').innerText = c.name;
+        document.getElementById('cvSubtitle').innerText = c.symbol + ' (Pro)';
+        document.getElementById('cvBalance').innerText = acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' THB';
+
+        // 🌟 โหลดกราฟ TradingView ของจริงเสมอ! (เอาป้ายบังออกแล้ว) 🌟
+        const tvContainer = document.getElementById('tvContainer');
+        
+        tvContainer.innerHTML = `
+            <iframe
+                src="https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(c.tvSymbol)}&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=1&save_image=0"
+                style="width:100%; height:100%; border:none;"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        `;
+
+        setTimeout(() => {
+            if (tvContainer.innerHTML.trim() === '') {
+                tvContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:13px;">ไม่สามารถโหลดกราฟได้</div>';
+            }
+        }, 2000);
+        
+        updateChartUI();
+    });
+}
+
+            function updateChartUI() {
+    const cc = activeAsset.pct >= 0 ? 'text-green' : 'text-red';
+    const s = activeAsset.pct >= 0 ? '+' : '';
+
+    // *** เพิ่มบรรทัดนี้: กำหนดทศนิยมตามราคา ***
+    let dec = activeAsset.priceThb < 1 ? 6 : 2;
+    
+    document.getElementById('cvPrice').innerText = activeAsset.priceThb.toLocaleString('en-US', {
+        minimumFractionDigits: dec,
+        maximumFractionDigits: dec
+    });
+    document.getElementById('cvPrice').className = 'pro-current-price ' + cc;
+
+    const cv = activeAsset.priceThb * (activeAsset.pct / 100);
+    document.getElementById('cvChange').innerText = `${s}${cv.toFixed(dec)} (${s}${activeAsset.pct.toFixed(2)}%)`;
+    document.getElementById('cvChange').className = 'pro-price-change ' + cc;
+
+    document.getElementById('cvOpen').innerText = (activeAsset.priceThb * 0.99).toLocaleString('en-US', { maximumFractionDigits: dec });
+    document.getElementById('cvHigh').innerText = (activeAsset.priceThb * 1.02).toLocaleString('en-US', { maximumFractionDigits: dec });
+    document.getElementById('cvLow').innerText = (activeAsset.priceThb * 0.98).toLocaleString('en-US', { maximumFractionDigits: dec });
+
+    const spread = activeAsset.priceThb * 0.0005;
+    document.getElementById('cvSellPrice').innerText = (activeAsset.priceThb - spread).toLocaleString('en-US', { maximumFractionDigits: dec });
+    document.getElementById('cvBuyPrice').innerText = (activeAsset.priceThb + spread).toLocaleString('en-US', { maximumFractionDigits: dec });
+}
+        function openOrderEntry(side) {
+            currentOrderSide = side;
+            switchTab('orderEntry');
+            document.getElementById('oeTitle').innerText = activeAsset.name;
+            
+            const acc = getMyAccount();
+            if (acc) {
+                document.getElementById('oeMaxAmount').innerText = `(สูงสุด ${acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 })} THB)`;
+            }
+            
+            document.getElementById('oeAmount').value = '0';
+            document.getElementById('oeLot').value = '0.00';
+            setOrderSide(side);
+        }
+
+        function setOrderSide(side) {
+            currentOrderSide = side;
+
+            const buyTab = document.querySelector('.order-tab.buy');
+            const sellTab = document.querySelector('.order-tab.sell');
+            if (buyTab) buyTab.classList.toggle('active', side === 'buy');
+            if (sellTab) sellTab.classList.toggle('active', side === 'sell');
+
+            document.getElementById('oeModeText').innerText = side === 'buy' ? 'ซื้อ' : 'ขาย';
+
+            const spread = activeAsset.priceThb * 0.0005;
+            const ep = side === 'buy' ? activeAsset.priceThb + spread : activeAsset.priceThb - spread;
+
+            // กำหนดจำนวนทศนิยม: ถ้าราคาต่ำกว่า 1 บาท (เช่น LUNC) โชว์ 6 ตำแหน่ง, ถ้าปกติโชว์ 2 ตำแหน่ง
+let dec = ep < 1 ? 6 : 2;
+
+document.getElementById('oeHeaderPrice').innerText = ep.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+document.getElementById('oeHeaderPrice').className = side === 'buy' ? 'text-green' : 'text-red';
+document.getElementById('oePrice').value = ep.toFixed(dec);
+
+            document.getElementById('btnSubmitOrder').style.backgroundColor = side === 'buy' ? 'var(--green)' : 'var(--red)';
+            
+            // คำนวณล็อตใหม่เมื่อเปลี่ยน side
+            calcLotFromAmount();
+        }
+
+        // คำนวณล็อตจากจำนวนเงิน
+function calcLotFromAmount() {
+    const acc = getMyAccount();
+    if (!acc) return;
+    
+    const amount = parseFloat(document.getElementById('oeAmount').value) || 0;
+    const price = parseFloat(document.getElementById('oePrice').value) || 0;
+    
+    if (price > 0 && amount > 0) {
+        // ล็อต = (จำนวนเงิน * 100) / ราคา
+        const lot = (amount * 100) / price;
+        // ปัดเศษให้เป็น 0.01
+        const roundedLot = Math.round(lot * 100) / 100;
+        document.getElementById('oeLot').value = roundedLot.toFixed(2);
+        
+        // ❌ ปิดส่วนนี้ไว้ เพื่อไม่ให้ระบบดึงเลข 0 มาทับตอนที่คุณกำลังพิมพ์ทีละตัวอักษร
+        // const actualMargin = (price * roundedLot) / 100;
+        // document.getElementById('oeAmount').value = actualMargin.toFixed(2);
+        
+    } else {
+        document.getElementById('oeLot').value = '0.00';
+    }
+    
+    updateMarginDisplay();
+}
+
+        // ปรับ input ทั่วไป (ใช้กับปุ่ม + -)
+        function adjustInput(id, val) {
+            const el = document.getElementById(id);
+            let currentVal = parseFloat(el.value) || 0;
+            let newVal = currentVal + val;
+            
+            if (id === 'oeAmount') {
+                const acc = getMyAccount();
+                if (acc && newVal > acc.thb) newVal = acc.thb;
+                if (newVal < 0) newVal = 0;
+                el.value = newVal.toFixed(2);
+                calcLotFromAmount();
+            } else if (id === 'oePrice') {
+                if (newVal < 0) newVal = 0;
+                el.value = newVal.toFixed(2);
+                calcLotFromAmount();
+            }
+        }
+
+        // ตั้งเปอร์เซ็นต์จากยอดเงินที่มี
+        function setAmountPercent(percent) {
+            const acc = getMyAccount();
+            if (!acc) return;
+            
+            const amount = (acc.thb * percent) / 100;
+            document.getElementById('oeAmount').value = amount.toFixed(2);
+            calcLotFromAmount();
+        }
+
+        // ตั้งค่าสูงสุด (100%)
+        function setAmountMax() {
+            const acc = getMyAccount();
+            if (!acc) return;
+            
+            document.getElementById('oeAmount').value = acc.thb.toFixed(2);
+            calcLotFromAmount();
+        }
+
+        // อัปเดตการแสดง Margin
+        function updateMarginDisplay() {
+            const acc = getMyAccount();
+            if (!acc) return;
+            
+            const amount = parseFloat(document.getElementById('oeAmount').value) || 0;
+            const lot = parseFloat(document.getElementById('oeLot').value) || 0;
+            const price = parseFloat(document.getElementById('oePrice').value) || 0;
+            
+            // แสดงยอดเงินที่ใช้ได้
+            document.getElementById('oeAvailable').innerText = `THB ${acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('oeMaxAmount').innerText = `(สูงสุด ${acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 })} THB)`;
+            
+            // คำนวณ margin ที่ต้องใช้
+            const requiredMargin = (price * lot) / 100;
+            document.getElementById('oeReqMargin').innerText = `THB ${requiredMargin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        function submitOrder() {
+            const price = parseFloat(document.getElementById('oePrice').value);
+            const lot = parseFloat(document.getElementById('oeLot').value);
+            const amount = parseFloat(document.getElementById('oeAmount').value);
+            const acc = getMyAccount();
+
+            if (!price || price <= 0 || !lot || lot <= 0 || !amount || amount <= 0) {
+                return showCustomPopup('ข้อผิดพลาด', 'กรุณาระบุข้อมูลให้ถูกต้อง', null, 'red');
+            }
+
+            const m = (price * lot) / 100;  // margin ที่ต้องใช้
+            if (m > acc.thb) {
+                return showCustomPopup('มาร์จิ้นไม่พอ', `ยอดเงินของคุณมีเพียง THB ${acc.thb.toLocaleString()}`, null, 'red');
+            }
+
+           
+
+            acc.thb -= m;
+            acc.positions.push({
+                id: Date.now(),
+                symbol: activeAsset.symbol,
+                side: currentOrderSide,
+                entryPrice: price,
+                lot: lot,
+                margin: m,
+                amount: amount,  // เก็บจำนวนเงินที่ใช้ด้วย
+                time: new Date().toLocaleTimeString()
+            });
+
+            saveState();
+            saveHistory('trade', `เปิดออเดอร์ ${activeAsset.symbol}`, `${currentOrderSide === 'buy' ? 'Long' : 'Short'} ${lot} Lot`, true);
+            showCustomPopup('ส่งคำสั่งสำเร็จ', `ใช้เงิน ${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB`, 'wallet', 'green');
+        }
+        function updateWalletUI() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            let tm = 0;
+            let tp = 0;
+
+            let longHtml = '';
+            let shortHtml = '';
+
+            acc.positions.forEach(p => {
+                tm += p.margin;
+                const c = allMarketData.find(x => x.symbol === p.symbol);
+                const cp = c ? c.priceThb : p.entryPrice;
+
+                let pnl = (cp - p.entryPrice) * p.lot;
+                if (p.side === 'sell') pnl = -pnl;
+
+                tp += pnl;
+
+                const cc = pnl >= 0 ? 'text-green' : 'text-red';
+                const s = pnl >= 0 ? '+' : '';
+                
+                // กำหนดสีปุ่มปิดสถานะให้ตรงกับฝั่ง
+                const btnColor = p.side === 'buy' ? 'var(--green)' : 'var(--red)';
+
+                const itemHtml = `
+                    <div class="asset-item" style="border: 1px solid var(--border-color); flex-direction: column; align-items: stretch; margin-bottom: 15px; background-color: var(--card-bg);">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <div style="font-weight:bold; color:white;">
+                                ${p.symbol}
+                                <span style="background:${p.side === 'buy' ? 'rgba(14,203,129,0.1)' : 'rgba(246,70,93,0.1)'}; color:${btnColor}; font-size:10px; padding:2px 6px; border-radius:4px;">
+                                    ${p.side === 'buy' ? 'Long' : 'Short'} ${p.lot}
+                                </span>
+                            </div>
+                            <div class="${cc}" style="font-weight:bold;">${s}${pnl.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB</div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+                            <div>เปิด: ${p.entryPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                            <div>มาร์จิ้น: ${p.margin.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                        </div>
+                        <button onclick="closePosition(${p.id})" style="margin-top:10px; width:100%; background:transparent; border:1px solid ${btnColor}; color:${btnColor}; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold;">ปิดสถานะ</button>
+                    </div>
+                `;
+
+                // คัดแยกฝั่ง Long / Short
+                if (p.side === 'buy') {
+                    longHtml += itemHtml;
+                } else {
+                    shortHtml += itemHtml;
+                }
+            });
+
+            let finalHtml = '';
+            
+            // ถ้ามีออเดอร์ Long ให้แสดงหมวด Long
+            if (longHtml !== '') {
+                finalHtml += `
+                    <div style="margin-bottom: 25px;">
+                        <div style="color: var(--green); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--green); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg> 
+                            สถานะซื้อ (Long)
+                        </div>
+                        ${longHtml}
+                    </div>
+                `;
+            }
+
+            // ถ้ามีออเดอร์ Short ให้แสดงหมวด Short
+            if (shortHtml !== '') {
+                finalHtml += `
+                    <div style="margin-bottom: 20px;">
+                        <div style="color: var(--red); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--red); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>
+                            สถานะขาย (Short)
+                        </div>
+                        ${shortHtml}
+                    </div>
+                `;
+            }
+
+            // เอาไปยัดใส่หน้าจอ
+            document.getElementById("positionsList").innerHTML =
+                finalHtml || '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding:10px 0;">ไม่มีสถานะคงค้าง</p>';
+
+            document.getElementById("displayBalance").innerText =
+                (acc.thb + tm + tp).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            updateHistoryUI();
+        }
+
+                        // ==========================================
+        // 🚨 ระบบ Popup ถามยืนยัน (Custom)
+        // ==========================================
+        function showConfirmPopup(title, desc, onConfirm) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmDesc').innerText = desc;
+            
+            const btnConfirm = document.getElementById('btnConfirmOK');
+            btnConfirm.onclick = function() {
+                closeConfirmPopup();
+                if(onConfirm) onConfirm(); // ถ้ากดยืนยัน ให้ไปทำฟังก์ชันปิดสถานะต่อ
+            };
+            
+            document.getElementById('confirmPopup').classList.add('active');
+        }
+
+        function closeConfirmPopup() {
+            document.getElementById('confirmPopup').classList.remove('active');
+        }
+
+        // ==========================================
+        // กดปุ่มปิดสถานะ -> เรียก Popup ขึ้นมาถามก่อน
+        // ==========================================
+        function closePosition(id) {
+            showConfirmPopup(
+                'ปิดสถานะ (Close Position)',
+                '⚠️ คุณต้องการปิดสถานะนี้ใช่หรือไม่?\n\nระบบจะทำการสรุปกำไร/ขาดทุน\nและคืนเงินเข้าพอร์ตของคุณทันที',
+                () => executeClosePosition(id) // ถ้ากดยืนยันใน Popup ค่อยส่ง ID ไปปิด
+            );
+        }
+
+        // ==========================================
+        // ดำเนินการคำนวณเงินและปิดสถานะของจริง
+        // ==========================================
+        function executeClosePosition(id) {
+            const acc = getMyAccount();
+            const t = acc.positions.find(p => p.id === id);
+            if (!t) return;
+
+            const c = allMarketData.find(x => x.symbol === t.symbol);
+            const cp = c ? c.priceThb : t.entryPrice;
+
+            let pnlValue = (cp - t.entryPrice) * t.lot;
+            if (t.side === 'sell') pnlValue = -pnlValue;
+
+            let r = t.margin + pnlValue;
+            if (r < 0) r = 0;
+
+            acc.thb += r;
+            acc.positions = acc.positions.filter(p => p.id !== id);
+            saveState();
+            updateWalletUI();
+
+            const ps = pnlValue >= 0
+                ? '+' + pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 })
+                : pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
+
+            saveHistory('trade', `ปิดสถานะ ${t.symbol}`, `${ps} THB`, pnlValue >= 0);
+            
+            // รอให้ Popup ยืนยันปิดลงไปก่อน ค่อยเด้ง Popup สำเร็จขึ้นมา
+            setTimeout(() => {
+                showCustomPopup('ปิดสถานะสำเร็จ', `คืนมาร์จิ้นและ P/L เรียบร้อย\n(P/L: ${ps})`, 'wallet', pnlValue >= 0 ? 'green' : 'red');
+            }, 300);
+        }
+
+        function saveHistory(type, title, amountStr, isPositive) {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            const d = new Date();
+            const t = d.toLocaleDateString('th-TH', { day: '2-digit', month: 'short' }) + ' ' +
+                      d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+
+            acc.history.unshift({ type, title, amountStr, isPositive, timeStr: t });
+            if (acc.history.length > 10) acc.history.pop();
+
+            saveState();
+            updateHistoryUI();
+        }
+
+
+        function updateHistoryUI() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            const c = document.getElementById('historyList');
+            if (!c) return;
+
+            if (acc.history.length === 0) {
+                c.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">ไม่มีประวัติ</p>';
+                return;
+            }
+
+            c.innerHTML = acc.history.map(i => {
+                const icon = i.type === 'deposit'
+                    ? '#icon-deposit'
+                    : i.type === 'withdraw'
+                        ? '#icon-withdraw'
+                        : '#icon-history';
+
+                return `
+                    <div class="asset-item">
+                        <div class="asset-left">
+                            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:50%; display:flex;">
+                                <svg width="16" height="16" stroke="${i.isPositive ? 'var(--green)' : 'var(--red)'}">
+                                    <use href="${icon}"></use>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="asset-name" style="font-size:14px;">${i.title}</div>
+                                <div class="asset-desc" style="font-size:11px;">${i.timeStr}</div>
+                            </div>
+                        </div>
+                        <div class="asset-right">
+                            <div class="asset-amount ${i.isPositive ? 'text-green' : 'text-red'}" style="font-size:14px;">${i.amountStr}</div>
+                            <div class="asset-value" style="font-size:11px; margin-top:4px;">สำเร็จ</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateProfileUI() {
+            const acc = getMyAccount();
+            if (!acc) return;
+
+            resetDailyDepositIfNeeded(acc);
+
+            document.getElementById('homeWelcomeName').innerText = `สวัสดี, ${acc.accName}`;
+            document.getElementById('profName').innerText = acc.accName;
+            document.getElementById('profUid').innerText = 'UID: ' + appState.activeUid;
+            document.getElementById('avatarInitial').innerText = acc.accName.charAt(0).toUpperCase();
+            document.getElementById('profBankInfo').innerHTML = `${acc.bankName}<br><span style="font-size:11px;">${acc.bankAcc}</span>`;
+
+            const depositLeftCount = 2 - acc.depositDaily.count;
+            const depositLeftAmount = 100000 - acc.depositDaily.total;
+            document.getElementById('profNextDeposit').innerText =
+                `เหลือ ${depositLeftCount < 0 ? 0 : depositLeftCount} ครั้ง / ${(depositLeftAmount < 0 ? 0 : depositLeftAmount).toLocaleString()} บาท`;
+
+            const unlockDate = new Date(acc.registeredAt + (90 * 24 * 60 * 60 * 1000));
+            document.getElementById('profUnlockDate').innerText =
+                unlockDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function showPending(title, sub, seconds, callback) {
+            document.getElementById('pendingView').style.display = 'flex';
+            document.getElementById('pendingTitle').innerText = title;
+            document.getElementById('pendingSub').innerText = sub;
+
+            const timerEl = document.getElementById('pendingTimer');
+            timerEl.style.display = seconds > 0 ? 'block' : 'none';
+
+            let t = seconds;
+
+            function formatTime(totalSeconds) {
+                const min = Math.floor(totalSeconds / 60);
+                const sec = totalSeconds % 60;
+                return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+            }
+
+            if (seconds > 0) timerEl.innerText = formatTime(t);
+
+            const timer = setInterval(() => {
+                t--;
+                if (t >= 0 && seconds > 0) {
+                    timerEl.innerText = formatTime(t);
+                }
+
+                if (t < 0) {
+                    clearInterval(timer);
+                    document.getElementById('pendingView').style.display = 'none';
+                    timerEl.style.display = 'none';
+                    if (callback) callback();
+                }
+            }, 1000);
+        }
+
+        function showCustomPopup(t, d, target, s) {
+            document.getElementById('popupTitle').innerText = t;
+            document.getElementById('popupDesc').innerText = d;
+
+            const icon = document.getElementById('popupIcon');
+            const btn = document.getElementById('btnPopupOK');
+            icon.className = 'success-icon ' + (s || 'gold');
+
+            let svgHtml = '';
+            if (s === 'red') {
+                svgHtml = '<svg width="30" height="30" stroke="currentColor"><use href="#icon-x"></use></svg>';
+                btn.style.backgroundColor = 'var(--red)';
+            } else if (s === 'green') {
+                svgHtml = '<svg width="30" height="30" stroke="currentColor"><use href="#icon-check"></use></svg>';
+                btn.style.backgroundColor = 'var(--green)';
+            } else {
+                svgHtml = '<svg width="30" height="30" stroke="currentColor"><use href="#icon-check"></use></svg>';
+                btn.style.backgroundColor = 'var(--gold)';
+            }
+
+            icon.innerHTML = svgHtml;
+            document.getElementById('customPopup').classList.add('active');
+            popupRedirectTarget = target;
+        }
+
+        function closePopup() {
+            document.getElementById('customPopup').classList.remove('active');
+            if (popupRedirectTarget) switchTab(popupRedirectTarget);
+        }
+
+        // Register Service Worker สำหรับ PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('✅ ServiceWorker registered:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('❌ ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+// 🖼️ ระบบสไลด์ภาพพื้นหลังหน้า Home
+    
+    // 💡 ตรงนี้ลูกพี่ไปทำรูปมาเพิ่ม แล้วใส่ชื่อไฟล์ลงไปได้เลยครับ
+    const bannerImages = [
+        "gold-banner.jpg",    // รูปที่ 1 
+        "pro.jpg",    // รูปที่ 2 (ตัวอย่าง)
+        "pro1.jpg"       // รูปที่ 3 (ตัวอย่าง)
+    ];
+    
+    let currentBannerIndex = 0;
+
+    function changeBannerImage() {
+        const bannerElement = document.getElementById('sliderBanner');
+        if (!bannerElement) return; // ถ้าหาไม่เจอให้ข้ามไป
+        
+        currentBannerIndex++;
+        
+        // ถ้าวนครบรูปสุดท้ายแล้ว ให้กลับไปเริ่มที่รูปแรก
+        if (currentBannerIndex >= bannerImages.length) {
+            currentBannerIndex = 0;
+        }
+        
+        // สั่งเปลี่ยนรูป
+        bannerElement.style.backgroundImage = `url('${bannerImages[currentBannerIndex]}')`;
+    }
+
+    // สั่งให้ภาพเปลี่ยนทุกๆ 4 วินาที (4000)
+    setInterval(changeBannerImage, 4000);
+
+                // ==========================================
+        // 🤖 ระบบจำลองนักลงทุน (Live Leaderboard) - สวิงเขียว/แดง ทุกคน!
+        // ==========================================
+                let mockBots = [
+            { name: "Kitisakpong1168", balance: 1857940.50, baseProfit: 2.5,  avatar: "M", region: "อเมริกา (USA)" },
+            { name: "Leon_Tan",  balance: 638500.00, baseProfit: -1.2, avatar: "L", region: "เอเชีย (Singapore)" },
+            { name: "Oliver.K",  balance: 425200.75, baseProfit: 1.8,  avatar: "O", region: "ยุโรป (UK)" },
+            { name: "Ahmed",   balance: 392150.00, baseProfit: -0.5, avatar: "A", region: "ตะวันออกกลาง (UAE)" },
+            { name: "WeiChen",  balance: 358400.20, baseProfit: 3.1,  avatar: "W", region: "เอเชีย (HongKong)" },
+            { name: "Carlos_Mis",  balance: 295300.00,  baseProfit: -2.0, avatar: "C", region: "อเมริกาใต้ (Brazil)" },
+            { name: "Sakao66",  balance: 75500.00,  baseProfit: 1.5,  avatar: "S", region: "เอเชีย (Thailand)" },
+            { name: "Emma_Trade",  balance: 56700.00,  baseProfit: -1.8, avatar: "E", region: "ยุโรป (Germany)" }
+        ];
+
+        function renderBotLeaderboard() {
+            const container = document.getElementById('botLeaderboard');
+            if(!container) return;
+            
+            // 1. สุ่มยอดเงินและ % ให้สวิงแรงขึ้น เพื่อให้สลับเขียว/แดงบ่อยๆ
+            mockBots.forEach(bot => {
+                // สุ่มเงินสวิงขึ้นลงแบบ 50/50 (ช่วง -$40 ถึง +$40)
+                const fluctuate = (Math.random() * 80) - 40; 
+                bot.balance += fluctuate;
+                
+                // สุ่ม % กำไรให้สวิงแรงขึ้น (ช่วง -0.4% ถึง +0.4% ทุกๆ 3 วินาที)
+                const pctFluctuate = (Math.random() * 0.8) - 0.4;
+                bot.baseProfit += pctFluctuate;
+
+                // 🚨 ล็อกความสมจริง: ถ้า % มันพุ่งบวกหรือลบเวอร์เกินไป ให้ดึงตัวเลขกลับมาตรงกลาง
+                if(bot.baseProfit > 12) bot.baseProfit -= 1.5;
+                if(bot.baseProfit < -12) bot.baseProfit += 1.5;
+            });
+            
+            // 2. เรียงลำดับจากเงินเยอะสุด
+            mockBots.sort((a, b) => b.balance - a.balance);
+            
+            // 🚨 3. แก้ตรงนี้เรียบร้อยครับ! ดึงมาแสดงเต็มๆ ทั้ง 8 คน
+            let displayBots = mockBots.slice(0, 8);
+            
+            let html = '';
+            displayBots.forEach((bot, index) => {
+                const borderBottom = index === displayBots.length - 1 ? 'none' : '1px solid var(--border-color)';
+                
+                // เช็คว่ากำไรหรือขาดทุน ณ วินาทีนั้น เพื่อแยกสี เขียว/แดง
+                const isPositive = bot.baseProfit >= 0;
+                const profitColor = isPositive ? 'var(--green)' : 'var(--red)';
+                const profitStr = (isPositive ? "+" : "") + bot.baseProfit.toFixed(2) + "%";
+                
+                const balanceStr = bot.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + " USD";
+
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 12px 0; border-bottom: ${borderBottom}; transition: all 0.3s ease;">
+                        <div style="display:flex; align-items:center; gap: 12px;">
+                            <div style="width:38px; height:38px; background:var(--input-bg); border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--gold); font-weight:bold; font-size:16px; border: 1px solid var(--border-color);">
+                                ${bot.avatar}
+                            </div>
+                            <div>
+                                <div style="color:white; font-size:14px; font-weight:bold;">${bot.name}</div>
+                                <div style="color:var(--text-muted); font-size:11px;">🌍 ${bot.region}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="color:white; font-weight:bold; font-size:14px; font-variant-numeric: tabular-nums;">${balanceStr}</div>
+                            <div style="color:${profitColor}; font-size:12px; font-weight:bold;">${profitStr}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // โหลดครั้งแรก และสั่งให้อัปเดตกระดานทุกๆ 3 วินาที
+        setTimeout(renderBotLeaderboard, 500);
+        setInterval(renderBotLeaderboard, 3000);
+
+        function checkDailyPromo() {
+            const today = new Date().toLocaleDateString('th-TH');
+            const lastSeen = localStorage.getItem('lastSeenPromoDate');
+
+            if (lastSeen !== today) {
+                const popup = document.getElementById('dailyPromoPopup');
+                if (popup) popup.style.display = 'flex';
+            }
+        }
+
+    </script>
+</body>
+</html>

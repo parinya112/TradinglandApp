@@ -1,0 +1,17 @@
+{
+  "name": "TradingLand Pro",
+  "short_name": "TradingLand",
+  "description": "แพลตฟอร์มเทรดสินทรัพย์ดิจิทัล",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0B0E11",
+  "theme_color": "#F0B90B",
+  "icons": [
+    {
+      "src": "./icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
