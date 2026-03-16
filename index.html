@@ -2261,7 +2261,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 98.59; 
+                item.priceUsd = 99.59; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2559,24 +2559,16 @@ setInterval(initMarketPrices, 2000);
     if (acc && !acc.initialBonus) {
         acc.initialBonus = true; // ประทับตราว่าผ่านการตั้งค่าเริ่มต้นแล้ว
 
-        // 🕵️‍♂️ แผนใหม่: นับจำนวนบัญชีที่มีในเครื่อง (v14_state)
-        const totalAccounts = Object.keys(appState.accounts).length;
+        // 🚫 ยกเลิกแจกเงินฟรี! ทุกบัญชีที่สร้างใหม่เริ่มที่ 0 บาท
+        acc.thb = 0; 
 
-        if (totalAccounts === 1) {
-            // 🌟 มีแค่ 1 บัญชี (แปลว่าเป็นคนแรกที่เพิ่งสมัคร) -> แจกโบนัส!
-            acc.thb = 63380.96;
-            saveHistory('deposit', 'ระบบได้ดึงเงินกับมาให้แล้ว', '+63,380.96 THB', true);
-        } else {
-            // 🚫 มีมากกว่า 1 บัญชี (แปลว่าเป็นบัญชีที่ 2 หรือ 3) -> ไม่แจกโบนัส!
-            acc.thb = 0;
-        }
-
-        // 💾 สั่งเซฟข้อมูลกลับลงเครื่องทันที (เพื่อความชัวร์ 100%)
+        // 💾 สั่งเซฟข้อมูลกลับลงเครื่องทันที
         localStorage.setItem('tradingland_v14_state', JSON.stringify(appState));
     }
     
     switchTab('home');
 }
+
 
 
 
