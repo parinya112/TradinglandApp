@@ -2253,19 +2253,19 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 5020.600; 
+                item.priceUsd = 5013.653; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
-                item.priceThb = isWeekend ? (item.priceUsd * 32.33) : (item.priceUsd * liveThbRate); 
+                item.priceThb = isWeekend ? (item.priceUsd * 32.29) : (item.priceUsd * liveThbRate); 
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 99.59; 
+                item.priceUsd = 93.48; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
-                item.priceThb = isWeekend ? (item.priceUsd * 32.33) : (item.priceUsd * liveThbRate); 
+                item.priceThb = isWeekend ? (item.priceUsd * 32.29) : (item.priceUsd * liveThbRate); 
             }
             
             // จัดการตัวเลขเปอร์เซ็นต์ (%) ให้สมจริง
