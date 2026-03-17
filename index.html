@@ -1561,6 +1561,16 @@ const splashPromos = [
         img: "s2.jpg",
         title: "",
         desc: ""
+    },
+    {
+        img: "s3.jpg",
+        title: "",
+        desc: ""
+    },
+    {
+        img: "s4.jpg",
+        title: "",
+        desc: ""
     }
 ];
 
@@ -2151,7 +2161,7 @@ tvSymbol: 'SET:SCC',
 icon: 'scc.png' },
 
 { symbol: 'LAND', name: 'LAND', category: 'stock', 
-priceThb: 6.709, 
+priceThb: 6.979, 
 priceUsd: 9.20, 
 pct: 1.47, 
 volume: '0.1M', 
@@ -2254,7 +2264,7 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 5000.653; 
+                item.priceUsd = 5028.853; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2262,7 +2272,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 95.87; 
+                item.priceUsd = 96.45; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
