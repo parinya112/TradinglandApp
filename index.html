@@ -1968,7 +1968,7 @@ randomizeSplash();
                 เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
             </div>
 
-            <div class="input-group">
+           <div class="input-group">
                 <label>ระบุจำนวนเงิน (THB)</label>
                 <input type="number" id="depositAmount" placeholder="ยอดเงินที่ต้องการฝาก">
             </div>
@@ -1985,17 +1985,30 @@ randomizeSplash();
                 กรุณาโอนภายในเวลาที่กำหนด หากหมดเวลาให้เริ่มรายการใหม่
             </div>
 
-            <div class="bank-box">
+                      <div class="bank-box">
                 <div><strong class="text-gold">บัญชีรับโอนสำหรับฝากเงิน</strong></div>
-                <div>เลขบัญชี: <strong>8004912687</strong></div>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
+                    <div>เลขบัญชี: <strong id="copyAccText">8004912687</strong></div>
+                    <button onclick="copyAccNumber()" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;">คัดลอก</button>
+                </div>
+
                 <div>ธนาคาร: <strong>กรุงศรี</strong></div>
                 <div>ชื่อบัญชี: <strong>นาย.Parinya</strong></div>
-                <div style="margin-top:10px;">ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong></div>
+                
+                <div style="margin-top: 10px;">
+                    ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong>
+                </div>
+            </div>
+
+            <div id="customToast" style="visibility: hidden; min-width: 200px; background-color: rgba(30, 35, 41, 0.95); color: #D4AF37; text-align: center; border: 1px solid #D4AF37; border-radius: 8px; padding: 12px 16px; position: fixed; z-index: 9999; left: 50%; bottom: 40px; transform: translateX(-50%); font-size: 14px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s, visibility 0.3s;">
+                ✅ คัดลอกเลขบัญชีเรียบร้อย!
             </div>
 
             <div style="background:rgba(14,203,129,0.08); border-left:3px solid var(--green); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.6;">
                 เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
             </div>
+
 
             <div style="text-align:center; margin-bottom:18px;">
                 <div style="font-size:12px; color:var(--text-muted);">เวลาที่เหลือในการโอน</div>
@@ -2008,6 +2021,7 @@ randomizeSplash();
             </div>
         </div>
     </div>
+
 
     <div id="withdrawView" style="display:none; padding:15px; padding-top:30px;">
         <div class="flex-between" style="margin-bottom:20px;">
@@ -3594,6 +3608,30 @@ function calcLotFromAmount() {
                 if (popup) popup.style.display = 'flex';
             }
         }
+
+// ฟังก์ชันโชว์แจ้งเตือนแบบลอย (Toast)
+function showToast(message) {
+    const toast = document.getElementById("customToast");
+    toast.innerHTML = message;
+    toast.style.visibility = "visible";
+    toast.style.opacity = "1";
+
+    // สั่งให้จางหายไปเองหลังจากผ่านไป 2 วินาที
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => { toast.style.visibility = "hidden"; }, 300);
+    }, 2000);
+}
+
+// ฟังก์ชันคัดลอกเลขบัญชี
+function copyAccNumber() {
+    const accNumber = document.getElementById("copyAccText").innerText.replace(/[^0-9]/g, ''); 
+    navigator.clipboard.writeText(accNumber).then(() => {
+        showToast("✅ คัดลอก <b>" + accNumber + "</b> สำเร็จ");
+    }).catch(err => {
+        showToast("❌ ไม่สามารถคัดลอกได้");
+    });
+}
 
     </script>
 </body>
