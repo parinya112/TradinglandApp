@@ -2282,15 +2282,15 @@ async function initMarketPrices() {
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
-                item.priceThb = isWeekend ? (item.priceUsd * 32.29) : (item.priceUsd * liveThbRate); 
+                item.priceThb = isWeekend ? (item.priceUsd * 32.79) : (item.priceUsd * liveThbRate); 
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 98.058; 
+                item.priceUsd = 98.10; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
-                item.priceThb = isWeekend ? (item.priceUsd * 32.29) : (item.priceUsd * liveThbRate); 
+                item.priceThb = isWeekend ? (item.priceUsd * 32.79) : (item.priceUsd * liveThbRate); 
             }
             
             // จัดการตัวเลขเปอร์เซ็นต์ (%) ให้สมจริง
