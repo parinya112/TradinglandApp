@@ -1518,49 +1518,7 @@
     </style>
 </head>
 <body>
-
-<!-- ใส่ก่อน </body> -->
-<div id="maintenanceMode" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(145deg, #0b0e14 0%, #1a1f2a 100%); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
-    <div style="text-align: center; padding: 20px; max-width: 300px;">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 8v4M12 16h.01"/>
-        </svg>
-        <h2 style="color: #F0B90B; margin: 20px 0 10px 0;">⚙️ ระบบปิดปรับปรุงชั่วคราว</h2>
-        <p style="color: #848E9C; font-size: 14px; line-height: 1.6;">ทีมงานกำลังพัฒนาระบบให้ดียิ่งขึ้น<br>กรุณากลับมาใหม่อีกครั้ง</p>
-        <div style="margin-top: 30px;">
-            <div style="width: 40px; height: 40px; margin: 0 auto; border: 3px solid rgba(240,185,11,0.3); border-top-color: #F0B90B; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-        </div>
-        <p style="color: #5a6578; font-size: 12px; margin-top: 20px;">TradingLand Pro</p>
-    </div>
-</div>
-
-<style>
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-</style>
-
-<script>
-// ปิดการทำงานทั้งหมด
-document.addEventListener('DOMContentLoaded', function() {
-    // ซ่อนเนื้อหาหลักทั้งหมด
-    const allViews = ['homeView', 'walletView', 'marketView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'profileView', 'accountListView', 'kycView', 'pinLockView'];
-    allViews.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-    
-    // ซ่อน header และ nav
-    const header = document.getElementById('mainHeader');
-    if (header) header.style.display = 'none';
-    const nav = document.getElementById('bottomNav');
-    if (nav) nav.style.display = 'none';
-    
-    // แสดงหน้า maintenance
-    document.getElementById('maintenanceMode').style.display = 'flex';
-});
-</script>    
+  
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
@@ -2320,7 +2278,7 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 4493.21; 
+                item.priceUsd = 4484.21; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
