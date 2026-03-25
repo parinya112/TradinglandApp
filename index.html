@@ -2054,31 +2054,67 @@ randomizeSplash();
         </div>
     </div>
 
-    <div id="profileView" style="display:none;">
-        <div class="profile-header">
-            <div class="profile-avatar" id="avatarInitial">U</div>
-            <div class="profile-name" id="profName">User Name</div>
-            <div class="profile-uid" id="profUid">UID: 00000000</div>
-            <div class="status-badge"><svg width="14" height="14" stroke="currentColor"><use href="#icon-check"></use></svg> ยืนยันตัวตน (KYC) แล้ว</div>
-        </div>
-        <div class="container" style="padding-top: 0;">
-            <div class="card">
-                <div class="section-title" style="margin-top: 0;">จัดการบัญชี (Multi-Account)</div>
-                <button class="btn" style="background-color: var(--card-bg); border: 1px solid var(--gold); color: var(--gold);" onclick="initAppSecurity()">
-                    สลับบัญชีลงทุน (Switch Account)
-                </button>
+   <div id="profileView" style="display:none;">
+    <div class="profile-header">
+        <div class="profile-avatar" id="avatarInitial">U</div>
+        <div class="profile-name" id="profName">User Name</div>
+        <div class="profile-uid" id="profUid">UID: 00000000</div>
+        <div class="status-badge"><svg width="14" height="14" stroke="currentColor"><use href="#icon-check"></use></svg> ยืนยันตัวตน (KYC) แล้ว</div>
+    </div>
+    <div class="container" style="padding-top: 0;">
+        
+     <!-- VIP Card -->
+<div id="vipCard" style="background: linear-gradient(135deg, #1E222D, #2B3139); border-radius: 30px; padding: 10px 16px; margin-bottom: 12px; border: 1px solid rgba(255,215,0,0.4); transition: all 0.3s ease;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div id="vipIconBg" style="background: rgba(255,215,0,0.2); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <svg id="vipIconSvg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
             </div>
-            <div class="card">
-                <div class="section-title" style="margin-top: 0;">ข้อมูลความปลอดภัย & วินัย</div>
-                <div class="menu-list">
-                    <div class="menu-item"><div class="menu-left"><div class="menu-label">บัญชีธนาคาร</div></div><div class="menu-value" id="profBankInfo">--</div></div>
-                    <div class="menu-item"><div class="menu-left"><div class="menu-label text-green">โควต้าฝากเงินวันนี้</div></div><div class="menu-value" id="profNextDeposit">คำนวณอยู่...</div></div>
-                    <div class="menu-item"><div class="menu-left"><div class="menu-label text-gold">วันปลดล็อกถอนเงิน</div></div><div class="menu-value" id="profUnlockDate">คำนวณอยู่...</div></div>
+            <div>
+                <div style="font-size: 9px; color: #848E9C;">ระดับสมาชิก</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span id="vipBadge" style="display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; background: linear-gradient(135deg, #FFD700, #FFA500); color: #0B0E11;">Normal</span>
+                    <span id="vipTotal" style="font-size: 8px; background: #2B3139; padding: 1px 6px; border-radius: 12px; color: #848E9C;"></span>
                 </div>
             </div>
-            <p style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">* การลงทุนมีความเสี่ยงสูง โปรดบริหารจัดการเงินทุนอย่างเคร่งครัด</p>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-size: 8px; color: #848E9C;">ยอดรวมมูลค่า</div>
+            <div id="vipValue" style="font-size: 12px; font-weight: bold; color: #FFD700;">0 THB</div>
         </div>
     </div>
+    <div style="display: flex; gap: 8px; padding-top: 6px; border-top: 1px solid #2B3139;">
+        <div style="flex: 1; text-align: center;">
+            <div style="font-size: 8px; color: #848E9C;">ฝากสะสม</div>
+            <div id="totalDepositDisplay" style="font-size: 11px; font-weight: bold; color: white;">0</div>
+        </div>
+        <div style="flex: 1; text-align: center;">
+            <div style="font-size: 8px; color: #848E9C;">กำไรสะสม</div>
+            <div id="totalProfitDisplay" style="font-size: 11px; font-weight: bold; color: #0ECB81;">0</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="section-title" style="margin-top: 0;">จัดการบัญชี (Multi-Account)</div>
+    <button class="btn" style="background-color: var(--card-bg); border: 1px solid var(--gold); color: var(--gold);" onclick="initAppSecurity()">
+        สลับบัญชีลงทุน (Switch Account)
+    </button>
+</div>
+<div class="card">
+    <div class="section-title" style="margin-top: 0;">ข้อมูลความปลอดภัย & วินัย</div>
+    <div class="menu-list">
+        <div class="menu-item"><div class="menu-left"><div class="menu-label">บัญชีธนาคาร</div></div><div class="menu-value" id="profBankInfo">--</div></div>
+        <div class="menu-item"><div class="menu-left"><div class="menu-label text-green">โควต้าฝากเงินวันนี้</div></div><div class="menu-value" id="profNextDeposit">คำนวณอยู่...</div></div>
+        <div class="menu-item"><div class="menu-left"><div class="menu-label text-gold">วันปลดล็อกถอนเงิน</div></div><div class="menu-value" id="profUnlockDate">คำนวณอยู่...</div></div>
+    </div>
+</div>
+<p style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">* การลงทุนมีความเสี่ยงสูง โปรดบริหารจัดการเงินทุนอย่างเคร่งครัด</p>
+    </div>
+</div>
 
        <div class="modal-overlay" id="customPopup">
         <div class="modal-content">
@@ -2665,7 +2701,7 @@ setInterval(initMarketPrices, 2000);
             }
         }
 
-               function onLoginSuccess() {
+function onLoginSuccess() {
     updateProfileUI();
     renderMarket();
     updateWalletUI();
@@ -2681,9 +2717,13 @@ setInterval(initMarketPrices, 2000);
         localStorage.setItem('tradingland_v14_state', JSON.stringify(appState));
     }
     
+    // ✅ เพิ่มตรงนี้! (อัปเดต UI VIP ทุกครั้งที่ล็อกอิน)
+    if (acc) {
+        updateVIPUI(acc);
+    }
+    
     switchTab('home');
 }
-
 
 
 
@@ -2821,63 +2861,66 @@ setInterval(initMarketPrices, 2000);
             document.getElementById('depositTransferTimer').innerText = '15:00';
         }
 
-        function confirmTransferred() {
-            const acc = getMyAccount();
-            if (!acc) return;
+       function confirmTransferred() {
+    const acc = getMyAccount();
+    if (!acc) return;
 
-            resetDailyDepositIfNeeded(acc);
+    resetDailyDepositIfNeeded(acc);
 
-            if (!pendingDepositAmount || pendingDepositAmount <= 0) {
-                return showCustomPopup('ไม่พบรายการฝาก', 'กรุณาเริ่มรายการฝากใหม่อีกครั้ง', 'deposit', 'red');
-            }
+    if (!pendingDepositAmount || pendingDepositAmount <= 0) {
+        return showCustomPopup('ไม่พบรายการฝาก', 'กรุณาเริ่มรายการฝากใหม่อีกครั้ง', 'deposit', 'red');
+    }
 
-            if (acc.depositDaily.count >= 2) {
-                return showCustomPopup('ฝากครบโควต้าแล้ว', 'วันนี้คุณฝากครบ 2 ครั้งแล้ว', 'wallet', 'red');
-            }
+    if (acc.depositDaily.count >= 2) {
+        return showCustomPopup('ฝากครบโควต้าแล้ว', 'วันนี้คุณฝากครบ 2 ครั้งแล้ว', 'wallet', 'red');
+    }
 
-            if ((acc.depositDaily.total + pendingDepositAmount) > 100000) {
-                return showCustomPopup('ยอดฝากเกินต่อวัน', 'ยอดฝากรวมของวันนี้เกินกำหนดแล้ว', 'wallet', 'red');
-            }
+    if ((acc.depositDaily.total + pendingDepositAmount) > 100000) {
+        return showCustomPopup('ยอดฝากเกินต่อวัน', 'ยอดฝากรวมของวันนี้เกินกำหนดแล้ว', 'wallet', 'red');
+    }
 
-            if (depositTransferCountdown) {
-                clearInterval(depositTransferCountdown);
-                depositTransferCountdown = null;
-            }
+    if (depositTransferCountdown) {
+        clearInterval(depositTransferCountdown);
+        depositTransferCountdown = null;
+    }
 
-            const amt = pendingDepositAmount;
-            pendingDepositAmount = 0;
+    const amt = pendingDepositAmount;
+    pendingDepositAmount = 0;
 
-            showPending(
-                'กำลังทำรายการตรวจสอบ',
-                'ห้ามปิดหน้านี้ ระบบกำลังตรวจสอบยอดโอนของคุณ',
-                60,
-                () => {
-                    acc.thb += amt;
-                    acc.depositDaily.count += 1;
-                    acc.depositDaily.total += amt;
-                    saveState();
+    showPending(
+        'กำลังทำรายการตรวจสอบ',
+        'ห้ามปิดหน้านี้ ระบบกำลังตรวจสอบยอดโอนของคุณ',
+        60,
+        () => {
+            acc.thb += amt;
+            acc.depositDaily.count += 1;
+            acc.depositDaily.total += amt;
+            saveState();
 
-                    saveHistory(
-                        'deposit',
-                        'ฝากเงินสำเร็จ',
-                        '+' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }),
-                        true
-                    );
+            saveHistory(
+                'deposit',
+                'ฝากเงินสำเร็จ',
+                '+' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }),
+                true
+            );
 
-                    document.getElementById('depositStep1Card').style.display = 'block';
-                    document.getElementById('depositStep2Card').style.display = 'none';
-                    document.getElementById('depositAmount').value = '';
-                    document.getElementById('depositTransferTimer').innerText = '15:00';
+            // ✅ เพิ่มตรงนี้! (อัปเดตยอดฝากสะสม)
+            updateVIPStats('deposit', amt);
 
-                    showCustomPopup(
-                        'ฝากเงินสำเร็จ',
-                        `ยอด ${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })} THB เข้าพอร์ตแล้ว`,
-                        'wallet',
-                        'green'
-                    );
-                }
+            document.getElementById('depositStep1Card').style.display = 'block';
+            document.getElementById('depositStep2Card').style.display = 'none';
+            document.getElementById('depositAmount').value = '';
+            document.getElementById('depositTransferTimer').innerText = '15:00';
+
+            showCustomPopup(
+                'ฝากเงินสำเร็จ',
+                `ยอด ${amt.toLocaleString('en-US', { minimumFractionDigits: 2 })} THB เข้าพอร์ตแล้ว`,
+                'wallet',
+                'green'
             );
         }
+    );
+}
 
         function openWithdraw() {
             const acc = getMyAccount();
@@ -3400,36 +3443,41 @@ function submitOrder() {
         // ==========================================
         // ดำเนินการคำนวณเงินและปิดสถานะของจริง
         // ==========================================
-        function executeClosePosition(id) {
-            const acc = getMyAccount();
-            const t = acc.positions.find(p => p.id === id);
-            if (!t) return;
+function executeClosePosition(id) {
+    const acc = getMyAccount();
+    const t = acc.positions.find(p => p.id === id);
+    if (!t) return;
 
-            const c = allMarketData.find(x => x.symbol === t.symbol);
-            const cp = c ? c.priceThb : t.entryPrice;
+    const c = allMarketData.find(x => x.symbol === t.symbol);
+    const cp = c ? c.priceThb : t.entryPrice;
 
-            let pnlValue = (cp - t.entryPrice) * t.lot;
-            if (t.side === 'sell') pnlValue = -pnlValue;
+    let pnlValue = (cp - t.entryPrice) * t.lot;
+    if (t.side === 'sell') pnlValue = -pnlValue;
 
-            let r = t.margin + pnlValue;
-            if (r < 0) r = 0;
+    let r = t.margin + pnlValue;
+    if (r < 0) r = 0;
 
-            acc.thb += r;
-            acc.positions = acc.positions.filter(p => p.id !== id);
-            saveState();
-            updateWalletUI();
+    acc.thb += r;
+    acc.positions = acc.positions.filter(p => p.id !== id);
+    saveState();
+    updateWalletUI();
 
-            const ps = pnlValue >= 0
-                ? '+' + pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 })
-                : pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    const ps = pnlValue >= 0
+        ? '+' + pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 })
+        : pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-            saveHistory('trade', `ปิดสถานะ ${t.symbol}`, `${ps} THB`, pnlValue >= 0);
-            
-            // รอให้ Popup ยืนยันปิดลงไปก่อน ค่อยเด้ง Popup สำเร็จขึ้นมา
-            setTimeout(() => {
-                showCustomPopup('ปิดสถานะสำเร็จ', `คืนมาร์จิ้นและ P/L เรียบร้อย\n(P/L: ${ps})`, 'wallet', pnlValue >= 0 ? 'green' : 'red');
-            }, 300);
-        }
+    saveHistory('trade', `ปิดสถานะ ${t.symbol}`, `${ps} THB`, pnlValue >= 0);
+    
+    // ✅ เพิ่มตรงนี้! (ถ้ามีกำไร ให้อัปเดตกำไรสะสม)
+    if (pnlValue > 0) {
+        updateVIPStats('profit', pnlValue);
+    }
+    
+    // รอให้ Popup ยืนยันปิดลงไปก่อน ค่อยเด้ง Popup สำเร็จขึ้นมา
+    setTimeout(() => {
+        showCustomPopup('ปิดสถานะสำเร็จ', `คืนมาร์จิ้นและ P/L เรียบร้อย\n(P/L: ${ps})`, 'wallet', pnlValue >= 0 ? 'green' : 'red');
+    }, 300);
+}
 
         function saveHistory(type, title, amountStr, isPositive) {
             const acc = getMyAccount();
@@ -3641,6 +3689,23 @@ function renderBotLeaderboard() {
 
         if(bot.baseProfit > 12) bot.baseProfit -= 1.5;
         if(bot.baseProfit < -12) bot.baseProfit += 1.5;
+        
+        // คำนวณระดับ VIP
+        if (bot.balance >= 50000000) {
+            bot.vipLevel = 'SSVIP';
+            bot.vipBg = 'linear-gradient(135deg, #FF1493, #FF69B4)';
+        } else if (bot.balance >= 10000000) {
+            bot.vipLevel = 'VVIP';
+            bot.vipBg = 'linear-gradient(135deg, #FF4500, #FF6347)';
+        } else if (bot.balance >= 3000000) {
+            bot.vipLevel = 'SVIP';
+            bot.vipBg = 'linear-gradient(135deg, #FF8C00, #FFA500)';
+        } else if (bot.balance >= 1000000) {
+            bot.vipLevel = 'VIP';
+            bot.vipBg = 'linear-gradient(135deg, #FFD700, #FFA500)';
+        } else {
+            bot.vipLevel = null;
+        }
     });
     
     // 2. เรียงลำดับจากเงินเยอะสุด
@@ -3650,7 +3715,6 @@ function renderBotLeaderboard() {
     
     let html = '';
     displayBots.forEach((bot, index) => {
-        const borderBottom = index === displayBots.length - 1 ? 'none' : '1px solid var(--border-color)';
         const isPositive = bot.baseProfit >= 0;
         const profitColor = isPositive ? 'var(--green)' : 'var(--red)';
         const profitStr = (isPositive ? "+" : "") + bot.baseProfit.toFixed(2) + "%";
@@ -3660,40 +3724,48 @@ function renderBotLeaderboard() {
         let rankColor = '';
         let rankBadge = '';
         if (index === 0) {
-            rankColor = 'linear-gradient(135deg, #FFD700, #FFA500)';  // ทองคำ
-            rankBadge = '🥇';
+            rankColor = 'linear-gradient(135deg, #FFD700, #FFA500)';
+            rankBadge = '<span style="font-size: 16px;">🏆</span>';
         } else if (index === 1) {
-            rankColor = 'linear-gradient(135deg, #C0C0C0, #A0A0A0)';  // เงิน
-            rankBadge = '🥈';
+            rankColor = 'linear-gradient(135deg, #C0C0C0, #A0A0A0)';
+            rankBadge = '<span style="font-size: 16px;">🥈</span>';
         } else if (index === 2) {
-            rankColor = 'linear-gradient(135deg, #CD7F32, #B87333)';  // ทองแดง
-            rankBadge = '🥉';
+            rankColor = 'linear-gradient(135deg, #CD7F32, #B87333)';
+            rankBadge = '<span style="font-size: 16px;">🥉</span>';
         } else {
             rankColor = 'var(--border-color)';
             rankBadge = `${index + 1}`;
         }
         
-        // ในส่วนที่แสดงอันดับ
-html += `
-    <div style="display:flex; justify-content:space-between; align-items:center; padding: 12px 15px; margin-bottom: 8px; background: var(--card-bg); border-radius: 12px; border: 1px solid ${rankColor === 'var(--border-color)' ? 'var(--border-color)' : 'transparent'}; ${rankColor !== 'var(--border-color)' ? `background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2)); border: 1px solid ${rankColor.split(',')[0].replace('linear-gradient(135deg, ', '')};` : ''} transition: all 0.3s ease;">
-        <div style="display:flex; align-items:center; gap: 12px;">
-            <div style="width: 28px; text-align: center;">
-                <span style="font-size: ${index < 3 ? '20px' : '16px'}; font-weight: bold; ${index < 3 ? 'filter: drop-shadow(0 0 3px gold);' : ''}">${rankBadge}</span>
+        // สร้าง Badge VIP
+        let vipBadgeHtml = '';
+        if (bot.vipLevel) {
+            vipBadgeHtml = `<span style="display: inline-block; margin-left: 4px; padding: 1px 5px; border-radius: 10px; font-size: 7px; font-weight: bold; background: ${bot.vipBg}; color: #FFFFFF;">${bot.vipLevel}</span>`;
+        }
+        
+        html += `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 12px; margin-bottom: 6px; background: var(--card-bg); border-radius: 10px; border: 1px solid ${rankColor === 'var(--border-color)' ? 'var(--border-color)' : 'transparent'}; ${rankColor !== 'var(--border-color)' ? `background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.15)); border: 1px solid ${rankColor.split(',')[0].replace('linear-gradient(135deg, ', '')};` : ''} transition: all 0.2s ease;">
+                <div style="display:flex; align-items:center; gap: 8px;">
+                    <div style="width: 24px; text-align: center;">
+                        <span style="font-size: ${index < 3 ? '16px' : '13px'}; font-weight: bold;">${rankBadge}</span>
+                    </div>
+                    <div style="width:${index < 3 ? '32px' : '28px'}; height:${index < 3 ? '32px' : '28px'}; background:${index === 0 ? 'linear-gradient(135deg, #FFD700, #FFA500)' : index === 1 ? 'linear-gradient(135deg, #C0C0C0, #A0A0A0)' : index === 2 ? 'linear-gradient(135deg, #CD7F32, #B87333)' : 'var(--input-bg)'}; border-radius:50%; display:flex; justify-content:center; align-items:center; color:${index < 3 ? '#0B0E11' : 'var(--gold)'}; font-weight:bold; font-size:${index < 3 ? '14px' : '12px'}; border: 1px solid ${index < 3 ? 'transparent' : 'var(--border-color)'};">
+                        ${bot.avatar}
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                            <span style="color:white; font-size:${index < 3 ? '12px' : '11px'}; font-weight:bold;">${bot.name}</span>
+                            ${vipBadgeHtml}
+                        </div>
+                        <div style="color:var(--text-muted); font-size:${index < 3 ? '9px' : '8px'};">🌍 ${bot.region}</div>
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="color:white; font-weight:bold; font-size:${index < 3 ? '11px' : '10px'}; font-variant-numeric: tabular-nums;">${balanceStr}</div>
+                    <div style="color:${profitColor}; font-size:${index < 3 ? '10px' : '9px'}; font-weight:bold;">${profitStr}</div>
+                </div>
             </div>
-            <div style="width:${index < 3 ? '38px' : '32px'}; height:${index < 3 ? '38px' : '32px'}; background:${index === 0 ? 'linear-gradient(135deg, #FFD700, #FFA500)' : index === 1 ? 'linear-gradient(135deg, #C0C0C0, #A0A0A0)' : index === 2 ? 'linear-gradient(135deg, #CD7F32, #B87333)' : 'var(--input-bg)'}; border-radius:50%; display:flex; justify-content:center; align-items:center; color:${index < 3 ? '#0B0E11' : 'var(--gold)'}; font-weight:bold; font-size:${index < 3 ? '16px' : '14px'}; border: 1px solid ${index < 3 ? 'transparent' : 'var(--border-color)'};">
-                ${bot.avatar}
-            </div>
-            <div>
-                <div style="color:white; font-size:${index < 3 ? '14px' : '13px'}; font-weight:bold;">${bot.name}</div>
-                <div style="color:var(--text-muted); font-size:${index < 3 ? '11px' : '10px'};">🌍 ${bot.region}</div>
-            </div>
-        </div>
-        <div style="text-align:right;">
-            <div style="color:white; font-weight:bold; font-size:${index < 3 ? '14px' : '13px'}; font-variant-numeric: tabular-nums;">${balanceStr}</div>
-            <div style="color:${profitColor}; font-size:${index < 3 ? '12px' : '11px'}; font-weight:bold;">${profitStr}</div>
-        </div>
-    </div>
-`;
+        `;
     });
     container.innerHTML = html;
 }
@@ -3734,6 +3806,179 @@ function copyAccNumber() {
         showToast("❌ ไม่สามารถคัดลอกได้");
     });
 }
+
+// ==========================================
+// 💎 ระบบ VIP (SSVIP, VVIP, SVIP, VIP, Normal)
+// ==========================================
+
+// ฟังก์ชันอัปเดตข้อมูล VIP ย้อนหลัง
+function updateOldAccountsForVIP() {
+    let updated = false;
+    
+    for (let uid in appState.accounts) {
+        const acc = appState.accounts[uid];
+        
+        if (!acc.hasOwnProperty('totalDeposit')) {
+            acc.totalDeposit = 0;
+            acc.totalProfit = 0;
+            
+            if (acc.history && acc.history.length > 0) {
+                acc.history.forEach(item => {
+                    if (item.type === 'deposit') {
+                        let match = item.amountStr.match(/([0-9,]+\.?[0-9]*)/);
+                        if (match) {
+                            let amount = parseFloat(match[1].replace(/,/g, ''));
+                            if (!isNaN(amount)) acc.totalDeposit += amount;
+                        }
+                    }
+                    if (item.type === 'trade' && item.title.includes('ปิดสถานะ')) {
+                        let match = item.amountStr.match(/([0-9,]+\.?[0-9]*)/);
+                        if (match) {
+                            let amount = parseFloat(match[1].replace(/,/g, ''));
+                            if (!isNaN(amount) && amount > 0) acc.totalProfit += amount;
+                        }
+                    }
+                });
+            }
+            
+            if (acc.thb && acc.thb > 0) {
+                acc.totalDeposit += acc.thb;
+            }
+            
+            updated = true;
+        }
+    }
+    
+    if (updated) {
+        saveState();
+        console.log('✅ อัปเดตข้อมูล VIP ย้อนหลังเรียบร้อย');
+        if (typeof updateVIPUI === 'function') {
+            const acc = getMyAccount();
+            if (acc) updateVIPUI(acc);
+        }
+    }
+}
+
+// ฟังก์ชันอัปเดต UI VIP
+function updateVIPUI(acc) {
+    const total = (acc.totalDeposit || 0) + (acc.totalProfit || 0);
+    let level = 'Normal';
+    let color = '#848E9C';
+    let bgColor = 'rgba(132,142,156,0.15)';
+    let svgColor = '#848E9C';
+    let borderColor = 'rgba(132,142,156,0.3)';
+    let svgPath = '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>';
+    
+    if (total >= 5000000000) {
+        level = 'SSVIP';
+        color = '#FF1493';
+        bgColor = 'linear-gradient(135deg, rgba(255,20,147,0.25), rgba(255,105,180,0.2))';
+        svgColor = '#FF1493';
+        borderColor = 'rgba(255,20,147,0.5)';
+        svgPath = '<circle cx="12" cy="12" r="10"/><path d="M12 2L15 8.5L22 9.5L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9.5L9 8.5L12 2Z"/>';
+    } else if (total >= 100000000) {
+        level = 'VVIP';
+        color = '#FF4500';
+        bgColor = 'linear-gradient(135deg, rgba(255,69,0,0.25), rgba(255,99,71,0.2))';
+        svgColor = '#FF4500';
+        borderColor = 'rgba(255,69,0,0.5)';
+        svgPath = '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>';
+    } else if (total >= 5000000) {
+        level = 'SVIP';
+        color = '#FF8C00';
+        bgColor = 'linear-gradient(135deg, rgba(255,140,0,0.25), rgba(255,165,0,0.2))';
+        svgColor = '#FF8C00';
+        borderColor = 'rgba(255,140,0,0.5)';
+        svgPath = '<polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>';
+    } else if (total >= 100000) {
+        level = 'VIP';
+        color = '#FFD700';
+        bgColor = 'linear-gradient(135deg, rgba(255,215,0,0.25), rgba(255,165,0,0.2))';
+        svgColor = '#FFD700';
+        borderColor = 'rgba(255,215,0,0.5)';
+        svgPath = '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>';
+    } else {
+        level = 'Normal';
+        color = '#848E9C';
+        bgColor = 'rgba(132,142,156,0.15)';
+        svgColor = '#848E9C';
+        borderColor = 'rgba(132,142,156,0.3)';
+        svgPath = '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>';
+    }
+    
+    // อัปเดต DOM
+    const vipBadge = document.getElementById('vipBadge');
+    const vipValueEl = document.getElementById('vipValue');
+    const vipCardEl = document.getElementById('vipCard');
+    const vipIconBgEl = document.getElementById('vipIconBg');
+    const vipIconSvg = document.getElementById('vipIconSvg');
+    const totalDepositEl = document.getElementById('totalDepositDisplay');
+    const totalProfitEl = document.getElementById('totalProfitDisplay');
+    
+    // อัปเดต Badge
+    if (vipBadge) {
+        vipBadge.innerText = level;
+        
+        if (level === 'SSVIP') {
+            vipBadge.style.background = 'linear-gradient(135deg, #FF1493, #FF69B4)';
+            vipBadge.style.color = '#FFFFFF';
+            vipBadge.style.boxShadow = '0 0 8px rgba(255,20,147,0.5)';
+        } else if (level === 'VVIP') {
+            vipBadge.style.background = 'linear-gradient(135deg, #FF4500, #FF6347)';
+            vipBadge.style.color = '#FFFFFF';
+            vipBadge.style.boxShadow = '0 0 6px rgba(255,69,0,0.4)';
+        } else if (level === 'SVIP') {
+            vipBadge.style.background = 'linear-gradient(135deg, #FF8C00, #FFA500)';
+            vipBadge.style.color = '#FFFFFF';
+            vipBadge.style.boxShadow = '0 0 6px rgba(255,140,0,0.4)';
+        } else if (level === 'VIP') {
+            vipBadge.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+            vipBadge.style.color = '#FFFFFF';
+            vipBadge.style.boxShadow = '0 0 6px rgba(255,215,0,0.4)';
+        } else {
+            vipBadge.style.background = 'linear-gradient(135deg, #4A4A4A, #3A3A3A)';
+            vipBadge.style.color = '#848E9C';
+            vipBadge.style.boxShadow = 'none';
+        }
+    }
+    
+    if (vipValueEl) {
+        vipValueEl.innerHTML = total.toLocaleString() + ' THB';
+        vipValueEl.style.color = color;
+    }
+    if (vipCardEl) vipCardEl.style.border = `1px solid ${borderColor}`;
+    if (vipIconBgEl) vipIconBgEl.style.background = bgColor;
+    if (vipIconSvg) {
+        vipIconSvg.innerHTML = svgPath;
+        vipIconSvg.setAttribute('stroke', svgColor);
+    }
+    if (totalDepositEl) totalDepositEl.innerHTML = (acc.totalDeposit || 0).toLocaleString() + ' THB';
+    if (totalProfitEl) totalProfitEl.innerHTML = (acc.totalProfit || 0).toLocaleString() + ' THB';
+}
+
+// ฟังก์ชันอัปเดตยอดฝากและกำไรเมื่อมีรายการใหม่
+function updateVIPStats(type, amount) {
+    const acc = getMyAccount();
+    if (!acc) return;
+    
+    if (type === 'deposit') {
+        if (!acc.totalDeposit) acc.totalDeposit = 0;
+        acc.totalDeposit += amount;
+    } else if (type === 'profit') {
+        if (!acc.totalProfit) acc.totalProfit = 0;
+        acc.totalProfit += amount;
+    }
+    
+    saveState();
+    updateVIPUI(acc);
+}
+
+// เรียกใช้ตอนโหลด
+setTimeout(() => {
+    updateOldAccountsForVIP();
+    const acc = getMyAccount();
+    if (acc) updateVIPUI(acc);
+}, 1000);
 
     </script>
 </body>
