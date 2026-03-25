@@ -1755,66 +1755,75 @@ randomizeSplash();
             </div>
 
                           <style>
-        .title-badge-hot {
-            display: inline-flex; 
-            align-items: center;
-            padding: 8px 18px; 
-            background-color: rgba(235, 87, 87, 0.08); /* พื้นหลังสีแดงใสๆ */
-            border-radius: 25px; /* ขอบมนทรงแคปซูล */
-            border: 1px solid rgba(235, 87, 87, 0.3); /* เส้นขอบสีแดง */
-            box-shadow: 0 0 12px rgba(235, 87, 87, 0.15); /* เงาเรืองแสงสีแดงแบบนิ่งๆ */
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
+    .title-badge-hot {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        background: #EB5757;
+        border-radius: 20px;
+        margin-top: 12px;
+        margin-bottom: 10px;
+    }
 
-        .title-badge-hot .title-content {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            color: #ffffff; /* สีตัวหนังสือ */
-        }
-    </style>
+    .title-badge-hot .title-content {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        font-weight: bold;
+        color: #ffffff;
+        gap: 6px;
+    }
 
-       <div class="title-badge-hot">
-        <div class="title-content">
-            <svg width="18" height="18" stroke="var(--red)" style="margin-right:8px;">
-                <use href="#icon-fire"></use>
-            </svg> 
-            สินทรัพย์ยอดนิยม (Top Assets)
-        </div>
-    </div> <div id="homeTopGainers"><p style="text-align:center; color:var(--text-muted); font-size:12px;">กำลังโหลด...</p></div>
+    .title-badge-glow {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        background: #FFD700;
+        border-radius: 20px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
 
-            
-                      <style>
-        .title-badge-glow {
-            display: inline-flex; /* ให้กรอบมันพอดีกับตัวหนังสือ */
-            align-items: center;
-            padding: 8px 18px; /* ความหนาของกรอบ */
-            background-color: rgba(255, 215, 0, 0.08); /* พื้นหลังสีทองใสๆ */
-            border-radius: 25px; /* ขอบมนเป็นทรงแคปซูล */
-            border: 1px solid rgba(255, 215, 0, 0.3); /* เส้นขอบสีทอง */
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.15); /* เงาเรืองแสงแบบนิ่งๆ */
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
+    .title-badge-glow .title-content {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        font-weight: bold;
+        color: #ffffff;  /* เปลี่ยนจาก #0B0E11 เป็น #ffffff */
+        gap: 6px;
+    }
+    
+    .title-badge-hot .title-content svg,
+    .title-badge-glow .title-content svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* ไอคอนสำหรับทองก็ให้ขาว */
+    .title-badge-glow .title-content svg {
+        stroke: #ffffff;
+    }
+</style>
 
-        /* จัดตัวหนังสือและไอคอน */
-        .title-badge-glow .title-content {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            color: #ffffff; /* สีตัวหนังสือ */
-        }
-    </style>
-
-    <div class="title-badge-glow">
-        <div class="title-content">
-            <svg width="18" height="18" stroke="var(--gold)" style="margin-right:8px;">
-                <use href="#icon-fire"></use>
-            </svg> 
-            นักลงทุนที่ทำกำไรสูงสุด (Live)
-        </div>
+<div class="title-badge-hot">
+    <div class="title-content">
+        <svg width="14" height="14" stroke="#ffffff" fill="none">
+            <use href="#icon-fire"></use>
+        </svg> 
+        สินทรัพย์ยอดนิยม (Top Assets)
     </div>
+</div>
+
+<div id="homeTopGainers"><p style="text-align:center; color:var(--text-muted); font-size:12px;">กำลังโหลด...</p></div>
+
+<div class="title-badge-glow">
+    <div class="title-content">
+        <svg width="14" height="14" stroke="#ffffff" fill="none">
+            <use href="#icon-fire"></use>
+        </svg> 
+        นักลงทุนที่ทำกำไรสูงสุด (Live)
+    </div>
+</div>
 
        <div class="card" style="padding: 5px 15px; margin-bottom: 30px;">
         <div id="botLeaderboard"></div>
@@ -2359,7 +2368,7 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 4484.21; 
+                item.priceUsd = 4584.21; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2367,7 +2376,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 98.10; 
+                item.priceUsd = 88.10; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -3233,7 +3242,7 @@ function calcLotFromAmount() {
             document.getElementById('oeReqMargin').innerText = `THB ${requiredMargin.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
 
-        function submitOrder() {
+function submitOrder() {
             const price = parseFloat(document.getElementById('oePrice').value);
             const lot = parseFloat(document.getElementById('oeLot').value);
             const amount = parseFloat(document.getElementById('oeAmount').value);
@@ -3605,90 +3614,103 @@ function calcLotFromAmount() {
     // สั่งให้ภาพเปลี่ยนทุกๆ 4 วินาที (4000)
     setInterval(changeBannerImage, 4000);
 
-                // ==========================================
-        // 🤖 ระบบจำลองนักลงทุน (Live Leaderboard) - สวิงเขียว/แดง ทุกคน!
-        // ==========================================
-                let mockBots = [
-            { name: "Kitisakpong1168", balance: 2538449.29, baseProfit: 7.5,  avatar: "M", region: "อเมริกา (USA)" },
-            { name: "Leon_Tan",  balance: 797490.00, baseProfit: -1.2, avatar: "L", region: "เอเชีย (Singapore)" },
-            { name: "Oliver.K",  balance: 468433.75, baseProfit: 1.8,  avatar: "O", region: "ยุโรป (UK)" },
-            { name: "Ahmed",   balance: 402150.00, baseProfit: -0.5, avatar: "A", region: "ตะวันออกกลาง (UAE)" },
-            { name: "WeiChen",  balance: 358400.20, baseProfit: 3.1,  avatar: "W", region: "เอเชีย (HongKong)" },
-            { name: "Carlos_Mis",  balance: 295300.00,  baseProfit: -2.0, avatar: "C", region: "อเมริกาใต้ (Brazil)" },
-            { name: "Sergeyevich",  balance: 165590.54,  baseProfit: 1.5,  avatar: "S", region: "อเมริกาใต้ (Brazil)" },
-            { name: "Emma_Trade",  balance: 86700.49,  baseProfit: -1.8, avatar: "E", region: "ยุโรป (Germany)" }
-        ];
+// ==========================================
+// 🤖 ระบบจำลองนักลงทุน (Live Leaderboard) - สวิงเขียว/แดง ทุกคน!
+// ==========================================
+let mockBots = [
+    { name: "Kitisakpong1168", balance: 3277893.29, baseProfit: 7.5,  avatar: "M", region: "อเมริกา (USA)" },
+    { name: "Leon_Tan",  balance: 1797490.00, baseProfit: -1.2, avatar: "L", region: "เอเชีย (Singapore)" },
+    { name: "Oliver.K",  balance: 1468433.75, baseProfit: 1.8,  avatar: "O", region: "ยุโรป (UK)" },
+    { name: "Ahmed",   balance: 1402190.00, baseProfit: -0.5, avatar: "A", region: "ตะวันออกกลาง (UAE)" },
+    { name: "WeiChen",  balance: 1358490.20, baseProfit: 3.1,  avatar: "W", region: "เอเชีย (HongKong)" },
+    { name: "Carlos_Mis",  balance: 1295300.00,  baseProfit: -2.0, avatar: "C", region: "อเมริกาใต้ (Brazil)" },
+    { name: "Sergeyevich",  balance: 1165590.54,  baseProfit: 1.5,  avatar: "S", region: "อเมริกาใต้ (Brazil)" },
+    { name: "Emma_Trade",  balance: 1086700.49,  baseProfit: -1.8, avatar: "E", region: "ยุโรป (Germany)" }
+];
 
-        function renderBotLeaderboard() {
-            const container = document.getElementById('botLeaderboard');
-            if(!container) return;
-            
-            // 1. สุ่มยอดเงินและ % ให้สวิงแรงขึ้น เพื่อให้สลับเขียว/แดงบ่อยๆ
-            mockBots.forEach(bot => {
-                // สุ่มเงินสวิงขึ้นลงแบบ 50/50 (ช่วง -$40 ถึง +$40)
-                const fluctuate = (Math.random() * 80) - 40; 
-                bot.balance += fluctuate;
-                
-                // สุ่ม % กำไรให้สวิงแรงขึ้น (ช่วง -0.4% ถึง +0.4% ทุกๆ 3 วินาที)
-                const pctFluctuate = (Math.random() * 0.8) - 0.4;
-                bot.baseProfit += pctFluctuate;
+function renderBotLeaderboard() {
+    const container = document.getElementById('botLeaderboard');
+    if(!container) return;
+    
+    // 1. สุ่มยอดเงินและ % ให้สวิงแรงขึ้น
+    mockBots.forEach(bot => {
+        const fluctuate = (Math.random() * 80) - 40; 
+        bot.balance += fluctuate;
+        const pctFluctuate = (Math.random() * 0.8) - 0.4;
+        bot.baseProfit += pctFluctuate;
 
-                // 🚨 ล็อกความสมจริง: ถ้า % มันพุ่งบวกหรือลบเวอร์เกินไป ให้ดึงตัวเลขกลับมาตรงกลาง
-                if(bot.baseProfit > 12) bot.baseProfit -= 1.5;
-                if(bot.baseProfit < -12) bot.baseProfit += 1.5;
-            });
-            
-            // 2. เรียงลำดับจากเงินเยอะสุด
-            mockBots.sort((a, b) => b.balance - a.balance);
-            
-            // 🚨 3. แก้ตรงนี้เรียบร้อยครับ! ดึงมาแสดงเต็มๆ ทั้ง 8 คน
-            let displayBots = mockBots.slice(0, 8);
-            
-            let html = '';
-            displayBots.forEach((bot, index) => {
-                const borderBottom = index === displayBots.length - 1 ? 'none' : '1px solid var(--border-color)';
-                
-                // เช็คว่ากำไรหรือขาดทุน ณ วินาทีนั้น เพื่อแยกสี เขียว/แดง
-                const isPositive = bot.baseProfit >= 0;
-                const profitColor = isPositive ? 'var(--green)' : 'var(--red)';
-                const profitStr = (isPositive ? "+" : "") + bot.baseProfit.toFixed(2) + "%";
-                
-                const balanceStr = bot.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + " USD";
-
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 12px 0; border-bottom: ${borderBottom}; transition: all 0.3s ease;">
-                        <div style="display:flex; align-items:center; gap: 12px;">
-                            <div style="width:38px; height:38px; background:var(--input-bg); border-radius:50%; display:flex; justify-content:center; align-items:center; color:var(--gold); font-weight:bold; font-size:16px; border: 1px solid var(--border-color);">
-                                ${bot.avatar}
-                            </div>
-                            <div>
-                                <div style="color:white; font-size:14px; font-weight:bold;">${bot.name}</div>
-                                <div style="color:var(--text-muted); font-size:11px;">🌍 ${bot.region}</div>
-                            </div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="color:white; font-weight:bold; font-size:14px; font-variant-numeric: tabular-nums;">${balanceStr}</div>
-                            <div style="color:${profitColor}; font-size:12px; font-weight:bold;">${profitStr}</div>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
+        if(bot.baseProfit > 12) bot.baseProfit -= 1.5;
+        if(bot.baseProfit < -12) bot.baseProfit += 1.5;
+    });
+    
+    // 2. เรียงลำดับจากเงินเยอะสุด
+    mockBots.sort((a, b) => b.balance - a.balance);
+    
+    let displayBots = mockBots.slice(0, 8);
+    
+    let html = '';
+    displayBots.forEach((bot, index) => {
+        const borderBottom = index === displayBots.length - 1 ? 'none' : '1px solid var(--border-color)';
+        const isPositive = bot.baseProfit >= 0;
+        const profitColor = isPositive ? 'var(--green)' : 'var(--red)';
+        const profitStr = (isPositive ? "+" : "") + bot.baseProfit.toFixed(2) + "%";
+        const balanceStr = bot.balance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + " USD";
+        
+        // กำหนดสีกรอบตามอันดับ
+        let rankColor = '';
+        let rankBadge = '';
+        if (index === 0) {
+            rankColor = 'linear-gradient(135deg, #FFD700, #FFA500)';  // ทองคำ
+            rankBadge = '🥇';
+        } else if (index === 1) {
+            rankColor = 'linear-gradient(135deg, #C0C0C0, #A0A0A0)';  // เงิน
+            rankBadge = '🥈';
+        } else if (index === 2) {
+            rankColor = 'linear-gradient(135deg, #CD7F32, #B87333)';  // ทองแดง
+            rankBadge = '🥉';
+        } else {
+            rankColor = 'var(--border-color)';
+            rankBadge = `${index + 1}`;
         }
+        
+        // ในส่วนที่แสดงอันดับ
+html += `
+    <div style="display:flex; justify-content:space-between; align-items:center; padding: 12px 15px; margin-bottom: 8px; background: var(--card-bg); border-radius: 12px; border: 1px solid ${rankColor === 'var(--border-color)' ? 'var(--border-color)' : 'transparent'}; ${rankColor !== 'var(--border-color)' ? `background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2)); border: 1px solid ${rankColor.split(',')[0].replace('linear-gradient(135deg, ', '')};` : ''} transition: all 0.3s ease;">
+        <div style="display:flex; align-items:center; gap: 12px;">
+            <div style="width: 28px; text-align: center;">
+                <span style="font-size: ${index < 3 ? '20px' : '16px'}; font-weight: bold; ${index < 3 ? 'filter: drop-shadow(0 0 3px gold);' : ''}">${rankBadge}</span>
+            </div>
+            <div style="width:${index < 3 ? '38px' : '32px'}; height:${index < 3 ? '38px' : '32px'}; background:${index === 0 ? 'linear-gradient(135deg, #FFD700, #FFA500)' : index === 1 ? 'linear-gradient(135deg, #C0C0C0, #A0A0A0)' : index === 2 ? 'linear-gradient(135deg, #CD7F32, #B87333)' : 'var(--input-bg)'}; border-radius:50%; display:flex; justify-content:center; align-items:center; color:${index < 3 ? '#0B0E11' : 'var(--gold)'}; font-weight:bold; font-size:${index < 3 ? '16px' : '14px'}; border: 1px solid ${index < 3 ? 'transparent' : 'var(--border-color)'};">
+                ${bot.avatar}
+            </div>
+            <div>
+                <div style="color:white; font-size:${index < 3 ? '14px' : '13px'}; font-weight:bold;">${bot.name}</div>
+                <div style="color:var(--text-muted); font-size:${index < 3 ? '11px' : '10px'};">🌍 ${bot.region}</div>
+            </div>
+        </div>
+        <div style="text-align:right;">
+            <div style="color:white; font-weight:bold; font-size:${index < 3 ? '14px' : '13px'}; font-variant-numeric: tabular-nums;">${balanceStr}</div>
+            <div style="color:${profitColor}; font-size:${index < 3 ? '12px' : '11px'}; font-weight:bold;">${profitStr}</div>
+        </div>
+    </div>
+`;
+    });
+    container.innerHTML = html;
+}
 
-        // โหลดครั้งแรก และสั่งให้อัปเดตกระดานทุกๆ 3 วินาที
-        setTimeout(renderBotLeaderboard, 500);
-        setInterval(renderBotLeaderboard, 3000);
+// โหลดครั้งแรก และสั่งให้อัปเดตกระดานทุกๆ 3 วินาที
+setTimeout(renderBotLeaderboard, 500);
+setInterval(renderBotLeaderboard, 3000);
 
-        function checkDailyPromo() {
-            const today = new Date().toLocaleDateString('th-TH');
-            const lastSeen = localStorage.getItem('lastSeenPromoDate');
+function checkDailyPromo() {
+    const today = new Date().toLocaleDateString('th-TH');
+    const lastSeen = localStorage.getItem('lastSeenPromoDate');
 
-            if (lastSeen !== today) {
-                const popup = document.getElementById('dailyPromoPopup');
-                if (popup) popup.style.display = 'flex';
-            }
-        }
+    if (lastSeen !== today) {
+        const popup = document.getElementById('dailyPromoPopup');
+        if (popup) popup.style.display = 'flex';
+    }
+}
 
 // ฟังก์ชันโชว์แจ้งเตือนแบบลอย (Toast)
 function showToast(message) {
@@ -3697,7 +3719,6 @@ function showToast(message) {
     toast.style.visibility = "visible";
     toast.style.opacity = "1";
 
-    // สั่งให้จางหายไปเองหลังจากผ่านไป 2 วินาที
     setTimeout(() => {
         toast.style.opacity = "0";
         setTimeout(() => { toast.style.visibility = "hidden"; }, 300);
