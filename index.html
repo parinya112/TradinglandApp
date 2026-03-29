@@ -1519,6 +1519,80 @@
 </head>
 <body>
   
+<!-- หน้าแจ้งเตือนปิดปรับปรุง (ตามรูป) -->
+<div id="maintenanceAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div style="text-align: center; padding: 30px; max-width: 300px;">
+        
+        <!-- ไอคอนแจ้งเตือน -->
+        <div style="background: rgba(240,185,11,0.1); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4M12 16h.01"/>
+            </svg>
+        </div>
+        
+        <!-- หัวข้อ -->
+        <h2 style="color: #F0B90B; font-size: 20px; margin: 0 0 15px 0;">🔧 ระบบกำลังปิดปรับปรุง</h2>
+        
+        <!-- ข้อความ -->
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">
+            แอปพลิเคชัน TradingLand กำลังปิดระบบและเพิ่มฟีเจอร์ใหม่ลองรับAIในอนาคตแก้ไขบัคมือถือS26+ IPHONE17+ เพิ่มประสิทธิภาพการใช้งานให้ดียิ่งขึ้นเพิ่มฟีเจอร์ระบบอังเปา
+        </p>
+        
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 20px 0;">
+            ขออภัยในความไม่สะดวกครับ 🚨
+        </p>
+        
+        <!-- เวลากลับมา -->
+        <div style="background: #1E222D; border-radius: 12px; padding: 12px; margin: 10px 0;">
+            <div style="color: #848E9C; font-size: 12px; margin-bottom: 5px;">💬 คาดว่าจะกลับมาใช้งานได้ในเวลา</div>
+            <div style="color: #F0B90B; font-size: 24px; font-weight: bold;" id="returnTime">05:00 น.</div>
+        </div>
+        
+        <!-- ข้อความเล็ก -->
+        <p style="color: #5A6578; font-size: 11px; margin-top: 20px;">ระบบปิดอัตโนมัติทุกวันอาทิตย 20:00 - 05:00</p>
+    </div>
+</div>
+
+<script>
+// ปิดการทำงานของแอปทั้งหมด
+function disableApp() {
+    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
+    views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.style.display = 'none';
+    });
+    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
+    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
+    
+    const splashAd = document.getElementById('splashAd');
+    if (splashAd) splashAd.style.display = 'none';
+}
+
+// ตรวจสอบเวลา 20:00 - 05:00
+function checkMaintenanceTime() {
+    const now = new Date();
+    const hour = now.getHours();
+    
+    // เวลา 20:00 - 05:00 (ห้ามเข้า)
+    if (hour >= 20 || hour < 5) {
+        document.getElementById('maintenanceAlert').style.display = 'flex';
+        disableApp();
+    } else {
+        document.getElementById('maintenanceAlert').style.display = 'none';
+        // ถ้าพ้นเวลาแล้ว ให้รีเฟรช
+        if (window.location.href.indexOf('maintenance') === -1) {
+            location.reload();
+        }
+    }
+}
+
+// เริ่มตรวจสอบเมื่อโหลดหน้า
+document.addEventListener('DOMContentLoaded', () => {
+    checkMaintenanceTime();
+    setInterval(checkMaintenanceTime, 60000);
+});
+</script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
