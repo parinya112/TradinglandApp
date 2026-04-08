@@ -1853,25 +1853,24 @@ randomizeSplash();
         </div>
     </div>
 
-    <div id="walletView" style="display:none;">
-        <div class="container">
-            <div class="card" style="text-align: center; padding-top: 30px; padding-bottom: 30px; background: linear-gradient(135deg, #8B6508 0%, #D4AF37 50%, #8B6508 100%); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">
-                <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 14px;">ยอดคงเหลือประเมิน (THB)</p>
-                <div class="wallet-balance" id="displayBalance" style="color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">0.00</div>
-                <div style="display: flex; gap: 15px; margin-top: 25px;">
-
-                    <button class="btn-action" onclick="openDeposit()"><svg width="18" height="18" stroke="var(--green)"><use href="#icon-deposit"></use></svg>ฝากเงิน</button>
-                    <button class="btn-action" onclick="openWithdraw()"><svg width="18" height="18" stroke="var(--red)"><use href="#icon-withdraw"></use></svg>ถอนเงิน</button>
-                </div>
+ <div id="walletView" style="display:none;">
+    <div class="container">
+        <div class="card" style="text-align: center; padding-top: 30px; padding-bottom: 30px; background: linear-gradient(135deg, #8B6508 0%, #D4AF37 50%, #8B6508 100%); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);">
+            <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 14px;">ยอดคงเหลือประเมิน (THB)</p>
+            <div class="wallet-balance" id="displayBalance" style="color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">0.00</div>
+            <div style="display: flex; gap: 15px; margin-top: 25px;">
+                <button class="btn-action" onclick="openDeposit()"><svg width="18" height="18" stroke="var(--green)"><use href="#icon-deposit"></use></svg>ฝากเงิน</button>
+                <button class="btn-action" onclick="openWithdraw()"><svg width="18" height="18" stroke="var(--red)"><use href="#icon-withdraw"></use></svg>ถอนเงิน</button>
             </div>
-
-            <div class="section-title">ตำแหน่งที่เปิดอยู่ (Positions)</div>
-            <div class="asset-list" id="positionsList"></div>
-
-            <div class="section-title" style="margin-top:25px;">ประวัติการทำรายการล่าสุด</div>
-            <div class="asset-list" id="historyList"></div>
         </div>
+
+        <div class="section-title">ตำแหน่งที่เปิดอยู่ (Positions)</div>
+        <div class="asset-list" id="positionsList"></div>
+
+        <div class="section-title" style="margin-top:25px;">ประวัติการทำรายการล่าสุด</div>
+        <div class="asset-list" id="historyList"></div>
     </div>
+</div>
 
     <div id="tradeChartView" style="display:none;">
         <div class="pro-header">
@@ -2476,7 +2475,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 112.05; 
+                item.priceUsd = 94.78; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2628,51 +2627,53 @@ setInterval(initMarketPrices, 2000);
         }
 
         function submitKyc() {
-            const an = document.getElementById('kycAccName').value.trim();
-            const rn = document.getElementById('kycRealName').value.trim();
-            const id = document.getElementById('kycId').value.trim();
-            const ph = document.getElementById('kycPhone').value.trim();
-            const bn = document.getElementById('kycBankName').value;
-            const ba = document.getElementById('kycBankAcc').value.trim();
+    const an = document.getElementById('kycAccName').value.trim();
+    const rn = document.getElementById('kycRealName').value.trim();
+    const id = document.getElementById('kycId').value.trim();
+    const ph = document.getElementById('kycPhone').value.trim();
+    const bn = document.getElementById('kycBankName').value;
+    const ba = document.getElementById('kycBankAcc').value.trim();
 
-            if (!an || !rn || !id || !ph || !bn || !ba) {
-                alert("กรุณากรอกข้อมูลให้ครบทุกช่องเพื่อความปลอดภัย");
-                return;
-            }
+    if (!an || !rn || !id || !ph || !bn || !ba) {
+        alert("กรุณากรอกข้อมูลให้ครบทุกช่องเพื่อความปลอดภัย");
+        return;
+    }
 
-            if (id.length !== 13) {
-                alert("เลขบัตรประชาชนต้องมี 13 หลัก");
-                return;
-            }
+    if (id.length !== 13) {
+        alert("เลขบัตรประชาชนต้องมี 13 หลัก");
+        return;
+    }
 
-            document.getElementById('kycView').style.display = 'none';
-            showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 2, () => {
-                const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
-                appState.accounts[newUid] = {
-                    uid: newUid,
-                    accName: an,
-                    realName: rn,
-                    idCard: id,
-                    phone: ph,
-                    bankName: bn,
-                    bankAcc: ba,
-                    thb: 0,
-                    positions: [],
-                    history: [],
-                    pin: "",
-                    registeredAt: Date.now(),
-                    depositDaily: {
-                        date: getDateKey(),
-                        count: 0,
-                        total: 0
-                    }
-                };
-                saveState();
-                targetUidToLogin = newUid;
-                startPinSetup();
-            });
-        }
-
+    document.getElementById('kycView').style.display = 'none';
+    showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 2, () => {
+        const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
+        appState.accounts[newUid] = {
+            uid: newUid,
+            accName: an,
+            realName: rn,
+            idCard: id,
+            phone: ph,
+            bankName: bn,
+            bankAcc: ba,
+            thb: 0,
+            positions: [],
+            history: [],
+            pin: "",
+            registeredAt: Date.now(),
+            depositDaily: {
+                date: getDateKey(),
+                count: 0,
+                total: 0
+            },
+            // ✅ เพิ่ม 2 บรรทัดนี้ตรงนี้
+            dailyProfit: {},
+            todayProfit: 0
+        };
+        saveState();
+        targetUidToLogin = newUid;
+        startPinSetup();
+    });
+}
         function startPinSetup() {
             setupPinStep = 1;
             currentPin = "";
@@ -3463,97 +3464,94 @@ function submitOrder() {
             saveHistory('trade', `เปิดออเดอร์ ${activeAsset.symbol}`, `${currentOrderSide === 'buy' ? 'Long' : 'Short'} ${lot} Lot`, true);
             showCustomPopup('ส่งคำสั่งสำเร็จ', `ใช้เงิน ${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB`, 'wallet', 'green');
         }
-        function updateWalletUI() {
-            const acc = getMyAccount();
-            if (!acc) return;
+       function updateWalletUI() {
+    const acc = getMyAccount();
+    if (!acc) return;
 
-            let tm = 0;
-            let tp = 0;
+    let tm = 0;
+    let tp = 0;
 
-            let longHtml = '';
-            let shortHtml = '';
+    let longHtml = '';
+    let shortHtml = '';
 
-            acc.positions.forEach(p => {
-                tm += p.margin;
-                const c = allMarketData.find(x => x.symbol === p.symbol);
-                const cp = c ? c.priceThb : p.entryPrice;
+    acc.positions.forEach(p => {
+        tm += p.margin;
+        const c = allMarketData.find(x => x.symbol === p.symbol);
+        const cp = c ? c.priceThb : p.entryPrice;
 
-                let pnl = (cp - p.entryPrice) * p.lot;
-                if (p.side === 'sell') pnl = -pnl;
+        let pnl = (cp - p.entryPrice) * p.lot;
+        if (p.side === 'sell') pnl = -pnl;
 
-                tp += pnl;
+        tp += pnl;
 
-                const cc = pnl >= 0 ? 'text-green' : 'text-red';
-                const s = pnl >= 0 ? '+' : '';
-                
-                // กำหนดสีปุ่มปิดสถานะให้ตรงกับฝั่ง
-                const btnColor = p.side === 'buy' ? 'var(--green)' : 'var(--red)';
+        const cc = pnl >= 0 ? 'text-green' : 'text-red';
+        const s = pnl >= 0 ? '+' : '';
+        
+        const btnColor = p.side === 'buy' ? 'var(--green)' : 'var(--red)';
 
-                const itemHtml = `
-                    <div class="asset-item" style="border: 1px solid var(--border-color); flex-direction: column; align-items: stretch; margin-bottom: 15px; background-color: var(--card-bg);">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                            <div style="font-weight:bold; color:white;">
-                                ${p.symbol}
-                                <span style="background:${p.side === 'buy' ? 'rgba(14,203,129,0.1)' : 'rgba(246,70,93,0.1)'}; color:${btnColor}; font-size:10px; padding:2px 6px; border-radius:4px;">
-                                    ${p.side === 'buy' ? 'Long' : 'Short'} ${p.lot}
-                                </span>
-                            </div>
-                            <div class="${cc}" style="font-weight:bold;">${s}${pnl.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB</div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
-                            <div>เปิด: ${p.entryPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
-                            <div>มาร์จิ้น: ${p.margin.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
-                        </div>
-                        <button onclick="closePosition(${p.id})" style="margin-top:10px; width:100%; background:transparent; border:1px solid ${btnColor}; color:${btnColor}; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold;">ปิดสถานะ</button>
+        const itemHtml = `
+            <div class="asset-item" style="border: 1px solid var(--border-color); flex-direction: column; align-items: stretch; margin-bottom: 15px; background-color: var(--card-bg);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <div style="font-weight:bold; color:white;">
+                        ${p.symbol}
+                        <span style="background:${p.side === 'buy' ? 'rgba(14,203,129,0.1)' : 'rgba(246,70,93,0.1)'}; color:${btnColor}; font-size:10px; padding:2px 6px; border-radius:4px;">
+                            ${p.side === 'buy' ? 'Long' : 'Short'} ${p.lot}
+                        </span>
                     </div>
-                `;
+                    <div class="${cc}" style="font-weight:bold;">${s}${pnl.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+                    <div>เปิด: ${p.entryPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                    <div>มาร์จิ้น: ${p.margin.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                </div>
+                <button onclick="closePosition(${p.id})" style="margin-top:10px; width:100%; background:transparent; border:1px solid ${btnColor}; color:${btnColor}; padding:8px; border-radius:6px; cursor:pointer; font-weight:bold;">ปิดสถานะ</button>
+            </div>
+        `;
 
-                // คัดแยกฝั่ง Long / Short
-                if (p.side === 'buy') {
-                    longHtml += itemHtml;
-                } else {
-                    shortHtml += itemHtml;
-                }
-            });
-
-            let finalHtml = '';
-            
-            // ถ้ามีออเดอร์ Long ให้แสดงหมวด Long
-            if (longHtml !== '') {
-                finalHtml += `
-                    <div style="margin-bottom: 25px;">
-                        <div style="color: var(--green); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--green); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg> 
-                            สถานะซื้อ (Long)
-                        </div>
-                        ${longHtml}
-                    </div>
-                `;
-            }
-
-            // ถ้ามีออเดอร์ Short ให้แสดงหมวด Short
-            if (shortHtml !== '') {
-                finalHtml += `
-                    <div style="margin-bottom: 20px;">
-                        <div style="color: var(--red); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--red); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>
-                            สถานะขาย (Short)
-                        </div>
-                        ${shortHtml}
-                    </div>
-                `;
-            }
-
-            // เอาไปยัดใส่หน้าจอ
-            document.getElementById("positionsList").innerHTML =
-                finalHtml || '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding:10px 0;">ไม่มีสถานะคงค้าง</p>';
-
-            document.getElementById("displayBalance").innerText =
-                (acc.thb + tm + tp).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-            updateHistoryUI();
+        if (p.side === 'buy') {
+            longHtml += itemHtml;
+        } else {
+            shortHtml += itemHtml;
         }
+    });
 
+    let finalHtml = '';
+    
+    if (longHtml !== '') {
+        finalHtml += `
+            <div style="margin-bottom: 25px;">
+                <div style="color: var(--green); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--green); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg> 
+                    สถานะซื้อ (Long)
+                </div>
+                ${longHtml}
+            </div>
+        `;
+    }
+
+    if (shortHtml !== '') {
+        finalHtml += `
+            <div style="margin-bottom: 20px;">
+                <div style="color: var(--red); font-size: 14px; font-weight: bold; margin-bottom: 12px; border-bottom: 1px dashed var(--red); padding-bottom: 8px; display:flex; align-items:center; gap:5px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>
+                    สถานะขาย (Short)
+                </div>
+                ${shortHtml}
+            </div>
+        `;
+    }
+
+    document.getElementById("positionsList").innerHTML =
+        finalHtml || '<p style="text-align:center; color:var(--text-muted); font-size:13px; padding:10px 0;">ไม่มีสถานะคงค้าง</p>';
+
+    document.getElementById("displayBalance").innerText =
+        (acc.thb + tm + tp).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    updateHistoryUI();
+    
+    // ✅ เพิ่มบรรทัดนี้ตรงนี้ (ท้ายสุดของฟังก์ชัน)
+    updateProfitUI();
+}
                         // ==========================================
         // 🚨 ระบบ Popup ถามยืนยัน (Custom)
         // ==========================================
@@ -3611,130 +3609,161 @@ function executeClosePosition(id) {
         ? '+' + pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 })
         : pnlValue.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-    saveHistory('trade', `ปิดสถานะ ${t.symbol}`, `${ps} THB`, pnlValue >= 0);
+   saveHistory('trade', `ปิดสถานะ ${t.symbol}`, `${ps} THB`, pnlValue >= 0);
     
-    // ✅ เพิ่มตรงนี้! (ถ้ามีกำไร ให้อัปเดตกำไรสะสม)
-    if (pnlValue > 0) {
-        updateVIPStats('profit', pnlValue);
-    }
-    
-    // รอให้ Popup ยืนยันปิดลงไปก่อน ค่อยเด้ง Popup สำเร็จขึ้นมา
-    setTimeout(() => {
-        showCustomPopup('ปิดสถานะสำเร็จ', `คืนมาร์จิ้นและ P/L เรียบร้อย\n(P/L: ${ps})`, 'wallet', pnlValue >= 0 ? 'green' : 'red');
-    }, 300);
+// ✅ เพิ่มตรงนี้! (ถ้ามีกำไร ให้อัปเดตกำไรสะสม)
+if (pnlValue > 0) {
+    updateVIPStats('profit', pnlValue);
 }
 
-        function saveHistory(type, title, amountStr, isPositive) {
-            const acc = getMyAccount();
-            if (!acc) return;
+// ✅ เพิ่มบรรทัดนี้! (อัปเดตกำไรขาดทุนรายวัน)
+updateDailyProfit(pnlValue);
 
-            const d = new Date();
-            const t = d.toLocaleDateString('th-TH', { day: '2-digit', month: 'short' }) + ' ' +
-                      d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+// รอให้ Popup ยืนยันปิดลงไปก่อน ค่อยเด้ง Popup สำเร็จขึ้นมา
+setTimeout(() => {
+    showCustomPopup('ปิดสถานะสำเร็จ', `คืนมาร์จิ้นและ P/L เรียบร้อย\n(P/L: ${ps})`, 'wallet', pnlValue >= 0 ? 'green' : 'red');
+}, 300);
+}
 
-            acc.history.unshift({ type, title, amountStr, isPositive, timeStr: t });
-            if (acc.history.length > 10) acc.history.pop();
+function saveHistory(type, title, amountStr, isPositive) {
+    const acc = getMyAccount();
+    if (!acc) return;
 
-            saveState();
-            updateHistoryUI();
-        }
+    const d = new Date();
+    const t = d.toLocaleDateString('th-TH', { day: '2-digit', month: 'short' }) + ' ' +
+              d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
 
+    acc.history.unshift({ type, title, amountStr, isPositive, timeStr: t });
+    if (acc.history.length > 10) acc.history.pop();
 
-        function updateHistoryUI() {
-            const acc = getMyAccount();
-            if (!acc) return;
+    saveState();
+    updateHistoryUI();
+}
 
-            const c = document.getElementById('historyList');
-            if (!c) return;
+function updateHistoryUI() {
+    const acc = getMyAccount();
+    if (!acc) return;
 
-            if (acc.history.length === 0) {
-                c.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">ไม่มีประวัติ</p>';
-                return;
-            }
+    const c = document.getElementById('historyList');
+    if (!c) return;
 
-            c.innerHTML = acc.history.map(i => {
-                const icon = i.type === 'deposit'
-                    ? '#icon-deposit'
-                    : i.type === 'withdraw'
-                        ? '#icon-withdraw'
-                        : '#icon-history';
+    if (acc.history.length === 0) {
+        c.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size:13px;">ไม่มีประวัติ</p>';
+        return;
+    }
 
-                return `
-                    <div class="asset-item">
-                        <div class="asset-left">
-                            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:50%; display:flex;">
-                                <svg width="16" height="16" stroke="${i.isPositive ? 'var(--green)' : 'var(--red)'}">
-                                    <use href="${icon}"></use>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="asset-name" style="font-size:14px;">${i.title}</div>
-                                <div class="asset-desc" style="font-size:11px;">${i.timeStr}</div>
-                            </div>
-                        </div>
-                        <div class="asset-right">
-                            <div class="asset-amount ${i.isPositive ? 'text-green' : 'text-red'}" style="font-size:14px;">${i.amountStr}</div>
-                            <div class="asset-value" style="font-size:11px; margin-top:4px;">สำเร็จ</div>
-                        </div>
+    c.innerHTML = acc.history.map(i => {
+        const icon = i.type === 'deposit'
+            ? '#icon-deposit'
+            : i.type === 'withdraw'
+                ? '#icon-withdraw'
+                : '#icon-history';
+
+        return `
+            <div class="asset-item">
+                <div class="asset-left">
+                    <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:50%; display:flex;">
+                        <svg width="16" height="16" stroke="${i.isPositive ? 'var(--green)' : 'var(--red)'}">
+                            <use href="${icon}"></use>
+                        </svg>
                     </div>
-                `;
-            }).join('');
+                    <div>
+                        <div class="asset-name" style="font-size:14px;">${i.title}</div>
+                        <div class="asset-desc" style="font-size:11px;">${i.timeStr}</div>
+                    </div>
+                </div>
+                <div class="asset-right">
+                    <div class="asset-amount ${i.isPositive ? 'text-green' : 'text-red'}" style="font-size:14px;">${i.amountStr}</div>
+                    <div class="asset-value" style="font-size:11px; margin-top:4px;">สำเร็จ</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+  function updateProfileUI() {
+    const acc = getMyAccount();
+    if (!acc) return;
+
+    resetDailyDepositIfNeeded(acc);
+
+    document.getElementById('homeWelcomeName').innerText = `สวัสดี, ${acc.accName}`;
+    document.getElementById('profName').innerText = acc.accName;
+    document.getElementById('profUid').innerText = 'UID: ' + appState.activeUid;
+    document.getElementById('avatarInitial').innerText = acc.accName.charAt(0).toUpperCase();
+    document.getElementById('profBankInfo').innerHTML = `${acc.bankName}<br><span style="font-size:11px;">${acc.bankAcc}</span>`;
+
+    const depositLeftCount = 2 - acc.depositDaily.count;
+    const depositLeftAmount = 100000 - acc.depositDaily.total;
+    document.getElementById('profNextDeposit').innerText =
+        `เหลือ ${depositLeftCount < 0 ? 0 : depositLeftCount} ครั้ง / ${(depositLeftAmount < 0 ? 0 : depositLeftAmount).toLocaleString()} บาท`;
+
+    const unlockDate = new Date(acc.registeredAt + (90 * 24 * 60 * 60 * 1000));
+    document.getElementById('profUnlockDate').innerText =
+        unlockDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function showPending(title, sub, seconds, callback) {
+    document.getElementById('pendingView').style.display = 'flex';
+    document.getElementById('pendingTitle').innerText = title;
+    document.getElementById('pendingSub').innerText = sub;
+
+    const timerEl = document.getElementById('pendingTimer');
+    timerEl.style.display = seconds > 0 ? 'block' : 'none';
+
+    let t = seconds;
+
+    function formatTime(totalSeconds) {
+        const min = Math.floor(totalSeconds / 60);
+        const sec = totalSeconds % 60;
+        return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+
+    if (seconds > 0) timerEl.innerText = formatTime(t);
+
+    const timer = setInterval(() => {
+        t--;
+        if (t >= 0 && seconds > 0) {
+            timerEl.innerText = formatTime(t);
         }
 
-        function updateProfileUI() {
-            const acc = getMyAccount();
-            if (!acc) return;
-
-            resetDailyDepositIfNeeded(acc);
-
-            document.getElementById('homeWelcomeName').innerText = `สวัสดี, ${acc.accName}`;
-            document.getElementById('profName').innerText = acc.accName;
-            document.getElementById('profUid').innerText = 'UID: ' + appState.activeUid;
-            document.getElementById('avatarInitial').innerText = acc.accName.charAt(0).toUpperCase();
-            document.getElementById('profBankInfo').innerHTML = `${acc.bankName}<br><span style="font-size:11px;">${acc.bankAcc}</span>`;
-
-            const depositLeftCount = 2 - acc.depositDaily.count;
-            const depositLeftAmount = 100000 - acc.depositDaily.total;
-            document.getElementById('profNextDeposit').innerText =
-                `เหลือ ${depositLeftCount < 0 ? 0 : depositLeftCount} ครั้ง / ${(depositLeftAmount < 0 ? 0 : depositLeftAmount).toLocaleString()} บาท`;
-
-            const unlockDate = new Date(acc.registeredAt + (90 * 24 * 60 * 60 * 1000));
-            document.getElementById('profUnlockDate').innerText =
-                unlockDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+        if (t < 0) {
+            clearInterval(timer);
+            document.getElementById('pendingView').style.display = 'none';
+            timerEl.style.display = 'none';
+            if (callback) callback();
         }
+    }, 1000);
+}
 
-        function showPending(title, sub, seconds, callback) {
-            document.getElementById('pendingView').style.display = 'flex';
-            document.getElementById('pendingTitle').innerText = title;
-            document.getElementById('pendingSub').innerText = sub;
-
-            const timerEl = document.getElementById('pendingTimer');
-            timerEl.style.display = seconds > 0 ? 'block' : 'none';
-
-            let t = seconds;
-
-            function formatTime(totalSeconds) {
-                const min = Math.floor(totalSeconds / 60);
-                const sec = totalSeconds % 60;
-                return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-            }
-
-            if (seconds > 0) timerEl.innerText = formatTime(t);
-
-            const timer = setInterval(() => {
-                t--;
-                if (t >= 0 && seconds > 0) {
-                    timerEl.innerText = formatTime(t);
-                }
-
-                if (t < 0) {
-                    clearInterval(timer);
-                    document.getElementById('pendingView').style.display = 'none';
-                    timerEl.style.display = 'none';
-                    if (callback) callback();
-                }
-            }, 1000);
-        }
+// ✅ ฟังก์ชันแสดงกำไรขาดทุน
+function updateProfitUI() {
+    const acc = getMyAccount();
+    if (!acc) return;
+    
+    const today = new Date().toLocaleDateString('en-CA');
+    const todayProfit = acc.dailyProfit?.[today] || 0;
+    
+    const todayEl = document.getElementById('todayProfitDisplay');
+    if (todayEl) {
+        todayEl.innerText = todayProfit.toLocaleString() + ' THB';
+        todayEl.style.color = todayProfit >= 0 ? '#0ECB81' : '#F6465D';
+    }
+    
+    let weekTotal = 0;
+    for (let i = 0; i < 7; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toLocaleDateString('en-CA');
+        const profit = acc.dailyProfit?.[dateStr] || 0;
+        weekTotal += profit;
+    }
+    
+    const weekEl = document.getElementById('weekProfitDisplay');
+    if (weekEl) {
+        weekEl.innerText = weekTotal.toLocaleString() + ' THB';
+        weekEl.style.color = weekTotal >= 0 ? '#0ECB81' : '#F6465D';
+    }
+}
 
         function showCustomPopup(t, d, target, s) {
             document.getElementById('popupTitle').innerText = t;
@@ -4124,6 +4153,76 @@ setTimeout(() => {
     const acc = getMyAccount();
     if (acc) updateVIPUI(acc);
 }, 1000);
+
+// อัปเดตข้อมูลกำไรย้อนหลังสำหรับบัญชีเก่า
+function fixOldAccountsProfit() {
+    for (let uid in appState.accounts) {
+        const acc = appState.accounts[uid];
+        if (!acc.dailyProfit) {
+            acc.dailyProfit = {};
+            acc.todayProfit = 0;
+        }
+    }
+    saveState();
+}
+
+// เรียกใช้ตอนโหลด
+setTimeout(() => {
+    fixOldAccountsProfit();
+    const acc = getMyAccount();
+    if (acc && typeof updateProfitUI === 'function') {
+        updateProfitUI();
+    }
+}, 1000);
+
+// อัปเดตข้อมูลกำไรขาดทุนย้อนหลังสำหรับบัญชีเก่า
+function updateOldAccountsProfit() {
+    for (let uid in appState.accounts) {
+        const acc = appState.accounts[uid];
+        
+        // ถ้ายังไม่มี dailyProfit ให้สร้าง
+        if (!acc.dailyProfit) {
+            acc.dailyProfit = {};
+            acc.todayProfit = 0;
+            
+            // คำนวณจากประวัติการปิดสถานะ
+            if (acc.history && acc.history.length > 0) {
+                acc.history.forEach(item => {
+                    if (item.type === 'trade' && item.title.includes('ปิดสถานะ')) {
+                        // ดึงตัวเลขจาก amountStr
+                        let match = item.amountStr.match(/([0-9,]+\.?[0-9]*)/);
+                        if (match) {
+                            let amount = parseFloat(match[1].replace(/,/g, ''));
+                            if (!isNaN(amount)) {
+                                // หาวันที่จาก timeStr
+                                const dateMatch = item.timeStr.match(/(\d{2})\s(\w+)\s(\d{2})/);
+                                if (dateMatch) {
+                                    // สร้างวันที่ (ประมาณ)
+                                    const today = new Date().toLocaleDateString('en-CA');
+                                    acc.dailyProfit[today] = (acc.dailyProfit[today] || 0) + amount;
+                                } else {
+                                    const today = new Date().toLocaleDateString('en-CA');
+                                    acc.dailyProfit[today] = (acc.dailyProfit[today] || 0) + amount;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+    saveState();
+    console.log('✅ อัปเดตข้อมูลกำไรย้อนหลังเรียบร้อย');
+}
+
+// เรียกใช้ตอนโหลด
+setTimeout(() => {
+    updateOldAccountsProfit();
+    const acc = getMyAccount();
+    if (acc) {
+        updateProfitUI();
+    }
+}, 1500);
 
     </script>
 </body>
