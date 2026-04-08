@@ -1518,6 +1518,77 @@
     </style>
 </head>
 <body>
+
+<!-- หน้าแจ้งเตือนปิดปรับปรุงระบบ (ใช้เอง ไม่มีอัตโนมัติ) -->
+<div id="systemMaintenanceAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div style="text-align: center; padding: 30px; max-width: 320px;">
+        
+        <!-- ไอคอน -->
+        <div style="background: rgba(240,185,11,0.1); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4M12 16h.01"/>
+                <path d="M4 4L20 20" stroke-width="1.5"/>
+                <path d="M20 4L4 20" stroke-width="1.5"/>
+            </svg>
+        </div>
+        
+        <!-- หัวข้อ -->
+        <h2 style="color: #F0B90B; font-size: 22px; margin: 0 0 15px 0;">🔐 ระบบปิดปรับปรุงชั่วคราว</h2>
+        
+        <!-- ข้อความ -->
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 15px 0;">
+            ทางเรากำลังดำเนินการอัปเดตระบบ AI และยกระดับความปลอดภัยของข้อมูลผู้ใช้บริการ
+        </p>
+        
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
+            เพื่อประสบการณ์การใช้งานที่ดีขึ้นและความปลอดภัยสูงสุด
+        </p>
+        
+        <!-- รายการอัปเดต -->
+        <div style="background: rgba(240,185,11,0.05); border-radius: 12px; padding: 12px; text-align: left;">
+            <p style="color: #F0B90B; font-size: 12px; margin: 0 0 8px 0;">📋 รายการอัปเดต</p>
+            <ul style="color: #848E9C; font-size: 11px; margin: 0; padding-left: 20px;">
+                <li>🤖 อัปเดตระบบ AI ระบบตรวจจับ + บล็อกการโจมตีIPS</li>
+                <li>🔒 เพิ่มชั้นความปลอดภัยข้อมูลส่วนบุคคล</li>
+                <li>🛡️ ระบบป้องกันและตรวจจับภัยคุกคาม</li>
+                <li>⚡ ปรับปรุงประสิทธิภาพการทำงาน</li>
+            </ul>
+        </div>
+        
+        <p style="color: #5A6578; font-size: 11px; margin-top: 20px;">ขออภัยในความไม่สะดวก ขอบคุณที่ไว้วางใจ使用บริการของเรา</p>
+    </div>
+</div>
+
+<script>
+// ปิดการทำงานของแอปทั้งหมด
+function disableAppForMaintenance() {
+    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
+    views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.style.display = 'none';
+    });
+    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
+    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
+    const splashAd = document.getElementById('splashAd');
+    if (splashAd) splashAd.style.display = 'none';
+}
+
+// แสดงหน้า Maintenance และปิดแอป
+function showMaintenance() {
+    document.getElementById('systemMaintenanceAlert').style.display = 'flex';
+    disableAppForMaintenance();
+}
+
+// ซ่อนหน้า Maintenance (ให้กลับมาใช้งานปกติ)
+function hideMaintenance() {
+    document.getElementById('systemMaintenanceAlert').style.display = 'none';
+    location.reload(); // รีเฟรชให้แอปกลับมา
+}
+
+// เรียกใช้ตอนโหลด (ถ้าต้องการให้ขึ้นทันที)
+showMaintenance();
+</script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
