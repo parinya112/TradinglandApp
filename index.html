@@ -2468,7 +2468,7 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 4798.082; 
+                item.priceUsd = 4669.930; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2476,7 +2476,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 94.78; 
+                item.priceUsd = 104.78; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -3078,34 +3078,122 @@ function closeSlipReceipt() {
             document.getElementById('wdBankInfo').innerHTML = `ธนาคาร: <strong>${acc.bankName}</strong><br>เลขบัญชี: <strong>${acc.bankAcc}</strong>`;
             switchTab('withdraw');
         }
+function processWithdraw() {
+    const acc = getMyAccount();
+    if (!acc) return;
 
-        function processWithdraw() {
-            const acc = getMyAccount();
-            if (!acc) return;
+    const amt = parseFloat(document.getElementById('withdrawAmount').value);
 
-            const amt = parseFloat(document.getElementById('withdrawAmount').value);
+    if (!amt || amt <= 0) return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
+    if (amt > acc.thb) return showCustomPopup('ยอดเงินไม่เพียงพอ', 'ยอดเงินในพอร์ตไม่พอสำหรับการถอน', null, 'red');
 
-            if (!amt || amt <= 0) return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
-            if (amt > acc.thb) return showCustomPopup('ยอดเงินไม่เพียงพอ', 'ยอดเงินในพอร์ตไม่พอสำหรับการถอน', null, 'red');
+    const now = Date.now();
+    const unlockAt = acc.registeredAt + (30 * 24 * 60 * 60 * 1000);
+    const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
 
-            const now = Date.now();
-            const unlockAt = acc.registeredAt + (90 * 24 * 60 * 60 * 1000);
-            const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
+    if (now < unlockAt) {
+        return showCustomPopup(
+            '🔒 ระบบล็อกการถอน',
+            `บัญชีนี้ยังถอนเงินไม่ได้\nเหลืออีก ${daysLeft > 0 ? daysLeft : 0} วัน จึงจะถอนเงินได้`,
+            null,
+            'red'
+        );
+    }
 
-            if (now < unlockAt) {
-                return showCustomPopup(
-                    '🔒 ระบบล็อกการถอน',
-                    `บัญชีนี้ยังถอนเงินไม่ได้\nเหลืออีก ${daysLeft > 0 ? daysLeft : 0} วัน จึงจะถอนเงินได้`,
-                    null,
-                    'red'
-                );
-            }
+    // หักเงิน
+    acc.thb -= amt;
+    saveState();
+    saveHistory('withdraw', 'ถอนเงิน', '-' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }), false);
+    
+    // แสดงสลิปแทน popup
+    showWithdrawSlip(amt);
+}
 
-            acc.thb -= amt;
-            saveState();
-            saveHistory('withdraw', 'ถอนเงิน', '-' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }), false);
-            showCustomPopup('รับคำสั่งถอนแล้ว', 'ระบบบันทึกคำสั่งถอนเรียบร้อย', 'wallet', 'gold');
-        }
+// ฟังก์ชันแสดงสลิปการถอน
+function showWithdrawSlip(amount) {
+    const slipOverlay = document.createElement('div');
+    slipOverlay.id = 'withdrawSlipOverlay';
+    slipOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10001;
+        backdrop-filter: blur(4px);
+    `;
+    
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+    const refNo = 'WD' + Date.now().toString().slice(-8);
+    const estimatedDate = new Date();
+    estimatedDate.setDate(estimatedDate.getDate() + 7);
+    const estDateStr = estimatedDate.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const maxDate = new Date();
+    maxDate.setDate(maxDate.getDate() + 14);
+    const maxDateStr = maxDate.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    
+    slipOverlay.innerHTML = `
+        <div style="background: linear-gradient(135deg, #1a1e2a 0%, #0f1119 100%); border-radius: 24px; width: 90%; max-width: 380px; padding: 0; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid rgba(240,185,11,0.3);">
+            <div style="background: linear-gradient(135deg, #0B0E11 0%, #1E222D 100%); padding: 20px; text-align: center; border-bottom: 1px solid rgba(240,185,11,0.2);">
+                <div style="width: 50px; height: 50px; background: rgba(240,185,11,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto;">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="2">
+                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                </div>
+                <h2 style="color: #F0B90B; margin: 0; font-size: 20px;">รับคำสั่งถอนเงิน</h2>
+                <p style="color: var(--text-muted); margin: 5px 0 0 0; font-size: 12px;">ระบบบันทึกคำสั่งถอนเรียบร้อย</p>
+            </div>
+            <div style="padding: 20px;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div style="color: var(--text-muted); font-size: 13px; margin-bottom: 5px;">จำนวนเงิน</div>
+                    <div style="color: var(--gold); font-size: 32px; font-weight: bold;">
+                        ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span style="font-size: 16px;">THB</span>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 15px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px;">
+                        <span style="color: var(--text-muted);">วันที่-เวลา</span>
+                        <span style="color: white;">${dateStr} ${timeStr}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px;">
+                        <span style="color: var(--text-muted);">เลขที่รายการ</span>
+                        <span style="color: white; font-family: monospace;">${refNo}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                        <span style="color: var(--text-muted);">สถานะ</span>
+                        <span style="color: #F0B90B;">ดำเนินการ</span>
+                    </div>
+                </div>
+                <div style="background: rgba(240,185,11,0.08); border-radius: 12px; padding: 12px; text-align: center; margin-bottom: 20px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span style="color: #F0B90B; font-size: 13px;">⏳ กรุณารอ 7-14 วันทำการ</span>
+                    <p style="color: var(--text-muted); font-size: 11px; margin-top: 8px;">เงินจะเข้าบัญชีภายใน ${estDateStr} - ${maxDateStr}</p>
+                </div>
+                <button onclick="closeWithdrawSlip()" style="width: 100%; padding: 14px; background: var(--gold); border: none; border-radius: 12px; color: #0B0E11; font-weight: bold; font-size: 16px; cursor: pointer;">
+                    ตกลง
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(slipOverlay);
+}
+
+function closeWithdrawSlip() {
+    const overlay = document.getElementById('withdrawSlipOverlay');
+    if (overlay) overlay.remove();
+    switchTab('wallet');
+}
 
        function simulateLiveMarket() {
     const todayDay = new Date().getDay();
