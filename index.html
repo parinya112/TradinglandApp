@@ -1518,41 +1518,21 @@
     </style>
 </head>
 <body>
-<!-- ซองอั่งเปา PNG ลอยกลางจอ -->
+<!-- ซองอั่งเปา PNG ล้วน ไม่มีแสง -->
 <div id="angpaoBigModal" class="modal-overlay" style="display: none; background: transparent;">
     
-    <!-- 🔥 ซองอย่างเดียว -->
-    <div class="angpao-glow" onclick="drawAngpaoReward()">
-        <img src="angpao.png" class="angpao-img">
-    </div>
+    <img src="angpao.png"
+         onclick="drawAngpaoReward()"
+         style="
+            width: 200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+         ">
 
 </div>
-
-<style>
-/* 🔥 แสงวิ้ง */
-.angpao-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
-    border-radius: 50%;
-    animation: glowPulse 1.5s infinite ease-in-out;
-}
-
-/* เอฟเฟกต์แสง */
-@keyframes glowPulse {
-    0%   { box-shadow: 0 0 10px gold, 0 0 20px orange; transform: translate(-50%, -50%) scale(1); }
-    50%  { box-shadow: 0 0 40px gold, 0 0 80px orange; transform: translate(-50%, -50%) scale(1.05); }
-    100% { box-shadow: 0 0 10px gold, 0 0 20px orange; transform: translate(-50%, -50%) scale(1); }
-}
-
-/* 🧧 รูป */
-.angpao-img {
-    width: 200px;
-    cursor: pointer;
-}
-</style>
 
 <script>
 // ================== ตั้งค่า ==================
