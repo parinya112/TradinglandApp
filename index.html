@@ -2326,7 +2326,7 @@ tvSymbol: 'SET:SCC',
 icon: 'scc.png' },
 
 { symbol: 'LAND', name: 'LAND', category: 'stock', 
-priceThb: 255.42, 
+priceThb: 257.42, 
 priceUsd: 9.20, 
 pct: 1.47, 
 volume: '0.5M', 
@@ -2575,7 +2575,7 @@ async function initMarketPrices() {
         else if (item.category === 'commodity') {
             if (item.symbol === 'XAU') { 
                 // ราคาทองคำ (USD)
-                item.priceUsd = 4669.930; 
+                item.priceUsd = 4842.930; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -2583,7 +2583,7 @@ async function initMarketPrices() {
             }
             if (item.symbol === 'WTI') { 
                 // ราคาน้ำมัน (USD)
-                item.priceUsd = 104.78; 
+                item.priceUsd = 91.78; 
                 
                 // ถ้าวันหยุด ใช้เรทคงที่ 34.50 เพื่อให้ราคานิ่ง
                 // ถ้าวันธรรมดา ใช้เรทจริง
@@ -3427,10 +3427,7 @@ function closeWithdrawSlip() {
             }
         }
 
-       // ==========================================
-// 📈 simulateLiveMarket - ปรับแบบมีเกราะป้องกัน (Safe Mode)
-// ==========================================
-async function openTradeChart(sym) {
+       async function openTradeChart(sym) {
     const c = allMarketData.find(x => x.symbol === sym);
     const acc = getMyAccount();
     if (!c || !acc) return;
@@ -3439,46 +3436,45 @@ async function openTradeChart(sym) {
     const todayDay = new Date().getDay();
     const isWeekend = (todayDay === 0 || todayDay === 6);
 
-    // แสดง loading
-    showPending('กำลังโหลดข้อมูลตลาด...', 'กรุณารอสักครู่', 2, async () => {
-        // ดึงราคาจริง (เฉพาะวันธรรมดาหรือคริปโต)
-        if (!isWeekend || c.category === 'crypto') {
-            const realPrice = await fetchRealPrice(c.symbol);
-            if (realPrice) {
-                const thbPrice = await usdToThb(realPrice);
-                c.priceUsd = realPrice;
-                c.priceThb = thbPrice;
-                c.pct = (Math.random() * 2) - 1;
-            }
+    // 🔥 ดึงราคาจริง
+    if (!isWeekend || c.category === 'crypto') {
+        const realPrice = await fetchRealPrice(c.symbol);
+        if (realPrice) {
+            const thbPrice = await usdToThb(realPrice);
+            c.priceUsd = realPrice;
+            c.priceThb = thbPrice;
+            c.pct = (Math.random() * 2) - 1;
         }
-        
-        activeAsset = c;
-        switchTab('tradeChart');
-        
-        document.getElementById('cvTitle').innerText = c.name;
-        document.getElementById('cvSubtitle').innerText = c.symbol + ' (Pro)';
-        document.getElementById('cvBalance').innerText = acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' THB';
+    }
 
-        // 🌟 โหลดกราฟ TradingView ของจริงเสมอ! (เอาป้ายบังออกแล้ว) 🌟
-        const tvContainer = document.getElementById('tvContainer');
-        
+    activeAsset = c;
+    switchTab('tradeChart');
+
+    document.getElementById('cvTitle').innerText = c.name;
+    document.getElementById('cvSubtitle').innerText = c.symbol + ' (Pro)';
+    document.getElementById('cvBalance').innerText =
+        acc.thb.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' THB';
+
+    // ✅ โหลดกราฟ (ต้องอยู่ใน function!)
+    const tvContainer = document.getElementById('tvContainer');
+
+    if (tvContainer) {
         tvContainer.innerHTML = `
             <iframe
                 src="https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(c.tvSymbol)}&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=1&save_image=0"
                 style="width:100%; height:100%; border:none;"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
+                loading="lazy">
             </iframe>
         `;
 
         setTimeout(() => {
             if (tvContainer.innerHTML.trim() === '') {
-                tvContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:13px;">ไม่สามารถโหลดกราฟได้</div>';
+                tvContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#999;font-size:13px;">โหลดกราฟไม่สำเร็จ</div>';
             }
         }, 2000);
-        
-        updateChartUI();
-    });
+    }
+
+    updateChartUI();
 }
 
             function updateChartUI() {
