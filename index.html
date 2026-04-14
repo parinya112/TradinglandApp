@@ -1518,7 +1518,134 @@
     </style>
 </head>
 <body>
+<!-- ซองอั่งเปา PNG ลอยกลางจอ -->
+<div id="angpaoBigModal" class="modal-overlay" style="display: none; background: transparent;">
+    
+    <!-- 🔥 ซองอย่างเดียว -->
+    <div class="angpao-glow" onclick="drawAngpaoReward()">
+        <img src="angpao.png" class="angpao-img">
+    </div>
 
+</div>
+
+<style>
+/* 🔥 แสงวิ้ง */
+.angpao-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    border-radius: 50%;
+    animation: glowPulse 1.5s infinite ease-in-out;
+}
+
+/* เอฟเฟกต์แสง */
+@keyframes glowPulse {
+    0%   { box-shadow: 0 0 10px gold, 0 0 20px orange; transform: translate(-50%, -50%) scale(1); }
+    50%  { box-shadow: 0 0 40px gold, 0 0 80px orange; transform: translate(-50%, -50%) scale(1.05); }
+    100% { box-shadow: 0 0 10px gold, 0 0 20px orange; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* 🧧 รูป */
+.angpao-img {
+    width: 200px;
+    cursor: pointer;
+}
+</style>
+
+<script>
+// ================== ตั้งค่า ==================
+const START_DATE = new Date('2026-04-14T00:00:00');
+const END_DATE   = new Date('2026-04-16T23:59:59');
+
+// ================== รางวัล ==================
+const angpaoPrizes = [
+    { amount: 10 }, { amount: 20 }, { amount: 50 }, { amount: 100 },
+    { amount: 200 }, { amount: 500 }, { amount: 88 }, { amount: 1 }
+];
+
+// ================== ระบบวันละครั้ง ==================
+function getTodayKey() {
+    return new Date().toISOString().split('T')[0];
+}
+
+function alreadyReceivedToday() {
+    return localStorage.getItem('angpao_last') === getTodayKey();
+}
+
+function markReceivedToday() {
+    localStorage.setItem('angpao_last', getTodayKey());
+}
+
+// ================== เช็คเวลา ==================
+function isEventActive() {
+    const now = new Date();
+    return now >= START_DATE && now <= END_DATE;
+}
+
+// ================== เปิด ==================
+function showAngpao() {
+    if (!isEventActive()) return;
+    if (alreadyReceivedToday()) return;
+
+    const modal = document.getElementById('angpaoBigModal');
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+}
+
+// ================== สุ่ม ==================
+function drawAngpaoReward() {
+    if (!isEventActive()) {
+        closeAngpao();
+        return;
+    }
+
+    if (alreadyReceivedToday()) {
+        closeAngpao();
+        return;
+    }
+
+    const prize = angpaoPrizes[Math.floor(Math.random() * angpaoPrizes.length)];
+
+    const acc = getMyAccount();
+    if (acc) {
+        acc.thb += prize.amount;
+        saveState();
+        saveHistory('deposit', 'อั่งเปา', `+${prize.amount} THB`, true);
+    }
+
+    markReceivedToday();
+
+    // 🔥 แสดงผลลัพธ์แบบลอย (ไม่มีกรอบ)
+    const modal = document.getElementById('angpaoBigModal');
+    modal.innerHTML = `
+        <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            color:gold;
+            font-size:40px;
+            font-weight:bold;
+        ">
+            +${prize.amount} บาท
+        </div>
+    `;
+
+    setTimeout(closeAngpao, 1500);
+}
+
+// ================== ปิด ==================
+function closeAngpao() {
+    const modal = document.getElementById('angpaoBigModal');
+    modal.classList.remove('active');
+
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
+</script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
@@ -2766,7 +2893,6 @@ setInterval(initMarketPrices, 2000);
                 }
             }
         }
-
 function onLoginSuccess() {
     updateProfileUI();
     renderMarket();
@@ -2787,6 +2913,9 @@ function onLoginSuccess() {
     if (acc) {
         updateVIPUI(acc);
     }
+    
+    // ✅ เพิ่มบรรทัดนี้! (แสดงซองอั่งเปา)
+    showAngpao();
     
     switchTab('home');
 }
