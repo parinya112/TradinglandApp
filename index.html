@@ -3196,9 +3196,9 @@ function processWithdraw() {
     if (!amt || amt <= 0) return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
     if (amt > acc.thb) return showCustomPopup('ยอดเงินไม่เพียงพอ', 'ยอดเงินในพอร์ตไม่พอสำหรับการถอน', null, 'red');
 
-    const now = Date.now();
-    const unlockAt = acc.registeredAt + (30 * 24 * 60 * 60 * 1000);
-    const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
+   const now = Date.now();
+const unlockAt = acc.registeredAt + (90 * 24 * 60 * 60 * 1000);
+const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
 
     if (now < unlockAt) {
         return showCustomPopup(
