@@ -1518,77 +1518,94 @@
     </style>
 </head>
 <body>
-<!-- หน้าแจ้งปิดปรับปรุงชั่วคราว (Manual) -->
-<div id="updateMaintenance" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
-    <div style="text-align: center; padding: 30px; max-width: 320px;">
-        
-        <!-- ไอคอน -->
-        <div style="background: rgba(240,185,11,0.1); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
-            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 8v4M12 16h.01"/>
-                <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/>
-            </svg>
-        </div>
-        
-        <!-- หัวข้อ -->
-        <h2 style="color: #F0B90B; font-size: 22px; margin: 0 0 15px 0;">ระบบปิดปรับปรุงชั่วคราว</h2>
-        
-        <!-- ข้อความแจ้ง -->
-        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 15px 0;">
-            ทางเรากำลังดำเนินการอัปเดตระบบและแก้ไขบัคเพื่อประสิทธิภาพที่ดีขึ้น
-        </p>
-        
-        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
-            แก้ไขการทำงานบนมือถือ Android และแก้ไขข้อบกพร่องเล็กน้อย
-        </p>
-        
-        <!-- รายการอัปเดต -->
-        <div style="background: rgba(240,185,11,0.05); border-radius: 12px; padding: 12px; text-align: left; margin-bottom: 20px;">
-            <p style="color: #F0B90B; font-size: 12px; margin: 0 0 8px 0;">รายการอัปเดต</p>
-            <ul style="color: #848E9C; font-size: 11px; margin: 0; padding-left: 20px;">
-                <li>ปรับปรุงระบบ Android</li>
-                <li>แก้ไขบัคการแสดงผลบางประการ</li>
-                <li>เพิ่มเสถียรภาพการทำงาน</li>
-                <li>อัปเดตความปลอดภัย</li>
-            </ul>
-        </div>
-        
-        <!-- ข้อความท้าย -->
-        <p style="color: #5A6578; font-size: 11px;">ขออภัยในความไม่สะดวก</p>
-        <p style="color: #5A6578; font-size: 11px; margin-top: 5px;">ปิดปรับปรุงเวลา14.00น-06.00น-ของวันจันทร์ที่20</p>
-    </div>
+<!-- ซองอั่งเปา PNG ล้วน -->
+<div id="angpaoBigModal" class="modal-overlay" style="display: none; background: transparent;">
+    
+    <img src="angpao.png"
+     onclick="drawAngpaoReward()"
+     style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        cursor: pointer;
+     ">
+
 </div>
 
 <script>
-// เปิดหน้าแจ้งปิดปรับปรุง
-function showMaintenance() {
-    document.getElementById('updateMaintenance').style.display = 'flex';
-    
-    // ซ่อนเนื้อหาหลักทั้งหมด
-    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
-    views.forEach(v => {
-        const el = document.getElementById(v);
-        if (el) el.style.display = 'none';
-    });
-    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
-    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
-    const splashAd = document.getElementById('splashAd');
-    if (splashAd) splashAd.style.display = 'none';
+// ================== ตั้งค่า ==================
+const EVENT_ID = 'promo_500_once';
+
+// ================== เช็คเคยรับ ==================
+function alreadyReceived() {
+    return localStorage.getItem(EVENT_ID) === '1';
 }
 
-// ปิดหน้าแจ้งปิดปรับปรุง (กลับมาใช้งานปกติ)
-function hideMaintenance() {
-    document.getElementById('updateMaintenance').style.display = 'none';
-    location.reload();
+function markReceived() {
+    localStorage.setItem(EVENT_ID, '1');
 }
 
-// ===== เปิดใช้งาน =====
-// ต้องการให้ขึ้นหน้าแจ้งปิดปรับปรุง ให้เรียก showMaintenance()
-// ต้องการให้กลับมาใช้งานปกติ ให้เรียก hideMaintenance() หรือลบโค้ดนี้ออก
+// ================== เปิด ==================
+function showAngpao() {
+    if (alreadyReceived()) return;
 
-// เปิดใช้งานทันที (แก้บัคเสร็จให้ลบ showMaintenance(); ออก)
-showMaintenance();
+    const modal = document.getElementById('angpaoBigModal');
+    if (!modal) return;
+
+    modal.style.display = 'flex';
+    modal.classList.add('active'); // 🔥 ตัวสำคัญ
+}
+
+// ================== รับเงิน ==================
+function drawAngpaoReward() {
+    if (alreadyReceived()) {
+        closeAngpao();
+        return;
+    }
+
+    const prize = 500;
+
+    const acc = getMyAccount();
+    if (acc) {
+        acc.thb += prize;
+        saveState();
+        saveHistory('deposit', 'ชดเชยการปิดอัพเดท', `+${prize} THB`, true);
+    }
+
+    markReceived();
+
+    const modal = document.getElementById('angpaoBigModal');
+    modal.innerHTML = `
+        <div style="
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            color:gold;
+            font-size:42px;
+            font-weight:bold;
+        ">
+            +500 บาท
+        </div>
+    `;
+
+    setTimeout(closeAngpao, 1500);
+}
+
+// ================== ปิด ==================
+function closeAngpao() {
+    const modal = document.getElementById('angpaoBigModal');
+    if (!modal) return;
+
+    modal.classList.remove('active'); // 🔥 เอาออกตอนปิด
+
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
 </script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
