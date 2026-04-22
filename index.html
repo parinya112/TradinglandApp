@@ -2861,11 +2861,14 @@ setInterval(initMarketPrices, 2000);
                     pinErrorAnim();
                 }
             }
-        }
+   }
 function onLoginSuccess() {
     updateProfileUI();
     renderMarket();
     updateWalletUI();
+    
+    // ✅ เพิ่มตรงนี้ (เล่นเสียงต้อนรับ)
+    speakWelcome();
     
     const acc = getMyAccount();
     if (acc && !acc.initialBonus) {
@@ -2888,9 +2891,6 @@ function onLoginSuccess() {
     
     switchTab('home');
 }
-
-
-
                function switchTab(tab) {
             if (!tab) return;
 
@@ -4406,6 +4406,40 @@ setTimeout(() => {
         updateProfitUI();
     }
 }, 1500);
+
+// ================== เช็ควัน ==================
+function getTodayKey() {
+    return new Date().toISOString().split('T')[0];
+}
+
+// ================== ฟังก์ชันเสียง ==================
+function speakWelcome() {
+    try {
+        const today = getTodayKey();
+
+        // 🔒 ถ้าพูดแล้ววันนี้ → ไม่พูดซ้ำ
+        if (localStorage.getItem('welcome_voice_date') === today) {
+            return;
+        }
+
+        if (!('speechSynthesis' in window)) return;
+
+        const msg = new SpeechSynthesisUtterance('สวัสดีค่ะ ขอต้อนรับสู่ เทรดดิ้งแลนด์ เป็นการทดสอบค่ะ');
+        msg.lang = 'th-TH';
+        msg.rate = 0.9;
+        msg.pitch = 1.1;
+        msg.volume = 1;
+
+        window.speechSynthesis.cancel(); // กันเสียงค้าง
+        window.speechSynthesis.speak(msg);
+
+        // ✅ บันทึกว่าวันนี้พูดแล้ว
+        localStorage.setItem('welcome_voice_date', today);
+
+    } catch(e) {
+        console.log('เสียง error:', e);
+    }
+}
 
     </script>
 </body>
