@@ -1518,94 +1518,72 @@
     </style>
 </head>
 <body>
-<!-- ซองอั่งเปา PNG ล้วน -->
-<div id="angpaoBigModal" class="modal-overlay" style="display: none; background: transparent;">
-    
-    <img src="angpao.png"
-     onclick="drawAngpaoReward()"
-     style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        cursor: pointer;
-     ">
-
+<!-- หน้าแจ้งปิดปรับปรุง (Manual ลบเอง) -->
+<div id="maintenanceMode" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div style="text-align: center; padding: 30px; max-width: 320px;">
+        
+        <!-- ไอคอนสามเหลี่ยมแจ้งเตือนสีแดง -->
+<div style="background: rgba(246,70,93,0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+    <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="#F6465D" stroke-width="1.5">
+        <path d="M12 2L2 19h20L12 2z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <circle cx="12" cy="17" r="0.5" fill="#F6465D" stroke="none"/>
+    </svg>
 </div>
-
-<script>
-// ================== ตั้งค่า ==================
-const EVENT_ID = 'promo_500_once';
-
-// ================== เช็คเคยรับ ==================
-function alreadyReceived() {
-    return localStorage.getItem(EVENT_ID) === '1';
-}
-
-function markReceived() {
-    localStorage.setItem(EVENT_ID, '1');
-}
-
-// ================== เปิด ==================
-function showAngpao() {
-    if (alreadyReceived()) return;
-
-    const modal = document.getElementById('angpaoBigModal');
-    if (!modal) return;
-
-    modal.style.display = 'flex';
-    modal.classList.add('active'); // 🔥 ตัวสำคัญ
-}
-
-// ================== รับเงิน ==================
-function drawAngpaoReward() {
-    if (alreadyReceived()) {
-        closeAngpao();
-        return;
-    }
-
-    const prize = 500;
-
-    const acc = getMyAccount();
-    if (acc) {
-        acc.thb += prize;
-        saveState();
-        saveHistory('deposit', 'ชดเชยการปิดอัพเดท', `+${prize} THB`, true);
-    }
-
-    markReceived();
-
-    const modal = document.getElementById('angpaoBigModal');
-    modal.innerHTML = `
-        <div style="
-            position:absolute;
-            top:50%;
-            left:50%;
-            transform:translate(-50%,-50%);
-            color:gold;
-            font-size:42px;
-            font-weight:bold;
-        ">
-            +500 บาท
+        
+   <!-- หัวข้อ -->
+        <h2 style="color: #F0B90B; font-size: 22px; margin: 0 0 15px 0;">System Notification</h2>
+        
+        <!-- ข้อความ -->
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
+            Our system is currently experiencing high usage
+        </p>
+        
+        <!-- รายการอัปเดต -->
+        <div style="background: rgba(240,185,11,0.05); border-radius: 12px; padding: 12px; text-align: left; margin-bottom: 20px;">
+            <p style="color: #F0B90B; font-size: 12px; margin: 0 0 8px 0;">System Status</p>
+            <ul style="color: #848E9C; font-size: 11px; margin: 0; padding-left: 20px;">
+                <li>Server usage: 98%</li>
+               
+            </ul>
         </div>
-    `;
-
-    setTimeout(closeAngpao, 1500);
+        
+        <!-- ข้อความท้าย -->
+        <p style="color: #5A6578; font-size: 11px;">We apologize for the inconvenience</p>
+       
+    </div>
+</div>
+<script>
+// แสดงหน้าแจ้งปิดปรับปรุง
+function showMaintenance() {
+    const maintDiv = document.getElementById('maintenanceMode');
+    if (maintDiv) maintDiv.style.display = 'flex';
+    
+    // ซ่อนเนื้อหาหลัก
+    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
+    views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.style.display = 'none';
+    });
+    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
+    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
+    const splashAd = document.getElementById('splashAd');
+    if (splashAd) splashAd.style.display = 'none';
 }
 
-// ================== ปิด ==================
-function closeAngpao() {
-    const modal = document.getElementById('angpaoBigModal');
-    if (!modal) return;
-
-    modal.classList.remove('active'); // 🔥 เอาออกตอนปิด
-
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 300);
+// ซ่อนหน้าแจ้งปิดปรับปรุง
+function hideMaintenance() {
+    const maintDiv = document.getElementById('maintenanceMode');
+    if (maintDiv) maintDiv.style.display = 'none';
+    location.reload();
 }
+
+// ===== เปิดใช้งาน =====
+// เปิด: เรียก showMaintenance()
+// ปิด: เรียก hideMaintenance()
+
+// เปิดใช้งานทันที (อัปเดตเสร็จให้ลบ showMaintenance(); ออก)
+showMaintenance();
 </script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
