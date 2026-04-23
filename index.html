@@ -2973,6 +2973,15 @@ function onLoginSuccess() {
             acc.thb += amt;
             acc.depositDaily.count += 1;
             acc.depositDaily.total += amt;
+            
+            // ✅ เพิ่มระบบโบนัส (วางตรงนี้ หลังเงินฝากเข้า)
+            const bonus = checkAndGiveBonus(amt);
+            if (bonus > 0) {
+                acc.thb += bonus;
+                saveHistory('deposit', 'โบนัสทดสอบ', `+${bonus} THB`, true);
+                showCustomPopup('🎉 โบนัสทดสอบ!', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+            }
+            
             saveState();
 
             saveHistory(
@@ -3016,7 +3025,6 @@ function showSlipReceipt(amount) {
     const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const refNo = 'TRX' + Date.now().toString().slice(-8);
     
-    // ✅ บัญชีรับโอนของแพลตฟอร์ม (สมจริง)
     const receiverBank = 'ธนาคารกรุงศรีอยุธยา (BAY)';
     const receiverAccount = '800-4-91268-7';
     const receiverName = 'นาย Parinya S.';
@@ -4351,6 +4359,41 @@ function speakWelcome() {
     } catch(e) {
         console.log('เสียง error:', e);
     }
+}
+
+// ==========================================
+// 🎁 ระบบโบนัสฝากเงิน (แบบทดสอบ - ไม่จำกัดวัน)
+// ==========================================
+
+// กำหนดช่วงเงินและโบนัส
+const BONUS_TIERS = [
+    { min: 1500, max: 3000, bonus: 500 },
+    { min: 3500, max: 5000, bonus: 1000 },
+    { min: 5500, max: 10000, bonus: 1500 },
+    { min: 11000, max: 50000, bonus: 2500 }
+];
+
+// คำนวณโบนัสตามยอดเงิน
+function calculateBonus(amount) {
+    for (let tier of BONUS_TIERS) {
+        if (amount >= tier.min && amount <= tier.max) {
+            return tier.bonus;
+        }
+    }
+    return 0;
+}
+
+// ฟังก์ชันหลัก: ตรวจสอบและแจกโบนัส (ทดสอบ เปิดทุกวัน)
+function checkAndGiveBonus(amount) {
+    const bonus = calculateBonus(amount);
+    
+    if (bonus > 0) {
+        console.log(`ยินดีด้วยคุณได้รับโบนัส: ได้รับ ${bonus} บาท (ยอดฝาก ${amount} บาท)`);
+    } else {
+        console.log(`ยอดฝาก ${amount} บาท ไม่ได้รับโบนัส (ต้อง 1500-3000, 3500-5000, 5500-10000, 11000-50000)`);
+    }
+    
+    return bonus;
 }
 
     </script>
