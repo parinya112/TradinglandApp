@@ -2978,8 +2978,8 @@ function onLoginSuccess() {
             const bonus = checkAndGiveBonus(amt);
             if (bonus > 0) {
                 acc.thb += bonus;
-                saveHistory('deposit', 'โบนัสทดสอบ', `+${bonus} THB`, true);
-                showCustomPopup('🎉 โบนัสทดสอบ!', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัส', `+${bonus} THB`, true);
+                showCustomPopup('ยินดีด้วยคุณได้รับโบนัส', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
             }
             
             saveState();
