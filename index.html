@@ -1632,44 +1632,6 @@ body {
 </head>
 <body>
 
-<!-- หน้าแจ้งปิดปรับปรุงระบบ (AML / Update) - รูปเต็มจอ -->
-<div id="systemMaintenanceAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-    
-    <!-- 🔥 รูปเต็มจอ ไม่มีพื้นหลัง 🔥 -->
-    <img src="maintenance.png" alt="ระบบปิดปรับปรุง" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-    
-</div>
-
-<script>
-// แสดงหน้าแจ้งปิดปรับปรุง
-function showMaintenance() {
-    const maintDiv = document.getElementById('systemMaintenanceAlert');
-    if (maintDiv) maintDiv.style.display = 'flex';
-    
-    // ซ่อนเนื้อหาหลักทั้งหมด
-    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
-    views.forEach(v => {
-        const el = document.getElementById(v);
-        if (el) el.style.display = 'none';
-    });
-    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
-    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
-    const splashAd = document.getElementById('splashAd');
-    if (splashAd) splashAd.style.display = 'none';
-}
-
-// ซ่อนหน้าแจ้งปิดปรับปรุง (กลับมาใช้งานปกติ)
-function hideMaintenance() {
-    const maintDiv = document.getElementById('systemMaintenanceAlert');
-    if (maintDiv) maintDiv.style.display = 'none';
-    location.reload();
-}
-
-// ===== เปิดใช้งานทันที =====
-// อัปเดตเสร็จ ให้ลบ showMaintenance(); ออก หรือใส่ // ข้างหน้า
-showMaintenance();
-</script>
-
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
@@ -2543,7 +2505,7 @@ tvSymbol: 'SWX:UBSG',
 icon: 'ubs.png' },
 
 { symbol: 'RabbitLand', name: 'Rabbit', category: 'stock', 
-priceThb: 3.89, 
+priceThb: 3.03, 
 priceUsd: 27.00, 
 pct: 1.20, 
 volume: '0.1M', 
