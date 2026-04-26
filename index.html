@@ -1632,6 +1632,7 @@ body {
 </head>
 <body>
 
+
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
@@ -2837,32 +2838,10 @@ setInterval(initMarketPrices, 2000);
     document.getElementById('pinLockView').style.display = 'flex';
     updatePinDots();
     
-    // ✅ เพิ่ม: สแกนอัตโนมัติ (ไม่ต้องกดปุ่ม)
+    // ✅ เพิ่มแค่นี้
     const acc = appState.accounts[targetUidToLogin];
-    const hasBiometric = localStorage.getItem(`biometric_${acc.uid}`);
-    
-    if (hasBiometric) {
-        // เปลี่ยนข้อความแจ้ง
-        document.getElementById('pinSubText').innerText = "🔄 กำลังสแกนหน้า/ลายนิ้วมือ...";
-        
-        // รอ 0.5 วินาที แล้วสแกนอัตโนมัติ
-        setTimeout(async () => {
-            const success = await authenticateWithBiometric(acc.uid);
-            if (success) {
-                document.getElementById('pinLockView').style.display = 'none';
-                onLoginSuccess();
-            } else {
-                // ถ้าสแกนไม่สำเร็จ ให้กลับมาใส่ PIN ได้
-                document.getElementById('pinSubText').innerText = `❌ สแกนไม่สำเร็จ กรุณาใส่ PIN\nเข้าสู่บัญชี: ${acc.accName}`;
-                // แสดงปุ่ม biometric เผื่อกดลองใหม่
-                document.getElementById('biometricBtn').style.display = 'block';
-                document.getElementById('biometricBtn').innerText = '🔄 ลองสแกนอีกครั้ง';
-            }
-        }, 500);
-    } else {
-        // ไม่มี biometric ให้ซ่อนปุ่ม
-        document.getElementById('biometricBtn').style.display = 'none';
-    }
+    const hasBio = localStorage.getItem(`biometric_${acc.uid}`);
+    document.getElementById('biometricBtn').style.display = hasBio ? 'block' : 'none';
 }
         function pressPin(num) {
             if (currentPin.length < 6) {
