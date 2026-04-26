@@ -2828,7 +2828,7 @@ setInterval(initMarketPrices, 2000);
             updatePinDots();
         }
 
-       function showPinAuth() {
+   function showPinAuth() {
     setupPinStep = 0;
     currentPin = "";
     document.getElementById('pinTitleText').innerText = "กรุณาระบุรหัส PIN";
@@ -2837,19 +2837,33 @@ setInterval(initMarketPrices, 2000);
     document.getElementById('pinLockView').style.display = 'flex';
     updatePinDots();
     
-    // ✅ เพิ่มตรงนี้ (เช็คว่ามี biometric หรือไม่)
+    // ✅ เพิ่ม: สแกนอัตโนมัติ (ไม่ต้องกดปุ่ม)
     const acc = appState.accounts[targetUidToLogin];
-    const biometricBtn = document.getElementById('biometricBtn');
     const hasBiometric = localStorage.getItem(`biometric_${acc.uid}`);
     
     if (hasBiometric) {
-        biometricBtn.style.display = 'block';
-        biometricBtn.innerText = '🔐 สแกนหน้า / ลายนิ้วมือ';
+        // เปลี่ยนข้อความแจ้ง
+        document.getElementById('pinSubText').innerText = "🔄 กำลังสแกนหน้า/ลายนิ้วมือ...";
+        
+        // รอ 0.5 วินาที แล้วสแกนอัตโนมัติ
+        setTimeout(async () => {
+            const success = await authenticateWithBiometric(acc.uid);
+            if (success) {
+                document.getElementById('pinLockView').style.display = 'none';
+                onLoginSuccess();
+            } else {
+                // ถ้าสแกนไม่สำเร็จ ให้กลับมาใส่ PIN ได้
+                document.getElementById('pinSubText').innerText = `❌ สแกนไม่สำเร็จ กรุณาใส่ PIN\nเข้าสู่บัญชี: ${acc.accName}`;
+                // แสดงปุ่ม biometric เผื่อกดลองใหม่
+                document.getElementById('biometricBtn').style.display = 'block';
+                document.getElementById('biometricBtn').innerText = '🔄 ลองสแกนอีกครั้ง';
+            }
+        }, 500);
     } else {
-        biometricBtn.style.display = 'none';
+        // ไม่มี biometric ให้ซ่อนปุ่ม
+        document.getElementById('biometricBtn').style.display = 'none';
     }
 }
-
         function pressPin(num) {
             if (currentPin.length < 6) {
                 currentPin += num;
