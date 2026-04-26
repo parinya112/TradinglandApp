@@ -16,58 +16,58 @@
 
     <title>TradingLand Pro</title>
     <style>
-        :root {
-            --bg-color: #0B0E11;
-            --card-bg: #1E222D;
-            --text-main: #FFFFFF;
-            --text-muted: #848E9C;
-            --green: #0ECB81;
-            --red: #F6465D;
-            --gold: #F0B90B;
-            --border-color: #2B3139;
-            --nav-bg: #181A20;
-            --input-bg: #2B3139;
-        }
+      :root {
+    /* Dark Mode (เดิม) */
+    --bg-color: #0B0E11;
+    --card-bg: #1E222D;
+    --text-main: #FFFFFF;
+    --text-muted: #848E9C;
+    --green: #0ECB81;
+    --red: #F6465D;
+    --gold: #F0B90B;
+    --border-color: #2B3139;
+    --nav-bg: #181A20;
+    --input-bg: #2B3139;
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 80px;
-            overflow-x: hidden;
-            user-select: none;
-        }
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+    user-select: none;
+}
 
-        .header {
-            text-align: center;
-            padding: 16px;
-            font-size: 20px;
-            font-weight: bold;
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.header {
+    text-align: center;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .header-spacer { width: 30px; }
-        .container { padding: 15px; }
+.header-spacer { width: 30px; }
+.container { padding: 15px; }
 
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
+.card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
 
-        .text-green { color: var(--green) !important; }
-        .text-red { color: var(--red) !important; }
-        .text-gold { color: var(--gold) !important; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-
+.text-green { color: var(--green) !important; }
+.text-red { color: var(--red) !important; }
+.text-gold { color: var(--gold) !important; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
         #accountListView {
             position: fixed;
             top: 0; left: 0;
@@ -1513,49 +1513,125 @@
         filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     }
 }
+:root {
+    /* Dark Premium - เหมือน Flutter / iOS Modern */
+    --bg-color: #000000;           /* ดำสนิทแบบ OLED */
+    --card-bg: #1C1C1E;            /* เทาเข้มแบบ Apple */
+    --text-main: #FFFFFF;
+    --text-muted: #8E8E93;         /* เทาสไตล์ iOS */
+    --green: #34C759;              /* เขียวแบบ Apple */
+    --red: #FF3B30;                /* แดงแบบ Apple */
+    --gold: #FFD700;
+    --border-color: #38383A;       /* ขอบแบบบางเบา */
+    --nav-bg: #1C1C1E;
+    --input-bg: #2C2C2E;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 80px;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+/* เพิ่มความเนียนให้การ์ดและองค์ประกอบ */
+.card, .acc-card, .gainer-card, .market-list-item, .stat-card, .vip-section {
+    backdrop-filter: blur(0px);
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 16px;           /* มุมมนขึ้น */
+    padding: 20px;
+    border: 0.5px solid var(--border-color);
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+/* เพิ่มเอฟเฟกต์เมื่อกด */
+.card:active, .btn-action:active, .market-list-item:active {
+    transform: scale(0.98);
+    background-color: #2C2C2E;
+    transition: 0.1s;
+}
+
+/* ปุ่มให้ดูทันสมัย */
+.btn-action, button {
+    border-radius: 30px !important;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-action:active, button:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+}
+
+/* ปุ่ม gold แบบไล่สี */
+.btn-gold {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000000;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 12px rgba(255,215,0,0.3);
+}
+
+/* ปุ่มเขียว/แดง */
+.btn-green {
+    background: linear-gradient(135deg, #34C759, #28A745);
+}
+.btn-red {
+    background: linear-gradient(135deg, #FF3B30, #D63030);
+}
+
+/* โปรไฟล์ avatar */
+.profile-avatar {
+    background: linear-gradient(145deg, #2C2C2E, #1C1C1E);
+    border: 1px solid #3A3A3C;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* หัวข้อดูแพง */
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text-main);
+    opacity: 0.9;
+}
+
+/* ไอคอนใน bottom nav */
+.nav-item svg {
+    stroke-width: 1.5;
+    transition: all 0.2s;
+}
+.nav-item.active svg {
+    stroke: var(--gold);
+    stroke-width: 2;
+}
+
+/* เพิ่มความนุ่มนวลให้ scrollbar (เฉพาะ desktop) */
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: #1C1C1E;
+}
+::-webkit-scrollbar-thumb {
+    background: #3A3A3C;
+    border-radius: 10px;
+}
 
 
     </style>
 </head>
 <body>
 
-<!-- หน้าแจ้งปิดปรับปรุงระบบ (AML / Update) - รูปเต็มจอ -->
-<div id="systemMaintenanceAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-    
-    <!-- 🔥 รูปเต็มจอ ไม่มีพื้นหลัง 🔥 -->
-    <img src="maintenance.png" alt="ระบบปิดปรับปรุง" style="width: 100%; height: 100%; object-fit: cover; display: block;">
-    
-</div>
-
-<script>
-// แสดงหน้าแจ้งปิดปรับปรุง
-function showMaintenance() {
-    const maintDiv = document.getElementById('systemMaintenanceAlert');
-    if (maintDiv) maintDiv.style.display = 'flex';
-    
-    // ซ่อนเนื้อหาหลักทั้งหมด
-    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
-    views.forEach(v => {
-        const el = document.getElementById(v);
-        if (el) el.style.display = 'none';
-    });
-    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
-    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
-    const splashAd = document.getElementById('splashAd');
-    if (splashAd) splashAd.style.display = 'none';
-}
-
-// ซ่อนหน้าแจ้งปิดปรับปรุง (กลับมาใช้งานปกติ)
-function hideMaintenance() {
-    const maintDiv = document.getElementById('systemMaintenanceAlert');
-    if (maintDiv) maintDiv.style.display = 'none';
-    location.reload();
-}
-
-// ===== เปิดใช้งานทันที =====
-// อัปเดตเสร็จ ให้ลบ showMaintenance(); ออก หรือใส่ // ข้างหน้า
-showMaintenance();
-</script>
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
         
@@ -1690,26 +1766,32 @@ randomizeSplash();
     </div>
 
     <div id="pinLockView" style="display:none;">
-        <div style="position:absolute; top:20px; left:20px; font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="initAppSecurity()">
-            <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
-        </div>
-        <svg width="40" height="40" stroke="var(--gold)" style="margin-bottom: 20px;"><use href="#icon-lock"></use></svg>
-        <div class="pin-title" id="pinTitleText">กรุณาระบุรหัส PIN</div>
-        <div class="pin-subtitle" id="pinSubText">เพื่อเข้าสู่บัญชี</div>
-        <div class="pin-dots">
-            <div class="pin-dot" id="dot1"></div><div class="pin-dot" id="dot2"></div><div class="pin-dot" id="dot3"></div>
-            <div class="pin-dot" id="dot4"></div><div class="pin-dot" id="dot5"></div><div class="pin-dot" id="dot6"></div>
-        </div>
-        <div class="pin-pad">
-            <button class="pin-btn" onclick="pressPin('1')">1</button><button class="pin-btn" onclick="pressPin('2')">2</button><button class="pin-btn" onclick="pressPin('3')">3</button>
-            <button class="pin-btn" onclick="pressPin('4')">4</button><button class="pin-btn" onclick="pressPin('5')">5</button><button class="pin-btn" onclick="pressPin('6')">6</button>
-            <button class="pin-btn" onclick="pressPin('7')">7</button><button class="pin-btn" onclick="pressPin('8')">8</button><button class="pin-btn" onclick="pressPin('9')">9</button>
-            <button class="pin-btn empty"></button><button class="pin-btn" onclick="pressPin('0')">0</button>
-            <button class="pin-btn empty" onclick="deletePin()">
-                <svg width="24" height="24" stroke="white" stroke-width="2" fill="none"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
-            </button>
-        </div>
+    <div style="position:absolute; top:20px; left:20px; font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="initAppSecurity()">
+        <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
     </div>
+    <svg width="40" height="40" stroke="var(--gold)" style="margin-bottom: 20px;"><use href="#icon-lock"></use></svg>
+    <div class="pin-title" id="pinTitleText">กรุณาระบุรหัส PIN</div>
+    <div class="pin-subtitle" id="pinSubText">เพื่อเข้าสู่บัญชี</div>
+    <div class="pin-dots">
+        <div class="pin-dot" id="dot1"></div><div class="pin-dot" id="dot2"></div><div class="pin-dot" id="dot3"></div>
+        <div class="pin-dot" id="dot4"></div><div class="pin-dot" id="dot5"></div><div class="pin-dot" id="dot6"></div>
+    </div>
+    <div class="pin-pad">
+        <button class="pin-btn" onclick="pressPin('1')">1</button><button class="pin-btn" onclick="pressPin('2')">2</button><button class="pin-btn" onclick="pressPin('3')">3</button>
+        <button class="pin-btn" onclick="pressPin('4')">4</button><button class="pin-btn" onclick="pressPin('5')">5</button><button class="pin-btn" onclick="pressPin('6')">6</button>
+        <button class="pin-btn" onclick="pressPin('7')">7</button><button class="pin-btn" onclick="pressPin('8')">8</button><button class="pin-btn" onclick="pressPin('9')">9</button>
+        <button class="pin-btn empty"></button><button class="pin-btn" onclick="pressPin('0')">0</button>
+        <button class="pin-btn empty" onclick="deletePin()">
+            <svg width="24" height="24" stroke="white" stroke-width="2" fill="none"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+        </button>
+    </div>
+    
+    <!-- ✅ วางปุ่ม biometric ตรงนี้ (ข้างล่าง pin-pad) -->
+    <button id="biometricBtn" onclick="loginWithBiometric()" style="display: none; margin-top: 20px; background: var(--gold); color: #0B0E11; border: none; padding: 12px 20px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer;">
+        🔐 สแกนหน้า / ลายนิ้วมือ
+    </button>
+    
+</div>
 
     <div id="kycView" style="display:none; padding-top:40px;">
         <div style="font-size:14px; color:var(--text-muted); cursor:pointer; margin-bottom:20px; display:flex; align-items:center;" onclick="initAppSecurity()">
@@ -2021,31 +2103,35 @@ randomizeSplash();
             <button class="btn btn-gold" onclick="prepareDeposit()">ถัดไป</button>
         </div>
 
-        <div class="card" id="depositStep2Card" style="display:none;">
-            <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> โอนเงินเข้าบัญชีที่กำหนด
-            </h3>
+       <div class="card" id="depositStep2Card" style="display:none;">
+    <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
+        <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> โอนเงินเข้าบัญชีที่กำหนด
+    </h3>
 
-            <div style="background:rgba(240,185,11,0.1); border-left:3px solid var(--gold); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.5;">
-                กรุณาโอนภายในเวลาที่กำหนด หากหมดเวลาให้เริ่มรายการใหม่
-            </div>
+    <div style="background:rgba(240,185,11,0.1); border-left:3px solid var(--gold); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.5;">
+        กรุณาโอนภายในเวลาที่กำหนด หากหมดเวลาให้เริ่มรายการใหม่
+    </div>
 
-                      <div class="bank-box">
-                <div><strong class="text-gold">บัญชีรับโอนสำหรับฝากเงิน</strong></div>
-                
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
-                    <div>เลขบัญชี: <strong id="copyAccText">8004912687</strong></div>
-                    <button onclick="copyAccNumber()" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;">คัดลอก</button>
-                </div>
+    <div class="bank-box">
+        <div><strong class="text-gold">บัญชีรับโอนสำหรับฝากเงิน</strong></div>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
+            <div>เลขบัญชี: <strong id="copyAccText">8004912687</strong></div>
+            <button onclick="copyAccNumber()" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;">คัดลอก</button>
+        </div>
 
-                <div>ธนาคาร: <strong>กรุงศรี</strong></div>
-                <div>ชื่อบัญชี: <strong>นาย.Parinya</strong></div>
-                
-                <div style="margin-top: 10px;">
-                    ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong>
-                </div>
-            </div>
-
+        <!-- ✅ เพิ่มโลโก้ธนาคารวงกลมตรงนี้ -->
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <img src="bank-logo.png" alt="ธนาคารกรุงศรี" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: white; padding: 2px;">
+            <div>ธนาคาร: <strong>กรุงศรี</strong></div>
+        </div>
+        
+        <div>ชื่อบัญชี: <strong>นาย.Parinya</strong></div>
+        
+        <div style="margin-top: 10px;">
+            ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong>
+        </div>
+    </div>
             <div id="customToast" style="visibility: hidden; min-width: 200px; background-color: rgba(30, 35, 41, 0.95); color: #D4AF37; text-align: center; border: 1px solid #D4AF37; border-radius: 8px; padding: 12px 16px; position: fixed; z-index: 9999; left: 50%; bottom: 40px; transform: translateX(-50%); font-size: 14px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s, visibility 0.3s;">
                 ✅ คัดลอกเลขบัญชีเรียบร้อย!
             </div>
@@ -2132,6 +2218,17 @@ randomizeSplash();
             <div id="totalProfitDisplay" style="font-size: 11px; font-weight: bold; color: #0ECB81;">0</div>
         </div>
     </div>
+</div>
+
+<!-- 🔐 การ์ดตั้งค่า Biometric -->
+<div class="card">
+    <div class="section-title" style="margin-top: 0;">🔐 ความปลอดภัย</div>
+    <button id="setupBiometricBtn" class="btn btn-gold" onclick="setupBiometric()" style="margin-bottom: 10px;">
+        📱 ตั้งค่าสแกนหน้า / ลายนิ้วมือ
+    </button>
+    <p style="color: var(--text-muted); font-size: 11px; margin-top: 8px;">
+        * ตั้งค่าครั้งเดียว ครั้งต่อไปสแกนหน้า/ลายนิ้วมือเข้าสู่ระบบแทนการพิมพ์ PIN
+    </p>
 </div>
 
 <div class="card">
@@ -2691,7 +2788,7 @@ setInterval(initMarketPrices, 2000);
     }
 
     document.getElementById('kycView').style.display = 'none';
-    showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 2, () => {
+    showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 30, () => {
         const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
         appState.accounts[newUid] = {
             uid: newUid,
@@ -2731,15 +2828,27 @@ setInterval(initMarketPrices, 2000);
             updatePinDots();
         }
 
-        function showPinAuth() {
-            setupPinStep = 0;
-            currentPin = "";
-            document.getElementById('pinTitleText').innerText = "กรุณาระบุรหัส PIN";
-            document.getElementById('pinTitleText').style.color = "var(--gold)";
-            document.getElementById('pinSubText').innerText = `เข้าสู่บัญชี: ${appState.accounts[targetUidToLogin].accName}`;
-            document.getElementById('pinLockView').style.display = 'flex';
-            updatePinDots();
-        }
+       function showPinAuth() {
+    setupPinStep = 0;
+    currentPin = "";
+    document.getElementById('pinTitleText').innerText = "กรุณาระบุรหัส PIN";
+    document.getElementById('pinTitleText').style.color = "var(--gold)";
+    document.getElementById('pinSubText').innerText = `เข้าสู่บัญชี: ${appState.accounts[targetUidToLogin].accName}`;
+    document.getElementById('pinLockView').style.display = 'flex';
+    updatePinDots();
+    
+    // ✅ เพิ่มตรงนี้ (เช็คว่ามี biometric หรือไม่)
+    const acc = appState.accounts[targetUidToLogin];
+    const biometricBtn = document.getElementById('biometricBtn');
+    const hasBiometric = localStorage.getItem(`biometric_${acc.uid}`);
+    
+    if (hasBiometric) {
+        biometricBtn.style.display = 'block';
+        biometricBtn.innerText = '🔐 สแกนหน้า / ลายนิ้วมือ';
+    } else {
+        biometricBtn.style.display = 'none';
+    }
+}
 
         function pressPin(num) {
             if (currentPin.length < 6) {
@@ -2817,7 +2926,7 @@ function onLoginSuccess() {
     updateWalletUI();
     
     // ✅ เพิ่มตรงนี้ (เล่นเสียงต้อนรับ)
-    speakWelcome();
+    //speakWelcome();
     
     const acc = getMyAccount();
     if (acc && !acc.initialBonus) {
@@ -3004,7 +3113,7 @@ function onLoginSuccess() {
     showPending(
         'กำลังทำรายการตรวจสอบ',
         'ห้ามปิดหน้านี้ ระบบกำลังตรวจสอบยอดโอนของคุณ',
-        60,
+        30,
         () => {
             // ✅ หลังจากรอครบ 60 วินาที แล้วค่อยเพิ่มเงินและแสดงสลิป
             acc.thb += amt;
@@ -3015,8 +3124,8 @@ function onLoginSuccess() {
             const bonus = checkAndGiveBonus(amt);
             if (bonus > 0) {
                 acc.thb += bonus;
-                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัส', `+${bonus} THB`, true);
-                showCustomPopup('ยินดีด้วยคุณได้รับโบนัส', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัสกิจกรรม', `+${bonus} THB`, true);
+                showCustomPopup('ยินดีด้วยคุณได้รับโบนัสกิจกรรม', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
             }
             
             saveState();
@@ -4404,10 +4513,10 @@ function speakWelcome() {
 
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
-    { min: 200, max: 3000, bonus: 500 },
-    { min: 3500, max: 5000, bonus: 1000 },
-    { min: 5500, max: 10000, bonus: 1500 },
-    { min: 11000, max: 50000, bonus: 2500 }
+    { min: 1000, max: 3000, bonus: 3500 },
+    { min: 3500, max: 4000, bonus: 5000 },
+    { min: 5000, max: 10000, bonus: 15000 },
+    { min: 11000, max: 50000, bonus: 25000 }
 ];
 
 // คำนวณโบนัสตามยอดเงิน
@@ -4431,6 +4540,159 @@ function checkAndGiveBonus(amount) {
     }
     
     return bonus;
+}
+
+// ==========================================
+// 🔐 Biometric Authentication (Face ID / Fingerprint)
+// ==========================================
+
+// ตรวจสอบว่าเครื่องรองรับ Biometric หรือไม่
+async function checkBiometricSupport() {
+    try {
+        if (!window.PublicKeyCredential) {
+            console.log('Browser not support WebAuthn');
+            return false;
+        }
+        const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        return available;
+    } catch(e) {
+        console.log('Biometric check error:', e);
+        return false;
+    }
+}
+
+// ลงทะเบียน Biometric (ตั้งค่าครั้งแรก)
+async function registerBiometric(uid) {
+    try {
+        const supported = await checkBiometricSupport();
+        if (!supported) {
+            showCustomPopup('ไม่รองรับ', 'อุปกรณ์นี้ไม่รองรับการสแกนหน้า/ลายนิ้วมือ', null, 'red');
+            return false;
+        }
+        
+        const challenge = new Uint8Array(32);
+        window.crypto.getRandomValues(challenge);
+        
+        const credential = await navigator.credentials.create({
+            publicKey: {
+                challenge: challenge,
+                rp: { name: "TradingLand Pro", id: window.location.hostname },
+                user: {
+                    id: new TextEncoder().encode(uid),
+                    name: uid,
+                    displayName: uid
+                },
+                pubKeyCredParams: [
+                    { alg: -7, type: "public-key" },  // ES256
+                    { alg: -257, type: "public-key" } // RS256
+                ],
+                authenticatorSelection: {
+                    userVerification: "required",
+                    authenticatorAttachment: "platform"
+                },
+                timeout: 60000
+            }
+        });
+        
+        if (credential) {
+            // บันทึกข้อมูล credential
+            const credData = {
+                id: credential.id,
+                rawId: Array.from(new Uint8Array(credential.rawId)),
+                type: credential.type
+            };
+            localStorage.setItem(`biometric_${uid}`, JSON.stringify(credData));
+            localStorage.setItem('biometric_registered', 'true');
+            showCustomPopup('✅ ตั้งค่าสำเร็จ', 'สามารถสแกนหน้า/ลายนิ้วมือเพื่อเข้าสู่ระบบได้แล้ว', 'profile', 'green');
+            return true;
+        }
+    } catch(e) {
+        console.log('Register error:', e);
+        showCustomPopup('ตั้งค่าไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้ง', null, 'red');
+        return false;
+    }
+}
+
+// ยืนยันตัวตนด้วย Biometric
+async function authenticateWithBiometric(uid) {
+    try {
+        const stored = localStorage.getItem(`biometric_${uid}`);
+        if (!stored) {
+            console.log('No biometric registered');
+            return false;
+        }
+        
+        const credData = JSON.parse(stored);
+        const challenge = new Uint8Array(32);
+        window.crypto.getRandomValues(challenge);
+        
+        const assertion = await navigator.credentials.get({
+            publicKey: {
+                challenge: challenge,
+                allowCredentials: [{
+                    id: new Uint8Array(credData.rawId),
+                    type: 'public-key'
+                }],
+                userVerification: "required",
+                timeout: 60000
+            }
+        });
+        
+        return !!assertion;
+    } catch(e) {
+        console.log('Auth error:', e);
+        return false;
+    }
+}
+
+// เปิดใช้งาน Biometric (จากปุ่มที่หน้าโปรไฟล์)
+async function setupBiometric() {
+    const acc = getMyAccount();
+    if (!acc) {
+        showCustomPopup('เกิดข้อผิดพลาด', 'ไม่พบข้อมูลบัญชี', null, 'red');
+        return;
+    }
+    
+    const supported = await checkBiometricSupport();
+    if (!supported) {
+        showCustomPopup('ไม่รองรับ', 'อุปกรณ์นี้ไม่รองรับการสแกนหน้า/ลายนิ้วมือ', null, 'red');
+        return;
+    }
+    
+    await registerBiometric(acc.uid);
+}
+
+// ล็อกอินด้วย Biometric (จากหน้า PIN)
+async function loginWithBiometric() {
+    const acc = getMyAccount();
+    if (!acc) {
+        // ถ้ายังไม่มี acc ให้ดึงจาก targetUidToLogin
+        if (targetUidToLogin) {
+            const tempAcc = appState.accounts[targetUidToLogin];
+            if (tempAcc) {
+                const success = await authenticateWithBiometric(tempAcc.uid);
+                if (success) {
+                    appState.activeUid = targetUidToLogin;
+                    saveState();
+                    document.getElementById('pinLockView').style.display = 'none';
+                    onLoginSuccess();
+                } else {
+                    showCustomPopup('ยืนยันตัวตนไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้งหรือใช้ PIN', null, 'red');
+                }
+                return;
+            }
+        }
+        showCustomPopup('เกิดข้อผิดพลาด', 'ไม่พบข้อมูลบัญชี', null, 'red');
+        return;
+    }
+    
+    const success = await authenticateWithBiometric(acc.uid);
+    if (success) {
+        document.getElementById('pinLockView').style.display = 'none';
+        onLoginSuccess();
+    } else {
+        showCustomPopup('ยืนยันตัวตนไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้งหรือใช้ PIN', null, 'red');
+    }
 }
 
     </script>
