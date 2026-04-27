@@ -1765,7 +1765,7 @@ randomizeSplash();
         </button>
     </div>
 
-    <div id="pinLockView" style="display:none;">
+<div id="pinLockView" style="display:none;">
     <div style="position:absolute; top:20px; left:20px; font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="initAppSecurity()">
         <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
     </div>
@@ -1786,9 +1786,14 @@ randomizeSplash();
         </button>
     </div>
     
-    <!-- ✅ วางปุ่ม biometric ตรงนี้ (ข้างล่าง pin-pad) -->
+    <!-- ปุ่ม biometric -->
     <button id="biometricBtn" onclick="loginWithBiometric()" style="display: none; margin-top: 20px; background: var(--gold); color: #0B0E11; border: none; padding: 12px 20px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer;">
         🔐 สแกนหน้า / ลายนิ้วมือ
+    </button>
+    
+    <!-- ✅ เพิ่มปุ่มลืม PIN ตรงนี้ -->
+    <button onclick="forgotPin()" style="margin-top: 10px; background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 8px 20px; border-radius: 25px; font-size: 13px; cursor: pointer;">
+        ลืมรหัส PIN?
     </button>
     
 </div>
@@ -4833,6 +4838,35 @@ function clearFavorites() {
             </svg>`;
         });
         showToast('🗑️ ล้างรายการโปรดเรียบร้อย');
+    }
+}
+
+// ==========================================
+// 🔑 ฟังก์ชันลืมรหัส PIN
+// ==========================================
+
+function forgotPin() {
+    const acc = appState.accounts[targetUidToLogin];
+    if (!acc) {
+        alert('ไม่พบข้อมูลบัญชี');
+        return;
+    }
+    
+    // ยืนยันตัวตนด้วยชื่อบัญชี
+    const userInput = prompt('🔐 ยืนยันตัวตน\n\nกรุณากรอกชื่อบัญชีของคุณเพื่อยืนยันการรีเซ็ต PIN:', '');
+    
+    if (userInput === acc.accName) {
+        // ลบ PIN เดิม
+        acc.pin = "";
+        saveState();
+        
+        // เริ่มตั้ง PIN ใหม่
+        targetUidToLogin = acc.uid;
+        startPinSetup();
+        
+        alert('✅ รีเซ็ต PIN สำเร็จ!\nกรุณาตั้งรหัส PIN ใหม่');
+    } else {
+        alert('❌ ชื่อบัญชีไม่ถูกต้อง');
     }
 }
 
