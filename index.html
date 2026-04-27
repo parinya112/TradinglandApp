@@ -15,6 +15,10 @@
 <meta name="application-name" content="TradingLand Pro">
 
     <title>TradingLand Pro</title>
+    
+    <!-- ✅ วางตรงนี้ (ใต้ title, เหนือ style) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
     <style>
       :root {
     /* Dark Mode (เดิม) */
@@ -2771,11 +2775,11 @@ setInterval(initMarketPrices, 2000);
             }
 
             const btnNew = document.getElementById('btnCreateNewAcc');
-            if (accCount >= 3) {
+            if (accCount >= 6) {
                 btnNew.style.display = 'none';
             } else {
                 btnNew.style.display = 'flex';
-                btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/3)`;
+                btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/6)`;
             }
 
             document.getElementById('accountListView').style.display = 'block';
@@ -2832,9 +2836,10 @@ setInterval(initMarketPrices, 2000);
                 total: 0
             },
             // ✅ เพิ่ม 2 บรรทัดนี้ตรงนี้
-            dailyProfit: {},
-            todayProfit: 0
-        };
+    dailyProfit: {},
+    todayProfit: 0,
+    lastWithdrawAt: null   // ✅ เพิ่มบรรทัดนี้
+};
         saveState();
         targetUidToLogin = newUid;
         startPinSetup();
@@ -3145,8 +3150,8 @@ function onLoginSuccess() {
             const bonus = checkAndGiveBonus(amt);
             if (bonus > 0) {
                 acc.thb += bonus;
-                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัสกิจกรรม', `+${bonus} THB`, true);
-                showCustomPopup('ยินดีด้วยคุณได้รับโบนัสกิจกรรม', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัส', `+${bonus} THB`, true);
+                showCustomPopup('ยินดีด้วยคุณได้รับโบนัส', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
             }
             
             saveState();
@@ -3169,7 +3174,7 @@ function onLoginSuccess() {
     );
 }
 
-// ส่วน showSlipReceipt และ closeSlipReceipt เหมือนเดิม
+// ส่วน showSlipReceipt และ closeSlipReceipt (เพิ่มปุ่มเซฟสลิป)
 function showSlipReceipt(amount) {
     const slipOverlay = document.createElement('div');
     slipOverlay.id = 'slipReceiptOverlay';
@@ -3198,7 +3203,7 @@ function showSlipReceipt(amount) {
     
     slipOverlay.innerHTML = `
         <div style="background: linear-gradient(135deg, #1a1e2a 0%, #0f1119 100%); border-radius: 24px; width: 90%; max-width: 380px; padding: 0; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid rgba(240,185,11,0.3);">
-            <div style="background: linear-gradient(135deg, #0B0E11 0%, #1E222D 100%); padding: 20px; text-align: center; border-bottom: 1px solid rgba(240,185,11,0.2);">
+            <div id="slipContentDeposit" style="background: linear-gradient(135deg, #0B0E11 0%, #1E222D 100%); padding: 20px; text-align: center; border-bottom: 1px solid rgba(240,185,11,0.2);">
                 <div style="width: 50px; height: 50px; background: rgba(14,203,129,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto;">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0ECB81" stroke-width="2">
                         <polyline points="20 6 9 17 4 12"></polyline>
@@ -3239,9 +3244,14 @@ function showSlipReceipt(amount) {
                 <div style="background: rgba(14,203,129,0.05); border-radius: 12px; padding: 12px; text-align: center; margin-bottom: 20px;">
                     <span style="color: #0ECB81; font-size: 13px;">✓ สถานะ: ดำเนินการสำเร็จ</span>
                 </div>
-                <button onclick="closeSlipReceipt()" style="width: 100%; padding: 14px; background: var(--gold); border: none; border-radius: 12px; color: #0B0E11; font-weight: bold; font-size: 16px; cursor: pointer;">
-                    ตกลง
-                </button>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="saveDepositSlipAsImage()" style="flex: 1; padding: 12px; background: var(--gold); border: none; border-radius: 12px; color: #0B0E11; font-weight: bold; font-size: 14px; cursor: pointer;">
+                        📸 เซฟสลิป
+                    </button>
+                    <button onclick="closeSlipReceipt()" style="flex: 1; padding: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; color: white; font-weight: bold; font-size: 14px; cursor: pointer;">
+                        ปิด
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -3254,7 +3264,61 @@ function closeSlipReceipt() {
     if (overlay) overlay.remove();
     switchTab('wallet');
 }
-        function openWithdraw() {
+
+// ฟังก์ชันเซฟสลิปฝากเงิน
+function saveDepositSlipAsImage() {
+    const slipElement = document.getElementById('slipReceiptOverlay');
+    if (!slipElement) return;
+    
+    const contentToCapture = slipElement.querySelector('#slipContentDeposit') || slipElement.querySelector('div > div');
+    if (!contentToCapture) return;
+    
+    contentToCapture.style.opacity = '0.5';
+    
+    html2canvas(contentToCapture, {
+        scale: 2,
+        backgroundColor: null,
+        logging: false,
+        useCORS: true
+    }).then(canvas => {
+        contentToCapture.style.opacity = '';
+        
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        link.download = `deposit_slip_${timestamp}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        
+        showToast('✅ เซฟสลิปฝากเงินเรียบร้อย');
+    }).catch(err => {
+        contentToCapture.style.opacity = '';
+        console.error('Capture error:', err);
+        showToast('❌ เซฟไม่สำเร็จ');
+    });
+}
+
+// ฟังก์ชัน Toast แจ้งเตือน
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.innerText = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1E222D;
+        color: #F0B90B;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 14px;
+        z-index: 10002;
+        border: 1px solid #F0B90B;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+}
+      function openWithdraw() {
             const acc = getMyAccount();
             if (!acc) return;
 
@@ -3272,9 +3336,10 @@ function processWithdraw() {
     if (!amt || amt <= 0) return showCustomPopup('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงิน', null, 'red');
     if (amt > acc.thb) return showCustomPopup('ยอดเงินไม่เพียงพอ', 'ยอดเงินในพอร์ตไม่พอสำหรับการถอน', null, 'red');
 
-   const now = Date.now();
-const unlockAt = acc.registeredAt + (90 * 24 * 60 * 60 * 1000);
-const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
+    const now = Date.now();
+    const lastWithdraw = acc.lastWithdrawAt || acc.registeredAt;
+    const unlockAt = lastWithdraw + (90 * 24 * 60 * 60 * 1000);
+    const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
 
     if (now < unlockAt) {
         return showCustomPopup(
@@ -3285,16 +3350,14 @@ const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
         );
     }
 
-    // หักเงิน
     acc.thb -= amt;
+    acc.lastWithdrawAt = now;
     saveState();
     saveHistory('withdraw', 'ถอนเงิน', '-' + amt.toLocaleString('en-US', { minimumFractionDigits: 2 }), false);
     
-    // แสดงสลิปแทน popup
     showWithdrawSlip(amt);
 }
 
-// ฟังก์ชันแสดงสลิปการถอน
 function showWithdrawSlip(amount) {
     const slipOverlay = document.createElement('div');
     slipOverlay.id = 'withdrawSlipOverlay';
@@ -3379,7 +3442,6 @@ function closeWithdrawSlip() {
     if (overlay) overlay.remove();
     switchTab('wallet');
 }
-
        function simulateLiveMarket() {
     const todayDay = new Date().getDay();
     const isWeekend = (todayDay === 0 || todayDay === 6);
@@ -4546,10 +4608,10 @@ function speakWelcome() {
 
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
-    { min: 1000, max: 3000, bonus: 3500 },
-    { min: 3500, max: 4000, bonus: 5000 },
-    { min: 5000, max: 10000, bonus: 15000 },
-    { min: 11000, max: 50000, bonus: 25000 }
+    { min: 1500, max: 3000, bonus: 500 },
+    { min: 3500, max: 5000, bonus: 1000 },
+    { min: 5500, max: 10000, bonus: 2000 },
+    { min: 11000, max: 50000, bonus: 5000 }
 ];
 
 // คำนวณโบนัสตามยอดเงิน
