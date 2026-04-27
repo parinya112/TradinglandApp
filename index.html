@@ -1924,17 +1924,35 @@ randomizeSplash();
     }
 </style>
 
-<div class="title-badge-hot">
+<!-- ✅ ส่วนหัว Favorite (อยู่บนสุด) -->
+<div class="title-badge-hot" style="display: flex; justify-content: space-between; align-items: center;">
     <div class="title-content">
-        <svg width="14" height="14" stroke="#ffffff" fill="none">
-            <use href="#icon-fire"></use>
-        </svg> 
-        สินทรัพย์ยอดนิยม (Top Assets)
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5">
+            <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2" fill="#FFD700"/>
+        </svg>
+        สินทรัพย์ที่ติดดาว (Favorites)
+    </div>
+    <button onclick="clearFavorites()" style="background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+        </svg>
+        ล้างทั้งหมด
+    </button>
+</div>
+
+<!-- ✅ container แสดงรายการที่ติดดาว -->
+<div id="favoritesContainer" style="min-height: 100px; margin-bottom: 20px;">
+    <div id="favoritesList" style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+    </div>
+    <div id="emptyFavoritesMsg" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; display: none;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 8px auto;">
+            <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+        </svg>
+        ยังไม่มีสินทรัพย์ที่ติดดาว<br>กดดาวในหน้า Market เพื่อเพิ่ม
     </div>
 </div>
 
-<div id="homeTopGainers"><p style="text-align:center; color:var(--text-muted); font-size:12px;">กำลังโหลด...</p></div>
-
+<!-- ✅ ส่วน Leaderboard (อยู่ข้างล่าง) -->
 <div class="title-badge-glow">
     <div class="title-content">
         <svg width="14" height="14" stroke="#ffffff" fill="none">
@@ -1944,18 +1962,18 @@ randomizeSplash();
     </div>
 </div>
 
-       <div class="card" style="padding: 5px 15px; margin-bottom: 30px;">
-        <div id="botLeaderboard"></div>
-    </div>
-    
-</div> <div id="marketView" style="display:none;">
+<div class="card" style="padding: 5px 15px; margin-bottom: 30px;">
+    <div id="botLeaderboard"></div>
+</div>
+
+</div> <!-- ปิด homeView -->
+
+<div id="marketView" style="display:none;">
     <div class="container">
         <div class="search-box">
-
-                <svg width="18" height="18" stroke="var(--text-muted)" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" placeholder="ค้นหาสินทรัพย์">
-            </div>
-
+            <svg width="18" height="18" stroke="var(--text-muted)" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" placeholder="ค้นหาสินทรัพย์">
+        </div>
             <div class="market-sub-tabs" id="marketCategoryTabs">
                 <div class="sub-tab active" onclick="filterMarket('all')">ทั้งหมด (All)</div>
                 <div class="sub-tab" onclick="filterMarket('crypto')">คริปโต (Crypto)</div>
@@ -2353,7 +2371,7 @@ tvSymbol: 'SET:SCC',
 icon: 'scc.png' },
 
 { symbol: 'LAND', name: 'LAND', category: 'stock', 
-priceThb: 273.42, 
+priceThb: 270.08, 
 priceUsd: 9.20, 
 pct: 1.47, 
 volume: '0.5M', 
@@ -2505,7 +2523,7 @@ tvSymbol: 'SWX:UBSG',
 icon: 'ubs.png' },
 
 { symbol: 'RabbitLand', name: 'Rabbit', category: 'stock', 
-priceThb: 3.03, 
+priceThb: 2.46, 
 priceUsd: 27.00, 
 pct: 1.20, 
 volume: '0.1M', 
@@ -2936,38 +2954,44 @@ function onLoginSuccess() {
         updateVIPUI(acc);
     }
     
+    // ✅ เพิ่มบรรทัดนี้! (แสดงรายการโปรด)
+    renderFavorites();
+    
     // ✅ เพิ่มบรรทัดนี้! (แสดงซองอั่งเปา)
     //showAngpao();
     
     switchTab('home');
 }
-               function switchTab(tab) {
-            if (!tab) return;
+        function switchTab(tab) {
+    if (!tab) return;
 
-            hideViews([
-                'homeView', 'walletView', 'marketView', 'tradeChartView',
-                'orderEntryView', 'depositView', 'withdrawView',
-                'profileView', 'accountListView', 'kycView'
-            ]);
+    hideViews([
+        'homeView', 'walletView', 'marketView', 'tradeChartView',
+        'orderEntryView', 'depositView', 'withdrawView',
+        'profileView', 'accountListView', 'kycView'
+    ]);
 
-            const isMainNav = ['home', 'market', 'wallet', 'profile'].includes(tab);
+    const isMainNav = ['home', 'market', 'wallet', 'profile'].includes(tab);
 
-            document.getElementById('mainHeader').style.display = isMainNav ? 'flex' : 'none';
-            document.getElementById('bottomNav').style.display = isMainNav ? 'flex' : 'none';
+    document.getElementById('mainHeader').style.display = isMainNav ? 'flex' : 'none';
+    document.getElementById('bottomNav').style.display = isMainNav ? 'flex' : 'none';
 
-            if (isMainNav) {
-                document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-                const nav = document.getElementById('nav-' + tab);
-                if (nav) nav.classList.add('active');
-            }
+    if (isMainNav) {
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        const nav = document.getElementById('nav-' + tab);
+        if (nav) nav.classList.add('active');
+    }
 
-            const targetView = document.getElementById(tab + 'View');
-            if (targetView) targetView.style.display = 'block';
+    const targetView = document.getElementById(tab + 'View');
+    if (targetView) targetView.style.display = 'block';
 
-            if (tab === 'wallet') updateWalletUI();
-            if (tab === 'profile') updateProfileUI();
-            if (tab === 'home') renderMarket();
-        }
+    if (tab === 'wallet') updateWalletUI();
+    if (tab === 'profile') updateProfileUI();
+    if (tab === 'home') {
+        renderMarket();
+        renderFavorites();  // ✅ เพิ่มบรรทัดนี้
+    }
+}
 
         function openDeposit() {
             const acc = getMyAccount();
@@ -3416,64 +3440,76 @@ function closeWithdrawSlip() {
             renderMarket();
         }
 
-        function renderMarket() {
-            const listContainer = document.getElementById('coinListContainer');
-            if (!listContainer) return;
+       function renderMarket() {
+    const listContainer = document.getElementById('coinListContainer');
+    if (!listContainer) return;
 
-            let html = '';
-            const filteredData = currentMarketFilter === 'all'
-                ? allMarketData
-                : allMarketData.filter(c => c.category === currentMarketFilter);
+    let html = '';
+    const filteredData = currentMarketFilter === 'all'
+        ? allMarketData
+        : allMarketData.filter(c => c.category === currentMarketFilter);
 
-            filteredData.forEach(c => {
-                const cc = c.pct >= 0 ? 'text-green' : 'text-red';
-                const s = c.pct >= 0 ? '+' : '';
-
-                html += `
-                    <div class="market-list-item" onclick="openTradeChart('${c.symbol}')">
-                        <div class="col-coin">
-                            <img src="${c.icon}" alt="Coin logo" class="coin-logo-img" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/circled-dot.png'">
-                            <div style="margin-left: 5px;">
-                                <span class="coin-symbol">${c.symbol}/THB</span>
-                                <div class="coin-vol">Vol: ${c.volume}</div>
-                            </div>
-                        </div>
-                        <div class="col-chart">${generateMockSparkline(c.pct >= 0)}</div>
-                        <div class="col-price">
-                            <div class="price-val ${cc}">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
-                            <div class="price-pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
-                        </div>
+    filteredData.forEach(c => {
+        const cc = c.pct >= 0 ? 'text-green' : 'text-red';
+        const s = c.pct >= 0 ? '+' : '';
+        const isFav = isFavorite(c.symbol);
+        
+        html += `
+            <div class="market-list-item" onclick="openTradeChart('${c.symbol}')">
+                <div class="col-coin" style="width: 35%;">
+                    <img src="${c.icon}" alt="Coin logo" class="coin-logo-img" onerror="this.src='https://img.icons8.com/ios-filled/50/ffffff/circled-dot.png'">
+                    <div style="margin-left: 5px;">
+                        <span class="coin-symbol">${c.symbol}/THB</span>
+                        <div class="coin-vol">Vol: ${c.volume}</div>
                     </div>
-                `;
-            });
+                </div>
+                <div class="col-chart" style="width: 20%;">${generateMockSparkline(c.pct >= 0)}</div>
+                <div class="col-price" style="width: 30%;">
+                    <div class="price-val ${cc}">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                    <div class="price-pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
+                </div>
+                <div style="width: 15%; text-align: center;">
+                    <button class="star-btn" data-symbol="${c.symbol}" onclick="event.stopPropagation(); toggleFavorite('${c.symbol}')" style="background: transparent; border: none; cursor: pointer;">
+                        ${isFav ? 
+                            `<svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1">
+                                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+                            </svg>` : 
+                            `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+                            </svg>`
+                        }
+                    </button>
+                </div>
+            </div>
+        `;
+    });
 
-            listContainer.innerHTML = html;
+    listContainer.innerHTML = html;
 
-            const homeTop = document.getElementById('homeTopGainers');
-            if (homeTop) {
-                const sortedCoins = [...allMarketData].sort((a, b) => b.pct - a.pct).slice(0, 3);
-                let homeHtml = '<div class="top-gainers-container">';
+    const homeTop = document.getElementById('homeTopGainers');
+    if (homeTop) {
+        const sortedCoins = [...allMarketData].sort((a, b) => b.pct - a.pct).slice(0, 3);
+        let homeHtml = '<div class="top-gainers-container">';
 
-                sortedCoins.forEach(c => {
-                    const cc = c.pct >= 0 ? 'text-green' : 'text-red';
-                    const s = c.pct >= 0 ? '+' : '';
-                    homeHtml += `
-                        <div class="gainer-card" onclick="openTradeChart('${c.symbol}')">
-                            <div class="sym">
-                                <img src="${c.icon}" style="width:16px; height:16px; border-radius:50%;" onerror="this.style.display='none'">
-                                ${c.symbol}
-                            </div>
-                            <div class="pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
-                            <div class="prc">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
-                        </div>
-                    `;
-                });
+        sortedCoins.forEach(c => {
+            const cc = c.pct >= 0 ? 'text-green' : 'text-red';
+            const s = c.pct >= 0 ? '+' : '';
+            homeHtml += `
+                <div class="gainer-card" onclick="openTradeChart('${c.symbol}')">
+                    <div class="sym">
+                        <img src="${c.icon}" style="width:16px; height:16px; border-radius:50%;" onerror="this.style.display='none'">
+                        ${c.symbol}
+                    </div>
+                    <div class="pct ${cc}">${s}${c.pct.toFixed(2)}%</div>
+                    <div class="prc">${c.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+                </div>
+            `;
+        });
 
-                homeHtml += '</div>';
-                homeTop.innerHTML = homeHtml;
-            }
-        }
-
+        homeHtml += '</div>';
+        homeTop.innerHTML = homeHtml;
+    }
+}
        async function openTradeChart(sym) {
     const c = allMarketData.find(x => x.symbol === sym);
     const acc = getMyAccount();
@@ -4684,6 +4720,119 @@ async function loginWithBiometric() {
         onLoginSuccess();
     } else {
         showCustomPopup('ยืนยันตัวตนไม่สำเร็จ', 'กรุณาลองใหม่อีกครั้งหรือใช้ PIN', null, 'red');
+    }
+}
+
+// ==========================================
+// ⭐ ระบบติดดาวหุ้น (Favorite Stocks)
+// ==========================================
+
+// โหลดรายการที่ติดดาว
+function loadFavorites() {
+    const favorites = JSON.parse(localStorage.getItem('favorite_stocks') || '[]');
+    return favorites;
+}
+
+// บันทึกรายการที่ติดดาว
+function saveFavorites(favorites) {
+    localStorage.setItem('favorite_stocks', JSON.stringify(favorites));
+}
+
+// เพิ่ม/ลบ ดาว
+function toggleFavorite(symbol) {
+    let favorites = loadFavorites();
+    const index = favorites.indexOf(symbol);
+    
+    if (index === -1) {
+        favorites.push(symbol);
+        showToast(`⭐ เพิ่ม ${symbol} เข้ารายการโปรดแล้ว`);
+    } else {
+        favorites.splice(index, 1);
+        showToast(`🗑️ ลบ ${symbol} ออกรายการโปรดแล้ว`);
+    }
+    
+    saveFavorites(favorites);
+    renderFavorites();
+    updateStarIcon(symbol);
+}
+
+// ตรวจสอบว่าเป็นรายการโปรดหรือไม่
+function isFavorite(symbol) {
+    const favorites = loadFavorites();
+    return favorites.includes(symbol);
+}
+
+// อัปเดตไอคอนดาวในหน้า Market
+function updateStarIcon(symbol) {
+    const starBtn = document.querySelector(`.star-btn[data-symbol="${symbol}"]`);
+    if (starBtn) {
+        const isFav = isFavorite(symbol);
+        starBtn.innerHTML = isFav ? 
+            `<svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1">
+                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+            </svg>` : 
+            `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+            </svg>`;
+    }
+}
+
+// แสดงรายการที่ติดดาวในหน้า Home
+function renderFavorites() {
+    const favorites = loadFavorites();
+    const container = document.getElementById('favoritesList');
+    const emptyMsg = document.getElementById('emptyFavoritesMsg');
+    
+    if (!container) return;
+    
+    if (favorites.length === 0) {
+        container.innerHTML = '';
+        if (emptyMsg) emptyMsg.style.display = 'block';
+        return;
+    }
+    
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    
+    const favoriteItems = allMarketData.filter(item => favorites.includes(item.symbol));
+    
+    let html = '';
+    favoriteItems.forEach(item => {
+        const cc = item.pct >= 0 ? 'text-green' : 'text-red';
+        const s = item.pct >= 0 ? '+' : '';
+        
+        html += `
+            <div class="favorite-card" style="background-color: var(--card-bg); border-radius: 12px; padding: 12px; min-width: 140px; cursor: pointer; border: 1px solid var(--border-color); position: relative;" onclick="openTradeChart('${item.symbol}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div class="sym" style="display: flex; align-items: center; gap: 5px;">
+                        <img src="${item.icon}" style="width: 20px; height: 20px; border-radius: 50%;" onerror="this.style.display='none'">
+                        <span style="font-weight: bold; font-size: 14px;">${item.symbol}</span>
+                    </div>
+                    <button class="remove-fav-btn" data-symbol="${item.symbol}" onclick="event.stopPropagation(); toggleFavorite('${item.symbol}')" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1">
+                            <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="pct ${cc}" style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">${s}${item.pct.toFixed(2)}%</div>
+                <div class="prc" style="font-size: 12px; color: var(--text-muted);">${item.priceThb.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+// ล้างรายการที่ติดดาวทั้งหมด
+function clearFavorites() {
+    if (confirm('⚠️ คุณต้องการล้างรายการสินทรัพย์ที่ติดดาวทั้งหมดใช่หรือไม่?')) {
+        saveFavorites([]);
+        renderFavorites();
+        document.querySelectorAll('.star-btn').forEach(btn => {
+            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+            </svg>`;
+        });
+        showToast('🗑️ ล้างรายการโปรดเรียบร้อย');
     }
 }
 
