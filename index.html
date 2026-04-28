@@ -1863,21 +1863,27 @@ randomizeSplash();
         <div class="header-spacer"></div>
     </div>
 
-    <div id="homeView" style="display:none;">
-        <div class="announcement-bar">
-            <svg width="14" height="14" stroke="currentColor" fill="none"><use href="#icon-alert"></use></svg>
-            <span class="marquee">ประกาศ: ตลาดมีความผันผวนสูง โปรดศึกษาข้อมูลและบริหารความเสี่ยงในการลงทุนอย่างระมัดระวัง</span>
+  <div id="homeView" style="display:none;">
+    <!-- ประกาศ滚动 (สวยขึ้น ไม่มีอิโมจิ มีข้อความเยอะ) -->
+    <div class="announcement-bar" style="background: linear-gradient(135deg, rgba(240,185,11,0.15), rgba(240,185,11,0.05)); border-bottom: 1px solid rgba(240,185,11,0.3);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div style="flex: 1; overflow: hidden; white-space: nowrap;">
+            <span class="marquee" style="animation-duration: 20s;">ประกาศ: ตลาดมีความผันผวนสูง โปรดศึกษาข้อมูลและบริหารความเสี่ยงในการลงทุนอย่างระมัดระวัง • อัปเดตระบบ AML และความปลอดภัย • โปรโมชั่นโบนัสฝากเงินสูงสุด 25,000 บาท • ติดดาวสินทรัพย์ที่ชอบได้แล้ววันนี้ • เพิ่มระบบสแกนหน้า/ลายนิ้วมือเพื่อความปลอดภัย • ตลาดคริปโตเปิด 24/7 • ถอนเงินได้ทุก 90 วัน สูงสุด 50,000 บาท/ครั้ง • รองรับการเทรดหุ้นไทย หุ้นจีน คริปโต และโภคภัณฑ์</span>
         </div>
-        <div id="sliderBanner" class="home-banner" style="background-image: url('gold-banner.jpg'); background-size: cover; background-position: center; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; transition: background-image 1s ease-in-out;">
-    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); border-radius: 16px;"></div>
-    
-    <div style="position: relative; z-index: 1;">
-        <h2 id="homeWelcomeName" style="color: #ffd700; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold;">ยินดีต้อนรับ</h2>
-        <p style="color: #ffffff; margin-bottom: 0; font-size: 0.9em; text-shadow: 1px 1px 3px rgba(0,0,0,0.9);">เข้าถึงตลาดสินทรัพย์ดิจิทัลและสินค้าโภคภัณฑ์โลก</p>
     </div>
-</div>
-
-
+    
+    <div id="sliderBanner" class="home-banner" style="background-image: url('gold-banner.jpg'); background-size: cover; background-position: center; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; transition: background-image 1s ease-in-out;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); border-radius: 16px;"></div>
+        
+        <div style="position: relative; z-index: 1;">
+            <h2 id="homeWelcomeName" style="color: #ffd700; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold;">ยินดีต้อนรับ</h2>
+            <p style="color: #ffffff; margin-bottom: 0; font-size: 0.9em; text-shadow: 1px 1px 3px rgba(0,0,0,0.9);">เข้าถึงตลาดสินทรัพย์ดิจิทัลและสินค้าโภคภัณฑ์โลก</p>
+        </div>
+    </div>
 
 
             <div class="quick-menu">
@@ -2385,7 +2391,7 @@ tvSymbol: 'SET:SCC',
 icon: 'scc.png' },
 
 { symbol: 'LAND', name: 'LAND', category: 'stock', 
-priceThb: 270.08, 
+priceThb: 267.58, 
 priceUsd: 9.20, 
 pct: 1.47, 
 volume: '0.5M', 
@@ -2537,7 +2543,7 @@ tvSymbol: 'SWX:UBSG',
 icon: 'ubs.png' },
 
 { symbol: 'RabbitLand', name: 'Rabbit', category: 'stock', 
-priceThb: 2.46, 
+priceThb: 2.09, 
 priceUsd: 27.00, 
 pct: 1.20, 
 volume: '0.1M', 
