@@ -1631,6 +1631,10 @@ body {
     border-radius: 10px;
 }
 
+.ad-banner:active {
+    transform: scale(0.98);
+    transition: 0.1s;
+}
 
     </style>
 </head>
@@ -1891,15 +1895,28 @@ randomizeSplash();
         </div>
     </div>
 
+    <div class="quick-menu">
+        <div class="quick-btn" onclick="openDeposit()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--green)"><use href="#icon-deposit"></use></svg></div><span class="quick-label">ฝากเงิน</span></div>
+        <div class="quick-btn" onclick="openWithdraw()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--red)"><use href="#icon-withdraw"></use></svg></div><span class="quick-label">ถอนเงิน</span></div>
+        <div class="quick-btn" onclick="switchTab('wallet')"><div class="quick-icon"><svg width="24" height="24" stroke="var(--gold)"><use href="#icon-history"></use></svg></div><span class="quick-label">พอร์ต</span></div>
+        <div class="quick-btn" onclick="switchTab('profile')"><div class="quick-icon"><svg width="24" height="24" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg></div><span class="quick-label">โปรไฟล์</span></div>
+    </div>
 
-            <div class="quick-menu">
-                <div class="quick-btn" onclick="openDeposit()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--green)"><use href="#icon-deposit"></use></svg></div><span class="quick-label">ฝากเงิน</span></div>
-                <div class="quick-btn" onclick="openWithdraw()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--red)"><use href="#icon-withdraw"></use></svg></div><span class="quick-label">ถอนเงิน</span></div>
-                <div class="quick-btn" onclick="switchTab('wallet')"><div class="quick-icon"><svg width="24" height="24" stroke="var(--gold)"><use href="#icon-history"></use></svg></div><span class="quick-label">พอร์ต</span></div>
-                <div class="quick-btn" onclick="switchTab('profile')"><div class="quick-icon"><svg width="24" height="24" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg></div><span class="quick-label">โปรไฟล์</span></div>
+    <!-- ✅ แบนเนอร์โฆษณา (วางตรงนี้) -->
+    <div class="ad-banner" onclick="watchAdAndGetReward()" style="background: linear-gradient(135deg, #1E222D, #2B3139); border-radius: 16px; padding: 15px; margin: 15px 0; text-align: center; cursor: pointer; border: 1px solid var(--gold);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F0B90B">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div>
+                <div style="font-weight: bold; color: #F0B90B;">รับเงินฟรี! ดูโฆษณา</div>
+                <div style="font-size: 12px; color: #848E9C;">คลิกเพื่อรับรางวัลสุ่ม (วันละ 3 ครั้ง)</div>
             </div>
+        </div>
+    </div>
 
-                          <style>
+    <style>
     .title-badge-hot {
         display: inline-flex;
         align-items: center;
@@ -1934,7 +1951,7 @@ randomizeSplash();
         align-items: center;
         font-size: 13px;
         font-weight: bold;
-        color: #ffffff;  /* เปลี่ยนจาก #0B0E11 เป็น #ffffff */
+        color: #ffffff;
         gap: 6px;
     }
     
@@ -1944,47 +1961,51 @@ randomizeSplash();
         height: 14px;
     }
     
-    /* ไอคอนสำหรับทองก็ให้ขาว */
     .title-badge-glow .title-content svg {
         stroke: #ffffff;
     }
-</style>
+    </style>
 
-<!-- ✅ ส่วนหัว Favorite (อยู่บนสุด) -->
-<div class="title-badge-hot" style="display: flex; justify-content: space-between; align-items: center;">
-    <div class="title-content">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5">
-            <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2" fill="#FFD700"/>
-        </svg>
-        สินทรัพย์ที่ติดดาว (Favorites)
+    <!-- ส่วนหัว Favorite (อยู่บนสุด) -->
+    <div class="title-badge-hot" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="title-content">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="1.5">
+                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2" fill="#FFD700"/>
+            </svg>
+            สินทรัพย์ที่ติดดาว (Favorites)
+        </div>
+        <button onclick="clearFavorites()" style="background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            ล้างทั้งหมด
+        </button>
     </div>
-    <button onclick="clearFavorites()" style="background: transparent; border: none; color: var(--text-muted); font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-        </svg>
-        ล้างทั้งหมด
-    </button>
-</div>
 
-<!-- ✅ container แสดงรายการที่ติดดาว -->
-<div id="favoritesContainer" style="min-height: 100px; margin-bottom: 20px;">
-    <div id="favoritesList" style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+    <!-- container แสดงรายการที่ติดดาว -->
+    <div id="favoritesContainer" style="min-height: 100px; margin-bottom: 20px;">
+        <div id="favoritesList" style="display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;">
+        </div>
+        <div id="emptyFavoritesMsg" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; display: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 8px auto;">
+                <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
+            </svg>
+            ยังไม่มีสินทรัพย์ที่ติดดาว<br>กดดาวในหน้า Market เพื่อเพิ่ม
+        </div>
     </div>
-    <div id="emptyFavoritesMsg" style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px; display: none;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 8px auto;">
-            <polygon points="12 2 15 8.5 22 9.5 17 14 18.5 21 12 17.5 5.5 21 7 14 2 9.5 9 8.5 12 2"/>
-        </svg>
-        ยังไม่มีสินทรัพย์ที่ติดดาว<br>กดดาวในหน้า Market เพื่อเพิ่ม
-    </div>
-</div>
 
-<!-- ✅ ส่วน Leaderboard (อยู่ข้างล่าง) -->
-<div class="title-badge-glow">
-    <div class="title-content">
-        <svg width="14" height="14" stroke="#ffffff" fill="none">
-            <use href="#icon-fire"></use>
-        </svg> 
-        นักลงทุนที่ทำกำไรสูงสุด (Live)
+    <!-- ส่วน Leaderboard (อยู่ข้างล่าง) -->
+    <div class="title-badge-glow">
+        <div class="title-content">
+            <svg width="14" height="14" stroke="#ffffff" fill="none">
+                <use href="#icon-fire"></use>
+            </svg> 
+            นักลงทุนที่ทำกำไรสูงสุด (Live)
+        </div>
+    </div>
+
+    <div class="card" style="padding: 5px 15px; margin-bottom: 30px;">
+        <div id="botLeaderboard"></div>
     </div>
 </div>
 
@@ -4957,6 +4978,160 @@ function forgotPin() {
     }
 }
 
+// ==========================================
+// 📺 ระบบโฆษณาแจกเงิน (ไม่มีหลังบ้าน)
+// ==========================================
+
+// ตั้งค่าขีดจำกัด
+const AD_LIMIT_PER_DAY = 3;  // วันละ 10 ครั้ง
+const MIN_REWARD = 10;        // ขั้นต่ำ 10 บาท
+const MAX_REWARD = 100;       // สูงสุด 100 บาท
+
+// ตรวจสอบจำนวนครั้งที่รับรางวัลวันนี้
+function getTodayAdCount() {
+    const today = new Date().toLocaleDateString('en-CA');
+    const data = localStorage.getItem('ad_reward_data');
+    if (data) {
+        const parsed = JSON.parse(data);
+        if (parsed.date === today) {
+            return parsed.count;
+        }
+    }
+    return 0;
+}
+
+// บันทึกจำนวนครั้งที่รับรางวัลวันนี้
+function saveTodayAdCount(count) {
+    const today = new Date().toLocaleDateString('en-CA');
+    localStorage.setItem('ad_reward_data', JSON.stringify({ date: today, count: count }));
+}
+
+// สุ่มเงินรางวัล
+function getRandomReward() {
+    return Math.floor(Math.random() * (MAX_REWARD - MIN_REWARD + 1)) + MIN_REWARD;
+}
+
+// ดูโฆษณาและรับรางวัล
+function watchAdAndGetReward() {
+    const acc = getMyAccount();
+    if (!acc) {
+        showCustomPopup('ยังไม่ได้เข้าสู่ระบบ', 'กรุณาเข้าสู่ระบบก่อนรับรางวัล', null, 'red');
+        return;
+    }
+    
+    // ตรวจสอบจำนวนครั้งวันนี้
+    const todayCount = getTodayAdCount();
+    if (todayCount >= AD_LIMIT_PER_DAY) {
+        showCustomPopup('ครบจำนวนครั้งแล้ว', `วันนี้คุณรับรางวัลครบ ${AD_LIMIT_PER_DAY} ครั้งแล้ว\nกลับมาพรุ่งนี้ใหม่นะครับ`, null, 'red');
+        return;
+    }
+    
+    // แสดงโฆษณา (จำลอง 3 วินาที)
+    showAdModal(() => {
+        // สุ่มรางวัล
+        const reward = getRandomReward();
+        
+        // เพิ่มเงินเข้าพอร์ต
+        acc.thb += reward;
+        saveState();
+        
+        // บันทึกประวัติ
+        saveHistory('deposit', 'รางวัลดูโฆษณา', `+${reward} THB`, true);
+        
+        // อัปเดตจำนวนครั้ง
+        saveTodayAdCount(todayCount + 1);
+        
+        // แจ้งเตือน
+        showCustomPopup(' ได้รับรางวัล!', `คุณได้รับเงิน ${reward} บาท\n(วันนี้เหลืออีก ${AD_LIMIT_PER_DAY - (todayCount + 1)} ครั้ง)`, 'wallet', 'green');
+        
+        // อัปเดต UI
+        updateWalletUI();
+    });
+}
+// รายการรูปโฆษณา (เพิ่ม/ลดได้ตามต้องการ)
+const AD_IMAGES = [
+    "ad0.jpg",
+    "ad1.jpg",
+    "ad2.jpg",
+    "ad3.jpg"
+   
+];
+
+// สุ่มเลือกรูป
+function getRandomAdImage() {
+    const randomIndex = Math.floor(Math.random() * AD_IMAGES.length);
+    return AD_IMAGES[randomIndex];
+}
+
+// แสดง Modal โฆษณา (สุ่มรูป)
+function showAdModal(callback) {
+    // สร้าง overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'adModal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 10002;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    `;
+    
+    // ✅ สุ่มเลือกรูปโฆษณา
+    const randomImage = getRandomAdImage();
+    
+    // เนื้อหาโฆษณา (ใช้รูปที่สุ่มได้)
+    overlay.innerHTML = `
+        <img src="${randomImage}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <div id="adTimer" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); padding: 6px 16px; border-radius: 30px; font-size: 16px; font-weight: bold; color: #F0B90B; font-family: monospace;">3</div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // นับถอยหลัง 3 วินาที
+    let timeLeft = 5;
+    const timerEl = overlay.querySelector('#adTimer');
+    
+    // คลิกที่รูป = รับรางวัล (หลังจากรอครบ)
+    overlay.onclick = () => {
+        if (timeLeft <= 0) {
+            overlay.remove();
+            if (callback) callback();
+        }
+    };
+    
+    const interval = setInterval(() => {
+        timeLeft--;
+        if (timerEl) timerEl.innerText = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            if (timerEl) {
+                timerEl.innerText = 'แตะเพื่อรับรางวัล';
+                timerEl.style.background = 'rgba(14,203,129,0.6)';
+                timerEl.style.color = '#fff';
+                timerEl.style.padding = '4px 12px';
+                timerEl.style.fontSize = '14px';
+            }
+        }
+    }, 1000);
+}
+
+// ปิด Modal โฆษณา
+function closeAdModal(getReward) {
+    const overlay = document.getElementById('adModal');
+    if (overlay) overlay.remove();
+    
+    if (getReward && window.adCallback) {
+        window.adCallback();
+        window.adCallback = null;
+    }
+}
     </script>
 </body>
 </html>
