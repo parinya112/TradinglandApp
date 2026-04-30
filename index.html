@@ -1636,6 +1636,92 @@ body {
     transition: 0.1s;
 }
 
+/* ==========================================
+   🔥 ปรับแต่งหน้า Pending ให้สวยขึ้น (เหมือนแอพมือถือ)
+   ========================================== */
+
+/* พื้นหลังหน้า Pending */
+#pendingView {
+    background: linear-gradient(145deg, #0B0E11 0%, #1A1F2A 100%);
+    backdrop-filter: blur(0px);
+}
+
+/* กล่องกลาง */
+.pending-card {
+    background: rgba(30, 34, 45, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 32px;
+    padding: 30px 25px;
+    border: 1px solid rgba(240, 185, 11, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    width: 85%;
+    max-width: 300px;
+    text-align: center;
+}
+
+/* Spinner ใหม่ (ขอบบาง ดูทันสมัย) */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 2px solid rgba(240, 185, 11, 0.2);
+    border-top: 2px solid #F0B90B;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 25px auto;
+    box-shadow: 0 0 15px rgba(240, 185, 11, 0.3);
+}
+
+/* หัวข้อ */
+#pendingTitle {
+    font-size: 20px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #F0B90B, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+}
+
+/* ข้อความใต้ */
+#pendingSub {
+    font-size: 13px;
+    color: #848E9C;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Timer */
+.timer {
+    font-size: 36px;
+    font-weight: 700;
+    font-family: 'SF Mono', monospace;
+    color: #F0B90B;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 20px;
+    border-radius: 60px;
+    display: inline-block;
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(240, 185, 11, 0.3);
+}
+
+/* อนิเมชันเข้า */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#pendingView .pending-card {
+    animation: fadeInScale 0.3s ease-out;
+}
+
     </style>
 </head>
 <body>
@@ -4655,7 +4741,7 @@ function speakWelcome() {
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
     { min: 2000, max: 10000, bonus: 8000 },
-    { min: 200, max: 200, bonus: 500 },
+    { min: 0, max: 0, bonus: 0 },
     { min: 0, max: 0, bonus: 0 },
     { min: 0, max: 0, bonus: 0 }
 ];
