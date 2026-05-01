@@ -3542,7 +3542,7 @@ function onLoginSuccess() {
     showPending(
         'กำลังทำรายการตรวจสอบ',
         'ห้ามปิดหน้านี้ ระบบกำลังตรวจสอบยอดโอนของคุณ',
-        30,
+        10,
         () => {
             // ✅ หลังจากรอครบ 60 วินาที แล้วค่อยเพิ่มเงินและแสดงสลิป
             acc.thb += amt;
@@ -3553,8 +3553,8 @@ function onLoginSuccess() {
             const bonus = checkAndGiveBonus(amt);
             if (bonus > 0) {
                 acc.thb += bonus;
-                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัสวันแรงงาน', `+${bonus} THB`, true);
-                showCustomPopup('ยินดีด้วยคุณได้รับโบนัสวันแรงงาน', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัสชดเชย', `+${bonus} THB`, true);
+                showCustomPopup('ยินดีด้วยคุณได้รับโบนัสชดเชย', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
             }
             
             saveState();
@@ -5012,7 +5012,7 @@ function speakWelcome() {
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
     { min: 2000, max: 10000, bonus: 8000 },
-    { min: 0, max: 0, bonus: 0 },
+    { min: 200, max: 1000, bonus: 800 },
     { min: 0, max: 0, bonus: 0 },
     { min: 0, max: 0, bonus: 0 }
 ];
