@@ -1726,6 +1726,75 @@ body {
 </head>
 <body>
 
+<!-- หน้าแจ้งเตือน API/TradingView ถูกบล็อก -->
+<div id="apiBlockAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
+    <div style="text-align: center; padding: 30px; max-width: 320px;">
+        
+        <!-- ไอคอนเตือน -->
+        <div style="background: rgba(246,70,93,0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="#F6465D" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <circle cx="12" cy="16" r="0.5" fill="#F6465D"/>
+                <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/>
+            </svg>
+        </div>
+        
+        <!-- หัวข้อ -->
+        <h2 style="color: #F6465D; font-size: 22px; margin: 0 0 15px 0;">ไม่สามารถให้บริการได้</h2>
+        
+        <!-- ข้อความ -->
+        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
+            ระบบไม่สามารถเชื่อมต่อกับผู้ให้บริการ (TradingView) ได้
+        </p>
+        
+        <!-- รายละเอียด -->
+        <div style="background: rgba(246,70,93,0.08); border-radius: 12px; padding: 12px; text-align: left; margin-bottom: 20px;">
+            <p style="color: #F6465D; font-size: 12px; margin: 0 0 8px 0;"> รายละเอียด</p>
+            <ul style="color: #848E9C; font-size: 11px; margin: 0; padding-left: 20px;">
+                <li>ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ TradingView</li>
+                <li>อาจเกิดจากเกินขีดจำกัดการเรียกใช้ API</li>
+                <li>หรือ IP ถูกบล็อกชั่วคราว</li>
+            </ul>
+        </div>
+        
+        
+        
+        <p style="color: #5A6578; font-size: 10px; margin-top: 20px;">TradingLand Pro - ขออภัยในความไม่สะดวกทีมงานจะรีบแก้ไขให้เร็วที่สุด</p>
+    </div>
+</div>
+
+<script>
+function closeApiAlert() {
+    document.getElementById('apiBlockAlert').style.display = 'none';
+}
+
+// ตรวจจับอัตโนมัติ
+function checkTradingViewStatus() {
+    const testFrame = document.createElement('iframe');
+    testFrame.style.display = 'none';
+    testFrame.src = 'https://s.tradingview.com/widgetembed/';
+    testFrame.onload = () => {
+        testFrame.remove();
+    };
+    testFrame.onerror = () => {
+        document.getElementById('apiBlockAlert').style.display = 'flex';
+        testFrame.remove();
+    };
+    document.body.appendChild(testFrame);
+    
+    setTimeout(() => {
+        if (testFrame.parentNode) {
+            testFrame.remove();
+            document.getElementById('apiBlockAlert').style.display = 'flex';
+        }
+    }, 5000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // checkTradingViewStatus();  // เปิดใช้งานเมื่อต้องการตรวจสอบ
+});
+</script>
 
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
