@@ -1722,79 +1722,113 @@ body {
     animation: fadeInScale 0.3s ease-out;
 }
 
+/* DCA Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #2B3139;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #F0B90B;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.dca-settings-panel {
+    margin-top: 15px;
+    display: none;
+}
+
+.dca-settings-panel.show {
+    display: block;
+}
+
+.dca-info-box {
+    background: rgba(240,185,11,0.08);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 15px;
+}
+
+.dca-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.dca-info-row:last-child {
+    margin-bottom: 0;
+}
+
+/* ✅ FIX ให้ทุก input สูงเท่ากัน */
+#dcaTime, #dcaFrequency, #dcaAmount, #dcaSymbol {
+    width: 100%;
+    height: 42px;              /* 👈 เพิ่ม */
+    padding: 0 12px;           /* 👈 เปลี่ยน */
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* ปรับ select */
+select {
+    cursor: pointer;
+}
+
+/* ✅ FIX iPhone Safari (ตัวต้นเหตุ) */
+input[type="time"] {
+    font-family: monospace;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 42px;
+    line-height: 42px;
+}
+
+/* ✅ กันเพี้ยนใน iOS เพิ่ม */
+input[type="time"]::-webkit-date-and-time-value {
+    text-align: left;
+}
     </style>
 </head>
 <body>
 
-<!-- หน้าแจ้งเตือน API/TradingView ถูกบล็อก -->
-<div id="apiBlockAlert" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif;">
-    <div style="text-align: center; padding: 30px; max-width: 320px;">
-        
-        <!-- ไอคอนเตือน -->
-        <div style="background: rgba(246,70,93,0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
-            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="#F6465D" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="8" x2="12" y2="12"/>
-                <circle cx="12" cy="16" r="0.5" fill="#F6465D"/>
-                <line x1="4" y1="4" x2="20" y2="20" stroke-width="1.5"/>
-            </svg>
-        </div>
-        
-        <!-- หัวข้อ -->
-        <h2 style="color: #F6465D; font-size: 22px; margin: 0 0 15px 0;">ไม่สามารถให้บริการได้</h2>
-        
-        <!-- ข้อความ -->
-        <p style="color: #848E9C; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
-            ระบบไม่สามารถเชื่อมต่อกับผู้ให้บริการ (TradingView) ได้
-        </p>
-        
-        <!-- รายละเอียด -->
-        <div style="background: rgba(246,70,93,0.08); border-radius: 12px; padding: 12px; text-align: left; margin-bottom: 20px;">
-            <p style="color: #F6465D; font-size: 12px; margin: 0 0 8px 0;"> รายละเอียด</p>
-            <ul style="color: #848E9C; font-size: 11px; margin: 0; padding-left: 20px;">
-                <li>ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ TradingView</li>
-                <li>อาจเกิดจากเกินขีดจำกัดการเรียกใช้ API</li>
-                <li>หรือ IP ถูกบล็อกชั่วคราว</li>
-            </ul>
-        </div>
-        
-        
-        
-        <p style="color: #5A6578; font-size: 10px; margin-top: 20px;">TradingLand Pro - ขออภัยในความไม่สะดวกทีมงานจะรีบแก้ไขให้เร็วที่สุด</p>
-    </div>
-</div>
-
-<script>
-function closeApiAlert() {
-    document.getElementById('apiBlockAlert').style.display = 'none';
-}
-
-// ตรวจจับอัตโนมัติ
-function checkTradingViewStatus() {
-    const testFrame = document.createElement('iframe');
-    testFrame.style.display = 'none';
-    testFrame.src = 'https://s.tradingview.com/widgetembed/';
-    testFrame.onload = () => {
-        testFrame.remove();
-    };
-    testFrame.onerror = () => {
-        document.getElementById('apiBlockAlert').style.display = 'flex';
-        testFrame.remove();
-    };
-    document.body.appendChild(testFrame);
-    
-    setTimeout(() => {
-        if (testFrame.parentNode) {
-            testFrame.remove();
-            document.getElementById('apiBlockAlert').style.display = 'flex';
-        }
-    }, 5000);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // checkTradingViewStatus();  // เปิดใช้งานเมื่อต้องการตรวจสอบ
-});
-</script>
 
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
@@ -2395,8 +2429,7 @@ randomizeSplash();
             <button class="btn btn-red" onclick="processWithdraw()">ยืนยันการถอนเงิน</button>
         </div>
     </div>
-
-   <div id="profileView" style="display:none;">
+<div id="profileView" style="display:none;">
     <div class="profile-header">
         <div class="profile-avatar" id="avatarInitial">U</div>
         <div class="profile-name" id="profName">User Name</div>
@@ -2442,13 +2475,168 @@ randomizeSplash();
 
 <!-- 🔐 การ์ดตั้งค่า Biometric -->
 <div class="card">
-    <div class="section-title" style="margin-top: 0;">🔐 ความปลอดภัย</div>
-    <button id="setupBiometricBtn" class="btn btn-gold" onclick="setupBiometric()" style="margin-bottom: 10px;">
-        📱 ตั้งค่าสแกนหน้า / ลายนิ้วมือ
+    <div class="section-title" style="margin-top: 0; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        ความปลอดภัย
+    </div>
+    <button id="setupBiometricBtn" class="btn btn-gold" onclick="setupBiometric()" style="margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        ตั้งค่าสแกนหน้า / ลายนิ้วมือ
     </button>
     <p style="color: var(--text-muted); font-size: 11px; margin-top: 8px;">
-        * ตั้งค่าครั้งเดียว ครั้งต่อไปสแกนหน้า/ลายนิ้วมือเข้าสู่ระบบแทนการพิมพ์ PIN
+        ตั้งค่าครั้งเดียว ครั้งต่อไปสแกนหน้า/ลายนิ้วมือเข้าสู่ระบบแทนการพิมพ์ PIN
     </p>
+</div>
+
+<!-- 🤖 Auto DCA Card -->
+<div class="card">
+    <div class="section-title" style="margin-top: 0; display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Auto DCA (Dollar Cost Average)
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <span style="color: white; font-size: 14px;">เปิดใช้งาน Auto DCA</span>
+        <label class="switch">
+            <input type="checkbox" id="dcaToggle" onchange="toggleDCASettings()">
+            <span class="slider round"></span>
+        </label>
+    </div>
+    
+    <div id="dcaSettingsPanel" class="dca-settings-panel">
+        <div class="input-group">
+            <label style="display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                    <rect x="3" y="5" width="18" height="14" rx="2" ry="2"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                สินทรัพย์
+            </label>
+            <select id="dcaSymbol">
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+                <option value="SOL">Solana (SOL)</option>
+                <option value="LUNA">Luna Classic (LUNA)</option>
+                <option value="XAU">Gold ทองคำ (XAU)</option>
+                <option value="WTI">Crude Oil น้ำมัน (WTI)</option>
+                <option value="SPX">S&P 500 (SPX)</option>
+                <option value="NDX">Nasdaq 100 (NDX)</option>
+                <option value="AAPL">Apple Inc. (AAPL)</option>
+                <option value="TSLA">Tesla Inc. (TSLA)</option>
+                <option value="PTT">PTT ปตท. (PTT)</option>
+                <option value="SCB">SCB ไทยพาณิชย์ (SCB)</option>
+                <option value="KBANK">KBANK กสิกรไทย (KBANK)</option>
+                <option value="ADVANC">ADVANC AIS (ADVANC)</option>
+                <option value="CPALL">CPALL 7-11 (CPALL)</option>
+                <option value="AOT">AOT ท่าอากาศยาน (AOT)</option>
+                <option value="GULF">GULF (GULF)</option>
+                <option value="BDMS">BDMS กรุงเทพดุสิต (BDMS)</option>
+                <option value="BTS">BTS รถไฟฟ้า (BTS)</option>
+                <option value="TRUE">TRUE ทรู (TRUE)</option>
+                <option value="SCC">SCC ปูนซีเมนต์ (SCC)</option>
+                <option value="LAND">LAND (LAND)</option>
+                <option value="BYD">BYD รถไฟฟ้า (BYD)</option>
+                <option value="BABA">Alibaba อาลีบาบา (BABA)</option>
+                <option value="TCEHY">Tencent เทนเซ็นต์ (TCEHY)</option>
+                <option value="JD">JD.com จิงตง (JD)</option>
+                <option value="NIO">NIO รถไฟฟ้า (NIO)</option>
+                <option value="LI">Li Auto รถไฟฟ้า (LI)</option>
+                <option value="XPEV">XPeng เสี่ยวเผิง (XPEV)</option>
+                <option value="PDD">Pinduoduo (PDD)</option>
+                <option value="BIDU">Baidu ไป่ตู้ (BIDU)</option>
+                <option value="NTES">NetEase เน็ตอีส (NTES)</option>
+                <option value="NVDA">NVIDIA ชิป AI (NVDA)</option>
+                <option value="AMD">AMD ชิป AI (AMD)</option>
+                <option value="INTC">Intel ชิป AI (INTC)</option>
+                <option value="SMCI">Super Micro (SMCI)</option>
+                <option value="MSFT">Microsoft (MSFT)</option>
+                <option value="GOOGL">Google (GOOGL)</option>
+                <option value="META">Meta (META)</option>
+                <option value="TSM">TSMC (TSM)</option>
+                <option value="AVGO">Broadcom (AVGO)</option>
+                <option value="PLTR">Palantir (PLTR)</option>
+                <option value="DJT">Trump Media (DJT)</option>
+                <option value="ABC">American Bitcoin (ABC)</option>
+                <option value="UBSG">UBS Group (UBSG)</option>
+                <option value="RabbitLand">Rabbit (RabbitLand)</option>
+                <option value="CK">CK (CK)</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+            <label style="display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="6" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                จำนวนเงินต่อครั้ง (บาท)
+            </label>
+            <input type="number" id="dcaAmount" value="500" step="100">
+        </div>
+        
+        <div class="input-group">
+            <label style="display: flex; align-items; center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                ความถี่
+            </label>
+            <select id="dcaFrequency">
+                <option value="daily">ทุกวัน</option>
+                <option value="weekly">ทุกสัปดาห์ (วันจันทร์)</option>
+                <option value="monthly">ทุกเดือน (วันที่ 1)</option>
+            </select>
+        </div>
+        
+        <!-- ฟิลด์เลือกเวลา -->
+<div class="input-group">
+    <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span style="color: #848E9C; font-size: 13px;">เวลาที่ต้องการซื้อ</span>
+    </label>
+    <input type="time" id="dcaTime" value="10:00" step="60" style="width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 12px; color: white; font-size: 14px; box-sizing: border-box;">
+    <p style="color: #848E9C; font-size: 10px; margin-top: 5px;">ระบบจะซื้ออัตโนมัติตามเวลาที่ตั้ง</p>
+</div>
+        <div class="dca-info-box">
+            <div class="dca-info-row">
+                <span style="color: #848E9C; font-size: 12px;">ลงทุนสะสม</span>
+                <span id="totalInvested" style="color: #F0B90B; font-weight: bold;">0 บาท</span>
+            </div>
+            <div class="dca-info-row">
+                <span style="color: #848E9C; font-size: 12px;">หน่วยสะสม</span>
+                <span id="totalUnits" style="color: #0ECB81; font-weight: bold;">0</span>
+            </div>
+            <div class="dca-info-row">
+                <span style="color: #848E9C; font-size: 12px;">รอบถัดไป</span>
+                <span id="nextRunDate" style="color: white; font-size: 12px;">-</span>
+            </div>
+        </div>
+        
+        <button class="btn btn-gold" onclick="saveDCASettings()" style="margin-top: 10px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            บันทึกการตั้งค่า
+        </button>
+    </div>
 </div>
 
 <div class="card">
@@ -2468,7 +2656,6 @@ randomizeSplash();
 <p style="color: var(--text-muted); font-size: 11px; text-align: center; margin-top: 20px; line-height: 1.5;">* การลงทุนมีความเสี่ยงสูง โปรดบริหารจัดการเงินทุนอย่างเคร่งครัด</p>
     </div>
 </div>
-
        <div class="modal-overlay" id="customPopup">
         <div class="modal-content">
             <div class="success-icon gold" id="popupIcon"></div>
@@ -3019,27 +3206,38 @@ setInterval(initMarketPrices, 2000);
     showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 30, () => {
         const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
         appState.accounts[newUid] = {
-            uid: newUid,
-            accName: an,
-            realName: rn,
-            idCard: id,
-            phone: ph,
-            bankName: bn,
-            bankAcc: ba,
-            thb: 0,
-            positions: [],
-            history: [],
-            pin: "",
-            registeredAt: Date.now(),
-            depositDaily: {
-                date: getDateKey(),
-                count: 0,
-                total: 0
-            },
-            // ✅ เพิ่ม 2 บรรทัดนี้ตรงนี้
+    uid: newUid,
+    accName: an,
+    realName: rn,
+    idCard: id,
+    phone: ph,
+    bankName: bn,
+    bankAcc: ba,
+    thb: 0,
+    positions: [],
+    history: [],
+    pin: "",
+    registeredAt: Date.now(),
+    depositDaily: {
+        date: getDateKey(),
+        count: 0,
+        total: 0
+    },
     dailyProfit: {},
     todayProfit: 0,
-    lastWithdrawAt: null   // ✅ เพิ่มบรรทัดนี้
+    lastWithdrawAt: null,
+    
+    // ✅ เพิ่ม DCA Settings ตรงนี้
+    dcaSettings: {
+        enabled: false,
+        symbol: 'BTC',
+        amount: 500,
+        frequency: 'daily',
+        nextRun: null,
+        lastRun: null,
+        totalInvested: 0,
+        totalUnits: 0
+    }
 };
         saveState();
         targetUidToLogin = newUid;
@@ -3167,6 +3365,10 @@ function onLoginSuccess() {
     
     // ✅ เพิ่มบรรทัดนี้! (แสดงรายการโปรด)
     renderFavorites();
+    
+    // ✅ เพิ่ม 2 บรรทัดนี้! (Auto DCA)
+    loadDCASettings();
+    checkAndRunDCA();
     
     // ✅ เพิ่มบรรทัดนี้! (แสดงซองอั่งเปา)
     //showAngpao();
@@ -5285,6 +5487,231 @@ function closeAdModal(getReward) {
     if (getReward && window.adCallback) {
         window.adCallback();
         window.adCallback = null;
+    }
+}
+
+// ==========================================
+// 🤖 Auto DCA System (พร้อมเลือกเวลา)
+// ==========================================
+
+// โหลดการตั้งค่า DCA
+function loadDCASettings() {
+    const acc = getMyAccount();
+    if (!acc || !acc.dcaSettings) return;
+    
+    const settings = acc.dcaSettings;
+    const toggle = document.getElementById('dcaToggle');
+    const panel = document.getElementById('dcaSettingsPanel');
+    const symbolSelect = document.getElementById('dcaSymbol');
+    const amountInput = document.getElementById('dcaAmount');
+    const freqSelect = document.getElementById('dcaFrequency');
+    const timeInput = document.getElementById('dcaTime');
+    
+    if (toggle) toggle.checked = settings.enabled || false;
+    if (panel) panel.classList.toggle('show', settings.enabled || false);
+    if (symbolSelect && settings.symbol) symbolSelect.value = settings.symbol;
+    if (amountInput) amountInput.value = settings.amount || 500;
+    if (freqSelect) freqSelect.value = settings.frequency || 'daily';
+    if (timeInput) timeInput.value = settings.time || '10:00';
+    
+    const totalInvested = document.getElementById('totalInvested');
+    const totalUnits = document.getElementById('totalUnits');
+    const nextRunDate = document.getElementById('nextRunDate');
+    
+    if (totalInvested) totalInvested.innerText = (settings.totalInvested || 0).toLocaleString() + ' บาท';
+    if (totalUnits) totalUnits.innerText = (settings.totalUnits || 0).toFixed(8);
+    
+    if (settings.nextRun && nextRunDate) {
+        const nextDate = new Date(settings.nextRun);
+        nextRunDate.innerText = nextDate.toLocaleDateString('th-TH') + ' ' + nextDate.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+    } else if (nextRunDate) {
+        nextRunDate.innerText = 'ยังไม่ตั้งค่า';
+    }
+}
+
+// เปิด/ปิด DCA
+function toggleDCASettings() {
+    const isEnabled = document.getElementById('dcaToggle').checked;
+    const panel = document.getElementById('dcaSettingsPanel');
+    
+    if (panel) panel.classList.toggle('show', isEnabled);
+    
+    if (!isEnabled) {
+        const acc = getMyAccount();
+        if (acc && acc.dcaSettings) {
+            acc.dcaSettings.enabled = false;
+            saveState();
+        }
+    }
+}
+
+// คำนวณวันรันครั้งต่อไป (แบบมีเวลา)
+// fromNow = true หมายถึง ให้นับจากวันนี้ ถ้ายังไม่เลยเวลาให้รันวันนี้เลย
+function calculateNextRunDate(frequency, timeStr, fromNow = false) {
+    const now = new Date();
+    const next = new Date(now);
+    
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    
+    if (frequency === 'daily') {
+        if (fromNow) {
+            // ตั้งเวลาของวันนี้
+            next.setHours(hours, minutes, 0, 0);
+            // ถ้าเลยเวลาของวันนี้แล้ว ให้เลื่อนเป็นพรุ่งนี้
+            if (next <= now) {
+                next.setDate(now.getDate() + 1);
+                next.setHours(hours, minutes, 0, 0);
+            }
+        } else {
+            // รอบปกติ: พรุ่งนี้
+            next.setDate(now.getDate() + 1);
+            next.setHours(hours, minutes, 0, 0);
+        }
+    } else if (frequency === 'weekly') {
+        // วันจันทร์ = 1, อาทิตย์ = 0 หรือ 7
+        let targetDay = 1; // จันทร์
+        let currentDay = now.getDay();
+        let daysToAdd = (targetDay - currentDay + 7) % 7;
+        
+        if (fromNow && daysToAdd === 0) {
+            // วันนี้เป็นวันจันทร์ ลองตั้งเวลาวันนี้ดู
+            next.setHours(hours, minutes, 0, 0);
+            if (next <= now) {
+                // เลยเวลาแล้ว ไปสัปดาห์หน้า
+                daysToAdd = 7;
+                next.setDate(now.getDate() + daysToAdd);
+                next.setHours(hours, minutes, 0, 0);
+            }
+        } else {
+            if (daysToAdd === 0) daysToAdd = 7;
+            next.setDate(now.getDate() + daysToAdd);
+            next.setHours(hours, minutes, 0, 0);
+        }
+    } else if (frequency === 'monthly') {
+        if (fromNow) {
+            // เช็คว่าวันนี้เป็นวันที่ 1 ไหม
+            if (now.getDate() === 1) {
+                next.setHours(hours, minutes, 0, 0);
+                if (next <= now) {
+                    // เลยเวลาแล้ว ไปเดือนหน้า
+                    next.setMonth(now.getMonth() + 1);
+                    next.setDate(1);
+                    next.setHours(hours, minutes, 0, 0);
+                }
+            } else {
+                // ไม่ใช่วันที่ 1 ไปเดือนหน้า
+                next.setMonth(now.getMonth() + 1);
+                next.setDate(1);
+                next.setHours(hours, minutes, 0, 0);
+            }
+        } else {
+            next.setMonth(now.getMonth() + 1);
+            next.setDate(1);
+            next.setHours(hours, minutes, 0, 0);
+        }
+    }
+    
+    return next;
+}
+
+// บันทึกการตั้งค่า DCA
+function saveDCASettings() {
+    const acc = getMyAccount();
+    if (!acc) return;
+    
+    if (!acc.dcaSettings) {
+        acc.dcaSettings = {};
+    }
+    
+    const isEnabled = document.getElementById('dcaToggle').checked;
+    const symbol = document.getElementById('dcaSymbol').value;
+    const amount = parseFloat(document.getElementById('dcaAmount').value);
+    const frequency = document.getElementById('dcaFrequency').value;
+    const timeStr = document.getElementById('dcaTime').value;
+    
+    acc.dcaSettings.enabled = isEnabled;
+    acc.dcaSettings.symbol = symbol;
+    acc.dcaSettings.amount = amount;
+    acc.dcaSettings.frequency = frequency;
+    acc.dcaSettings.time = timeStr || '10:00';
+    
+    if (isEnabled) {
+        // ✅ ใช้ fromNow = true เพื่อให้รันวันนี้เลย ถ้ายังไม่เลยเวลา
+        acc.dcaSettings.nextRun = calculateNextRunDate(frequency, timeStr || '10:00', true).toISOString();
+    }
+    
+    saveState();
+    loadDCASettings();
+    
+    const freqText = frequency === 'daily' ? 'วัน' : (frequency === 'weekly' ? 'สัปดาห์' : 'เดือน');
+    showCustomPopup('บันทึกการตั้งค่า Auto DCA', 'ระบบจะทำการซื้อ ' + symbol + ' ทุก' + freqText + ' เวลา ' + (timeStr || '10:00') + ' น.', 'profile', 'gold');
+}
+
+// รัน DCA
+function runDCA() {
+    const acc = getMyAccount();
+    if (!acc || !acc.dcaSettings || !acc.dcaSettings.enabled) return false;
+    
+    const settings = acc.dcaSettings;
+    const amount = settings.amount;
+    const symbol = settings.symbol;
+    
+    const asset = allMarketData.find(a => a.symbol === symbol);
+    if (!asset) return false;
+    
+    if (amount > acc.thb) {
+        showCustomPopup('Auto DCA หยุดทำงาน', 'เงินในพอร์ตไม่เพียงพอที่จะซื้อ ' + symbol, 'profile', 'red');
+        settings.enabled = false;
+        saveState();
+        return false;
+    }
+    
+    const price = asset.priceThb;
+    // ✅ แก้ไขตรงนี้: ใช้สูตร (amount * 100) / price แทน amount / price
+    const quantity = (amount * 100) / price;
+    
+    acc.thb -= amount;
+    acc.positions.push({
+        id: Date.now(),
+        symbol: symbol,
+        side: 'buy',
+        entryPrice: price,
+        lot: quantity,      // ✅ ตอนนี้ quantity คือ LOT ที่ถูกต้องแล้ว
+        margin: amount,
+        amount: amount,
+        time: new Date().toLocaleTimeString(),
+        isDCA: true,
+        tp: 0,
+        sl: 0
+    });
+    
+    settings.totalInvested = (settings.totalInvested || 0) + amount;
+    settings.totalUnits = (settings.totalUnits || 0) + (amount / price); // เก็บหน่วยจริงแยก
+    settings.lastRun = new Date().toISOString();
+    settings.nextRun = calculateNextRunDate(settings.frequency, settings.time || '10:00', false).toISOString();
+    
+    saveState();
+    saveHistory('trade', 'Auto DCA: ซื้อ ' + symbol, quantity.toFixed(8) + ' ล็อต (' + amount.toLocaleString() + ' THB)', true);
+    
+    showCustomPopup('Auto DCA', 'ซื้อ ' + symbol + ' อัตโนมัติ ' + quantity.toFixed(8) + ' ล็อต (' + amount.toLocaleString() + ' THB)', 'wallet', 'green');
+    
+    updateWalletUI();
+    return true;
+}
+
+// ตรวจสอบและรัน DCA
+function checkAndRunDCA() {
+    const acc = getMyAccount();
+    if (!acc || !acc.dcaSettings || !acc.dcaSettings.enabled) return;
+    
+    const settings = acc.dcaSettings;
+    if (!settings.nextRun) return;
+    
+    const now = new Date();
+    const nextRun = new Date(settings.nextRun);
+    
+    if (now >= nextRun) {
+        runDCA();
     }
 }
     </script>
