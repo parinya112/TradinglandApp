@@ -37,12 +37,14 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Inter', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
     padding-bottom: 80px;
     overflow-x: hidden;
     user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .header {
@@ -1609,31 +1611,56 @@ body {
     opacity: 0.9;
 }
 
-/* ไอคอนใน bottom nav */
+/* ========== BOTTOM NAV ========== */
+.nav-item {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
 .nav-item svg {
     stroke-width: 1.5;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
 }
+
 .nav-item.active svg {
     stroke: var(--gold);
     stroke-width: 2;
+    filter: drop-shadow(0 0 4px rgba(240, 185, 11, 0.4));
 }
 
-/* เพิ่มความนุ่มนวลให้ scrollbar (เฉพาะ desktop) */
-::-webkit-scrollbar {
-    width: 4px;
+/* ========== AD BANNER ========== */
+.ad-banner {
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    position: relative;
+    overflow: hidden;
 }
-::-webkit-scrollbar-track {
-    background: #1C1C1E;
+
+.ad-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
 }
-::-webkit-scrollbar-thumb {
-    background: #3A3A3C;
-    border-radius: 10px;
+
+.ad-banner:active::before {
+    left: 100%;
 }
 
 .ad-banner:active {
-    transform: scale(0.98);
-    transition: 0.1s;
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* Bonus: Hover effect สำหรับ Desktop */
+@media (hover: hover) {
+    .ad-banner:hover {
+        transform: scale(0.99);
+        border-color: var(--gold);
+    }
 }
 
 /* ==========================================
@@ -2912,7 +2939,7 @@ tvSymbol: 'SWX:UBSG',
 icon: 'ubs.png' },
 
 { symbol: 'RabbitLand', name: 'Rabbit', category: 'stock', 
-priceThb: 1.89, 
+priceThb: 1.27, 
 priceUsd: 27.00, 
 pct: 1.20, 
 volume: '0.1M', 
@@ -2920,7 +2947,7 @@ tvSymbol: 'SWX:Rabbit',
 icon: 'Rabbit.png' },
 
 { symbol: 'CK', name: 'CK', category: 'stock', 
-priceThb: 272.44, 
+priceThb: 268.46, 
 priceUsd: 27.00, 
 pct: 1.20, 
 volume: '1.5', 
@@ -3107,7 +3134,7 @@ setInterval(initMarketPrices, 2000);
         document.addEventListener("DOMContentLoaded", () => {
             try {
                 initAppSecurity();
-                setInterval(simulateLiveMarket, 3000);
+                setInterval(simulateLiveMarket, 1000);
             } catch (e) {
                 console.error("App init error:", e);
                 alert("ระบบโหลดไม่สำเร็จ กรุณาลองรีเฟรชอีกครั้ง");
@@ -3873,18 +3900,26 @@ function closeWithdrawSlip() {
     allMarketData.forEach(coin => {
         // ถ้าเป็น XAU หรือ WTI และเป็นวันหยุด -> ไม่ขยับ
         if ((coin.symbol === 'XAU' || coin.symbol === 'WTI') && isWeekend) {
-            // ไม่ทำอะไรเลย ปล่อยให้นิ่ง
             return;
         }
         
-        // สินทรัพย์อื่นๆ หรือวันธรรมดา ขยับได้ปกติ
-        const vol = (Math.random() * 0.002) - 0.001;
+        // เพิ่มความผันผวนตามประเภทสินทรัพย์ (แต่ยังใช้โครงสร้างเดิม)
+        let baseVol = 0.002;
+        if (coin.category === 'crypto') baseVol = 0.008;
+        if (coin.category === 'stock') baseVol = 0.004;
+        if (coin.category === 'commodity') baseVol = 0.002;
+        if (coin.category === 'index') baseVol = 0.0015;
+        
+        const vol = (Math.random() * baseVol * 2) - baseVol;
         coin.priceThb *= (1 + vol);
         coin.priceUsd *= (1 + vol);
-        coin.pct += (Math.random() * 0.2) - 0.1;
+        
+        // ปรับเปอร์เซ็นต์ให้ smooth ขึ้น
+        const pctChange = (Math.random() * 0.3) - 0.15;
+        coin.pct = coin.pct * 0.8 + pctChange * 20;
 
-        if (coin.pct > 99) coin.pct = 99;
-        if (coin.pct < -99) coin.pct = -99;
+        if (coin.pct > 25) coin.pct = 25;
+        if (coin.pct < -25) coin.pct = -25;
     });
 
     renderMarket();
@@ -3898,7 +3933,6 @@ function closeWithdrawSlip() {
     }
     if (document.getElementById('walletView').style.display === 'block') updateWalletUI();
 }
-
         function generateMockSparkline(isPos) {
             const w = 60;
             const pts = [];
