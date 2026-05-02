@@ -3163,11 +3163,11 @@ setInterval(initMarketPrices, 2000);
             }
 
             const btnNew = document.getElementById('btnCreateNewAcc');
-            if (accCount >= 6) {
+            if (accCount >= 9) {
                 btnNew.style.display = 'none';
             } else {
                 btnNew.style.display = 'flex';
-                btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/6)`;
+                btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/9)`;
             }
 
             document.getElementById('accountListView').style.display = 'block';
@@ -3203,42 +3203,54 @@ setInterval(initMarketPrices, 2000);
     }
 
     document.getElementById('kycView').style.display = 'none';
-    showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 30, () => {
-        const newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
-        appState.accounts[newUid] = {
-    uid: newUid,
-    accName: an,
-    realName: rn,
-    idCard: id,
-    phone: ph,
-    bankName: bn,
-    bankAcc: ba,
-    thb: 0,
-    positions: [],
-    history: [],
-    pin: "",
-    registeredAt: Date.now(),
-    depositDaily: {
-        date: getDateKey(),
-        count: 0,
-        total: 0
-    },
-    dailyProfit: {},
-    todayProfit: 0,
-    lastWithdrawAt: null,
     
-    // ✅ เพิ่ม DCA Settings ตรงนี้
-    dcaSettings: {
-        enabled: false,
-        symbol: 'BTC',
-        amount: 500,
-        frequency: 'daily',
-        nextRun: null,
-        lastRun: null,
-        totalInvested: 0,
-        totalUnits: 0
+    // 🎲 ตรวจสอบว่าเลขมงคล 68686868 มีคนใช้หรือยัง? (ไม่ต้องแจ้งเตือน)
+    const isLuckyTaken = appState.accounts["68686868"] ? true : false;
+    
+    let newUid;
+    
+    if (!isLuckyTaken) {
+        // ✅ ถ้ายังไม่มีใครใช้ ให้ใช้เลขมงคล 68686868 (เงียบ ไม่แจ้งเตือน)
+        newUid = "68686868";
+    } else {
+        // ❌ ถ้ามีคนใช้แล้ว ให้สุ่มปกติ (เงียบ ไม่แจ้งเตือน)
+        newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
     }
-};
+    
+    showPending('กำลังตรวจสอบข้อมูลกับระบบ...', 'กรุณารอสักครู่ ห้ามปิดแอปพลิเคชัน', 30, () => {
+        appState.accounts[newUid] = {
+            uid: newUid,
+            accName: an,
+            realName: rn,
+            idCard: id,
+            phone: ph,
+            bankName: bn,
+            bankAcc: ba,
+            thb: 0,
+            positions: [],
+            history: [],
+            pin: "",
+            registeredAt: Date.now(),
+            depositDaily: {
+                date: getDateKey(),
+                count: 0,
+                total: 0
+            },
+            dailyProfit: {},
+            todayProfit: 0,
+            lastWithdrawAt: null,
+            
+            dcaSettings: {
+                enabled: false,
+                symbol: 'BTC',
+                amount: 500,
+                frequency: 'daily',
+                nextRun: null,
+                lastRun: null,
+                totalInvested: 0,
+                totalUnits: 0
+            }
+        };
         saveState();
         targetUidToLogin = newUid;
         startPinSetup();
@@ -4112,7 +4124,7 @@ function calcLotFromAmount() {
         document.getElementById('oeLot').value = roundedLot.toFixed(2);
         
         // ❌ ปิดส่วนนี้ไว้ เพื่อไม่ให้ระบบดึงเลข 0 มาทับตอนที่คุณกำลังพิมพ์ทีละตัวอักษร
-        // const actualMargin = (price * roundedLot) / 100;
+        // const actualMargin = (price * roundedLot) / 10;
         // document.getElementById('oeAmount').value = actualMargin.toFixed(2);
         
     } else {
