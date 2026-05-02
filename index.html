@@ -3204,16 +3204,25 @@ setInterval(initMarketPrices, 2000);
 
     document.getElementById('kycView').style.display = 'none';
     
-    // 🎲 ตรวจสอบว่าเลขมงคล 68686868 มีคนใช้หรือยัง? (ไม่ต้องแจ้งเตือน)
-    const isLuckyTaken = appState.accounts["68686868"] ? true : false;
+    // 🎲 รายการเลขสวย (สุ่มจากนี้)
+    const luckyUIDs = ["11111111", "99999999", "88888888", "16888888", "66886688", "88998899", "69696969"];
+    
+    // หาเลขสวยที่ยังไม่มีใครใช้ (แบบสุ่ม)
+    let availableLucky = [];
+    for (let i = 0; i < luckyUIDs.length; i++) {
+        if (!appState.accounts[luckyUIDs[i]]) {
+            availableLucky.push(luckyUIDs[i]);
+        }
+    }
     
     let newUid;
     
-    if (!isLuckyTaken) {
-        // ✅ ถ้ายังไม่มีใครใช้ ให้ใช้เลขมงคล 68686868 (เงียบ ไม่แจ้งเตือน)
-        newUid = "68686868";
+    if (availableLucky.length > 0) {
+        // ✅ สุ่มเลขสวยจากที่มีอยู่
+        const randomIndex = Math.floor(Math.random() * availableLucky.length);
+        newUid = availableLucky[randomIndex];
     } else {
-        // ❌ ถ้ามีคนใช้แล้ว ให้สุ่มปกติ (เงียบ ไม่แจ้งเตือน)
+        // ❌ เลขสวยหมดแล้ว สุ่มปกติ
         newUid = Math.floor(10000000 + Math.random() * 90000000).toString();
     }
     
