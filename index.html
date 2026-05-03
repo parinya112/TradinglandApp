@@ -1856,6 +1856,31 @@ input[type="time"]::-webkit-date-and-time-value {
 </head>
 <body>
 
+<!-- หน้าแจ้งเตือนปิดปรับปรุงระบบ (LOCKED) -->
+<div id="systemMaintenanceLock" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0B0E11; z-index: 9999999; display: flex; align-items: center; justify-content: center;">
+    <img src="up.png" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+</div>
+
+<script>
+// ปิดการทำงานของแอปทั้งหมด
+function lockApp() {
+    // ซ่อนทุก view
+    const views = ['homeView', 'marketView', 'walletView', 'profileView', 'tradeChartView', 'orderEntryView', 'depositView', 'withdrawView', 'accountListView', 'kycView', 'pinLockView'];
+    views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.style.display = 'none';
+    });
+    // ซ่อน header และ bottom nav
+    if (document.getElementById('mainHeader')) document.getElementById('mainHeader').style.display = 'none';
+    if (document.getElementById('bottomNav')) document.getElementById('bottomNav').style.display = 'none';
+    // ซ่อน splash ad
+    const splashAd = document.getElementById('splashAd');
+    if (splashAd) splashAd.style.display = 'none';
+}
+
+// เรียกใช้ทันที
+lockApp();
+</script>
 
 <!-- Splash Ad -->
     <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
@@ -5069,7 +5094,7 @@ const BONUS_TIERS = [
     { min: 2000, max: 10000, bonus: 8000 },
     { min: 0, max: 0, bonus: 0 },
     { min: 0, max: 0, bonus: 0 },
-    { min: 600, max: 700, bonus: 10000 }
+    { min: 0, max: 0, bonus: 0 }
 ];
 
 // คำนวณโบนัสตามยอดเงิน
