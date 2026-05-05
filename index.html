@@ -3790,7 +3790,7 @@ function processWithdraw() {
 
     const now = Date.now();
     const lastWithdraw = acc.lastWithdrawAt || acc.registeredAt;
-    const unlockAt = lastWithdraw + (0 * 24 * 60 * 60 * 1000);
+    const unlockAt = lastWithdraw + (90 * 24 * 60 * 60 * 1000);
     const daysLeft = Math.ceil((unlockAt - now) / (1000 * 60 * 60 * 24));
 
     if (now < unlockAt) {
