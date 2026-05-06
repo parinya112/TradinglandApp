@@ -2088,11 +2088,11 @@ randomizeSplash();
         <div class="timer" id="pendingTimer" style="display:none;">01:00</div>
     </div>
 
-    <div class="header" id="mainHeader" style="display:none;">
-        <div class="header-spacer"></div>
-        <div>TradingLand Pro</div>
-        <div class="header-spacer"></div>
-    </div>
+<div class="header" id="mainHeader" style="display:none; height: 70px; overflow: hidden;">
+    <div class="header-spacer"></div>
+    <img src="loogo.png" alt="TradingLand Pro" style="height: 180px; width: auto; margin-top: -5px;">
+    <div class="header-spacer"></div>
+</div>
 
   <div id="homeView" style="display:none;">
     <!-- ประกาศ滚动 (สวยขึ้น ไม่มีอิโมจิ มีข้อความเยอะ) -->
@@ -2123,20 +2123,18 @@ randomizeSplash();
         <div class="quick-btn" onclick="switchTab('profile')"><div class="quick-icon"><svg width="24" height="24" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg></div><span class="quick-label">โปรไฟล์</span></div>
     </div>
 
-    <!-- ✅ แบนเนอร์โฆษณา (วางตรงนี้) -->
-    <div class="ad-banner" onclick="watchAdAndGetReward()" style="background: linear-gradient(135deg, #1E222D, #2B3139); border-radius: 16px; padding: 15px; margin: 15px 0; text-align: center; cursor: pointer; border: 1px solid var(--gold);">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F0B90B">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <div>
-                <div style="font-weight: bold; color: #F0B90B;">รับเงินฟรี! ดูโฆษณา</div>
-                <div style="font-size: 12px; color: #848E9C;">คลิกเพื่อรับรางวัลสุ่ม (วันละ 3 ครั้ง)</div>
-            </div>
-        </div>
-    </div>
-
+  <!-- ✅ แบนเนอร์โฆษณา (ขยายใหญ่ขึ้น) -->
+<div class="ad-banner" onclick="watchAdAndGetReward()" style="
+    background: url('ad-banner.png') center/cover no-repeat;
+    border-radius: 20px;
+    margin: 15px 0;
+    cursor: pointer;
+    border: 2px solid var(--gold);
+    aspect-ratio: 16 / 5;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+">
+</div>
     <style>
     .title-badge-hot {
         display: inline-flex;
