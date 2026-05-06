@@ -1987,20 +1987,26 @@ randomizeSplash();
     </svg>
 
         <div id="accountListView" style="display:none;">
-        
-        <div style="text-align: center; padding-top: 20px; margin-bottom: 5px;">
-            <div class="animated-logo-container">
-                <img src="logo.png" class="animated-logo-img" alt="TradingLand Logo">
-            </div>
+    
+    <div style="text-align: center; padding-top: 20px; margin-bottom: 5px;">
+        <div class="animated-logo-container">
+            <img src="logo.png" class="animated-logo-img" alt="TradingLand Logo">
         </div>
-        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 40px; text-align:center;">เลือกบัญชีเพื่อเข้าสู่ระบบ</p>
-
-        <div id="accountListContainer"></div>
-        <button class="btn-new-acc" id="btnCreateNewAcc" onclick="startNewAccount()">
-            <svg width="20" height="20"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (Max 3)
-        </button>
     </div>
+<p style="color: #FFFFFF; font-size: 14px; margin-bottom: 40px; text-align:center; font-weight: 500; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">เลือกบัญชีเพื่อเข้าสู่ระบบ</p>
 
+    <div id="accountListContainer"></div>
+    
+    <button class="btn-new-acc" id="btnCreateNewAcc" onclick="startNewAccount()" style="
+        background: rgba(0,0,0,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #2C1810;
+        font-weight: bold;
+        backdrop-filter: blur(4px);
+    ">
+        <svg width="20" height="20" stroke="#2C1810"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (Max 3)
+    </button>
+</div>
 <div id="pinLockView" style="display:none;">
     <div style="position:absolute; top:20px; left:20px; font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="initAppSecurity()">
         <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
@@ -2460,8 +2466,16 @@ randomizeSplash();
 <div id="profileView" style="display:none;">
     <div class="container" style="padding: 0 16px 80px 16px;">
         
- <!-- การ์ดโปรไฟล์ -->
-<div class="card" style="background: linear-gradient(135deg, #F0B90B 0%, #DCAE0A 50%, #B8860B 100%); padding: 20px; margin-bottom: 20px; margin-top: 8px; border: none; box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); border-radius: 12px;">
+ <!-- การ์ดโปรไฟล์ (ใช้รูป PNG อย่างเดียว) -->
+<div class="card" style="
+    background: url('xyz.png') center/cover no-repeat;
+    padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 8px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3);
+    border-radius: 12px;
+">
     
     <!-- ส่วนข้อมูลโปรไฟล์ -->
     <div style="display: flex; align-items: center; gap: 14px;">
@@ -3148,7 +3162,7 @@ setInterval(initMarketPrices, 2000);
             }
         }
 
-      function showAccountList() {
+  function showAccountList() {
     hideViews(['pinLockView', 'kycView']);
     const c = document.getElementById('accountListContainer');
     c.innerHTML = '';
@@ -3158,7 +3172,7 @@ setInterval(initMarketPrices, 2000);
     for (const uid in appState.accounts) {
         const acc = appState.accounts[uid];
         
-        // ใส่ตรา Verified ถ้ามี KYC แล้ว
+        // ตรา Verified
         const verifiedBadge = (acc.realName && acc.idCard) ? `
             <span style="display: inline-flex; align-items: center; margin-left: 6px;">
                 <div style="width: 14px; height: 14px; border-radius: 50%; background: #1877F2; display: flex; align-items: center; justify-content: center;">
@@ -3170,18 +3184,28 @@ setInterval(initMarketPrices, 2000);
         ` : '';
         
         c.innerHTML += `
-            <div class="acc-card" onclick="selectAccountToLogin('${uid}')">
+            <div class="acc-card" onclick="selectAccountToLogin('${uid}')" style="
+                background: url('xyz.png') center/cover no-repeat;
+                border: none;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                margin-bottom: 12px;
+            ">
                 <div style="display:flex; align-items:center;">
-                    <div class="acc-avatar">${(acc.accName || 'U').charAt(0).toUpperCase()}</div>
+                    <div class="acc-avatar" style="
+                        background: rgba(0,0,0,0.3);
+                        border: 2px solid rgba(255,215,0,0.6);
+                        color: #F0B90B;
+                        font-weight: bold;
+                    ">${(acc.accName || 'U').charAt(0).toUpperCase()}</div>
                     <div class="acc-info">
-                        <div class="acc-name">
+                        <div class="acc-name" style="color: #FFFFFF; font-weight: 700;">
                             ${acc.accName || 'บัญชี'}
                             ${verifiedBadge}
                         </div>
-                        <div class="acc-uid">UID: ${uid} | ยอด: ${(acc.thb || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} THB</div>
+                        <div class="acc-uid" style="color: #FFFFFF;">UID: ${uid} | ยอด: ${(acc.thb || 0).toLocaleString('en-US', { maximumFractionDigits: 0 })} THB</div>
                     </div>
                 </div>
-                <svg width="24" height="24" stroke="var(--text-muted)" fill="none">
+                <svg width="24" height="24" stroke="#FFFFFF" fill="none" style="opacity: 0.8;">
                     <use href="#icon-back" style="transform: rotate(180deg); transform-origin: center;"></use>
                 </svg>
             </div>
@@ -3193,7 +3217,11 @@ setInterval(initMarketPrices, 2000);
         btnNew.style.display = 'none';
     } else {
         btnNew.style.display = 'flex';
-        btnNew.innerHTML = `<svg width="20" height="20" stroke="currentColor"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/9)`;
+        btnNew.innerHTML = `<svg width="20" height="20" stroke="#FFFFFF"><use href="#icon-plus"></use></svg> เปิดบัญชีใหม่ (${accCount}/9)`;
+        btnNew.style.background = "rgba(0,0,0,0.4)";
+        btnNew.style.border = "1px solid rgba(255,215,0,0.5)";
+        btnNew.style.color = "#FFFFFF";
+        btnNew.style.backdropFilter = "blur(4px)";
     }
 
     document.getElementById('accountListView').style.display = 'block';
