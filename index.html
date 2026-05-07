@@ -2103,6 +2103,256 @@ window.registerRealInitAppSecurity = function(fn) {
     console.log('✅ ลงทะเบียน initAppSecurity จริงเรียบร้อย');
 };
 </script>
+
+<!-- ✅ ปุ่ม Floating Chat (เป็นวงกลม) -->
+<div id="chatFloatingBtn" style="
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    display: none;
+    cursor: pointer;
+    z-index: 9999;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,215,0,0.3);
+">
+    <img src="chat-button.png" alt="Chat" style="width: 100%; height: 100%; object-fit: cover;">
+</div>
+
+<style>
+@keyframes pulse {
+    0% {
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.3),
+            0 0 0 0 rgba(240,185,11,0.7);
+    }
+
+    70% {
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.3),
+            0 0 0 10px rgba(240,185,11,0);
+    }
+
+    100% {
+        box-shadow:
+            0 4px 15px rgba(0,0,0,0.3),
+            0 0 0 0 rgba(240,185,11,0);
+    }
+}
+
+#chatFloatingBtn.show {
+    display: flex;
+    animation: pulse 1.5s infinite;
+}
+
+#chatFloatingBtn.dragging {
+    cursor: grabbing;
+    opacity: 0.85;
+    animation: none;
+}
+
+#chatFloatingBtn:active {
+    transform: scale(0.95);
+}
+
+/* ปุ่มวงกลมจากรูปสี่เหลี่ยม 520x520 */
+#chatFloatingBtn img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;  /* ทำให้เป็นวงกลม */
+    object-fit: cover;
+}
+</style>
+
+<script>
+// ==========================================
+// 🖱️ Floating Chat Drag System
+// ==========================================
+
+let isDragging = false;
+let hasMoved = false;
+let isTouchingButton = false;
+
+let dragStartX = 0;
+let dragStartY = 0;
+
+let btnStartX = 0;
+let btnStartY = 0;
+
+const chatBtn = document.getElementById('chatFloatingBtn');
+
+
+// ======================
+// เริ่มจับ
+// ======================
+function startDrag(e) {
+
+    isTouchingButton = true;
+    hasMoved = false;
+
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+
+    dragStartX = clientX;
+    dragStartY = clientY;
+
+    const rect = chatBtn.getBoundingClientRect();
+
+    btnStartX = rect.left;
+    btnStartY = rect.top;
+}
+
+
+// ======================
+// ระหว่างลาก
+// ======================
+function onDrag(e) {
+
+    // ยังไม่ได้แตะปุ่ม
+    if (!isTouchingButton) return;
+
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+
+    const deltaX = clientX - dragStartX;
+    const deltaY = clientY - dragStartY;
+
+    // ขยับเกิน 10px ค่อยเริ่มลากจริง
+    if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
+
+        isDragging = true;
+        hasMoved = true;
+
+        chatBtn.classList.add('dragging');
+
+        // ✅ บล็อก scroll เฉพาะตอนลากจริง
+        e.preventDefault();
+    }
+
+    if (!isDragging) return;
+
+    let newLeft = btnStartX + deltaX;
+    let newTop = btnStartY + deltaY;
+
+    const btnWidth = chatBtn.offsetWidth;
+    const btnHeight = chatBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth - 10;
+    const maxY = window.innerHeight - btnHeight - 10;
+
+    newLeft = Math.min(Math.max(newLeft, 10), maxX);
+    newTop = Math.min(Math.max(newTop, 10), maxY);
+
+    chatBtn.style.left = newLeft + 'px';
+    chatBtn.style.top = newTop + 'px';
+
+    chatBtn.style.right = 'auto';
+    chatBtn.style.bottom = 'auto';
+}
+
+
+// ======================
+// ปล่อยลาก
+// ======================
+function stopDrag() {
+
+    if (isDragging) {
+
+        localStorage.setItem('chatBtnLeft', chatBtn.style.left);
+        localStorage.setItem('chatBtnTop', chatBtn.style.top);
+    }
+
+    setTimeout(() => {
+
+        isDragging = false;
+        hasMoved = false;
+        isTouchingButton = false;
+
+        chatBtn.classList.remove('dragging');
+
+    }, 50);
+}
+
+
+// ======================
+// เปิด popup
+// ======================
+function openAIChat() {
+
+    showCustomPopup(
+        ' ขออภัย',
+        'ฟังก์ชันแชทถามและใช้ AI เกี่ยวกับการเทรด\nกำลังอยู่ในระหว่างการพัฒนา\nโปรดติดตามในเวอร์ชันถัดไป',
+        null,
+        'gold'
+    );
+}
+
+
+// ======================
+// โหลดตำแหน่งเดิม
+// ======================
+function loadChatBtnPosition() {
+
+    const savedLeft = localStorage.getItem('chatBtnLeft');
+    const savedTop = localStorage.getItem('chatBtnTop');
+
+    if (savedLeft && savedTop) {
+
+        chatBtn.style.left = savedLeft;
+        chatBtn.style.top = savedTop;
+
+        chatBtn.style.right = 'auto';
+        chatBtn.style.bottom = 'auto';
+    }
+}
+
+
+// ======================
+// Event Listeners
+// ======================
+
+// Desktop
+chatBtn.addEventListener('mousedown', startDrag);
+window.addEventListener('mousemove', onDrag);
+window.addEventListener('mouseup', stopDrag);
+
+// Mobile
+chatBtn.addEventListener('touchstart', startDrag, { passive: true });
+window.addEventListener('touchmove', onDrag, { passive: false });
+window.addEventListener('touchend', stopDrag);
+
+
+// ======================
+// คลิกเปิด popup
+// ======================
+chatBtn.addEventListener('click', function(e) {
+
+    if (hasMoved) {
+        e.preventDefault();
+        return;
+    }
+
+    openAIChat();
+});
+
+
+// โหลดตำแหน่ง
+loadChatBtnPosition();
+
+
+// ======================
+// แสดงปุ่ม
+// ======================
+function showChatButton() {
+
+    chatBtn.classList.add('show');
+
+    chatBtn.style.display = 'flex';
+    chatBtn.style.cursor = 'grab';
+}
+</script>
     <svg style="display:none;">
         <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></symbol>
         ```
@@ -3652,6 +3902,13 @@ function onLoginSuccess() {
     // ✅ เพิ่มบรรทัดนี้! (แสดงซองอั่งเปา)
     //showAngpao();
     
+      // ✅ แสดงปุ่ม Floating Chat AI
+    const chatBtn = document.getElementById('chatFloatingBtn');
+    if (chatBtn) {
+        chatBtn.classList.add('show');
+        chatBtn.style.display = 'flex';
+    }
+
     switchTab('home');
 }
         function switchTab(tab) {
