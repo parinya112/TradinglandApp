@@ -2262,65 +2262,71 @@ window.registerRealInitAppSecurity = function(fn) {
         <div class="quick-btn" onclick="switchTab('profile')"><div class="quick-icon"><svg width="24" height="24" stroke="white"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke-width="2"/></svg></div><span class="quick-label">โปรไฟล์</span></div>
     </div>
 
- <!-- ✅ แบนเนอร์โฆษณา (ไม่มีขอบ) -->
-<div class="ad-banner" onclick="watchAdAndGetReward()" style="
+<!-- ✅ แบนเนอร์โฆษณา -->
+<div class="ad-banner" onclick="watchAdAndGetReward()"></div>
+
+<style>
+.ad-banner{
+    position: relative;
+    overflow: hidden;
+
     background: url('ad-banner.png') center/cover no-repeat;
-    border-radius: 16px;
+
+    border-radius: 20px;
     margin: 15px 0;
+
     cursor: pointer;
+
     aspect-ratio: 16 / 5;
     width: 100%;
-">
-</div> <style>
-    .title-badge-hot {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 12px;
-        background: #EB5757;
-        border-radius: 20px;
-        margin-top: 12px;
-        margin-bottom: 10px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+
+    transition: transform 0.3s ease;
+}
+
+/* ✅ แสงเคลื่อนไหว */
+.ad-banner::before{
+    content: "";
+
+    position: absolute;
+
+    top: -50%;
+    left: -120%;
+
+    width: 50%;
+    height: 220%;
+
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0.4) 50%,
+        rgba(255,255,255,0.05) 70%,
+        rgba(255,255,255,0) 100%
+    );
+
+    transform: rotate(20deg);
+
+    animation: shineMove 3s linear infinite;
+
+    pointer-events: none;
+}
+
+.ad-banner:hover{
+    transform: scale(1.01);
+}
+
+@keyframes shineMove{
+    0%{
+        left: -120%;
     }
 
-    .title-badge-hot .title-content {
-        display: flex;
-        align-items: center;
-        font-size: 13px;
-        font-weight: bold;
-        color: #ffffff;
-        gap: 6px;
+    100%{
+        left: 160%;
     }
-
-    .title-badge-glow {
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 12px;
-        background: #FFD700;
-        border-radius: 20px;
-        margin-top: 15px;
-        margin-bottom: 10px;
-    }
-
-    .title-badge-glow .title-content {
-        display: flex;
-        align-items: center;
-        font-size: 13px;
-        font-weight: bold;
-        color: #ffffff;
-        gap: 6px;
-    }
-    
-    .title-badge-hot .title-content svg,
-    .title-badge-glow .title-content svg {
-        width: 14px;
-        height: 14px;
-    }
-    
-    .title-badge-glow .title-content svg {
-        stroke: #ffffff;
-    }
-    </style>
-
+}
+</style>
     <!-- ส่วนหัว Favorite (อยู่บนสุด) -->
     <div class="title-badge-hot" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="title-content">
@@ -4786,7 +4792,7 @@ function updateProfitUI() {
     // 💡 ตรงนี้ลูกพี่ไปทำรูปมาเพิ่ม แล้วใส่ชื่อไฟล์ลงไปได้เลยครับ
     const bannerImages = [
         "gold-banner.jpg",    // รูปที่ 1 
-        "pro.jpg",    // รูปที่ 2 (ตัวอย่าง)
+        "xr.png",    // รูปที่ 2 (ตัวอย่าง)
         "pro1.jpg"       // รูปที่ 3 (ตัวอย่าง)
     ];
     
