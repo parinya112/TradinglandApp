@@ -1856,114 +1856,253 @@ input[type="time"]::-webkit-date-and-time-value {
 </head>
 <body>
 
+<!-- Splash Screen (หน้าโลโก้แอพ) -->
+<div id="splashScreen"
+     style="
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100dvh;
+        background: #0B0E11;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition: opacity 0.4s ease;
+     ">
+    <img src="Splash.png"
+         alt="TradingLand"
+         style="
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+         ">
+</div>
 
+<!-- Splash Ad (โฆษณา) -->
+<div id="splashAd"
+     style="
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100dvh;
+        background-color: #0b0e14;
+        z-index: 999998;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-family: 'Poppins', sans-serif;
+     ">
 
-<!-- Splash Ad -->
-    <div id="splashAd" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #0b0e14; z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif;">
-        
-        <button onclick="closeSplashAd()" style="position: absolute; top: 50px; right: 20px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid #ffd700; padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; z-index: 10;">
-            ข้าม (<span id="adCountdown">5</span>s)
-        </button>
+    <!-- ปุ่มข้าม -->
+    <button onclick="closeSplashAd()"
+            style="
+                position: absolute;
+                top: 50px;
+                right: 20px;
+                background: rgba(0,0,0,0.7);
+                color: #fff;
+                border: 1px solid #ffd700;
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                cursor: pointer;
+                z-index: 10;
+            ">
+        ข้าม (<span id="adCountdown">5</span>s)
+    </button>
 
-        <img id="splashDynamicImg" src="splash-gold.jpg" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9; position: absolute; top: 0; left: 0; z-index: 1;">
-        
-        <div style="position: absolute; bottom: 15%; text-align: center; width: 100%; padding: 0 20px; box-sizing: border-box; z-index: 5;">
-            <h1 id="splashDynamicTitle" style="color: #ffd700; margin: 0; font-size: 28px; text-shadow: 2px 2px 6px #000; font-weight: bold; letter-spacing: 1px;">ยกระดับการลงทุนของคุณ</h1>
-            
-            <p id="splashDynamicDesc" style="color: #ffffff; text-shadow: 1px 1px 4px #000; font-size: 14px; margin-top: 8px;">แพลตฟอร์มเทรดสินทรัพย์ระดับโลกที่นักลงทุนมืออาชีพเลือก</p>
-        </div>
+    <!-- รูปโฆษณา -->
+    <img id="splashDynamicImg"
+         src="splash-gold.jpg"
+         style="
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+         ">
+
+    <!-- ข้อความ -->
+    <div style="
+            position: absolute;
+            bottom: 15%;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 5;
+         ">
+
+        <h1 id="splashDynamicTitle"
+            style="
+                color: #ffd700;
+                margin: 0;
+                font-size: 28px;
+                text-shadow: 2px 2px 6px #000;
+                font-weight: bold;
+                letter-spacing: 1px;
+            ">
+            ยกระดับการลงทุนของคุณ
+        </h1>
+
+        <p id="splashDynamicDesc"
+           style="
+                color: #ffffff;
+                text-shadow: 1px 1px 4px #000;
+                font-size: 14px;
+                margin-top: 8px;
+           ">
+            แพลตฟอร์มเทรดสินทรัพย์ระดับโลกที่นักลงทุนมืออาชีพเลือก
+        </p>
     </div>
- <script>
-        // 1. คลังโปรโมชั่น
-const splashPromos = [
-    {
-        img: "splash-gold.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "promo-bonus.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "promo-vip.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s1.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s2.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s3.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s4.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s5.jpg",
-        title: "",
-        desc: ""
-    },
-    {
-        img: "s6.jpg",
-        title: "",
-        desc: ""
+</div>
+
+<script>
+/* =========================
+   LOCK APP START
+========================= */
+
+window.__ALLOW_APP_START__ = false;
+window.__PENDING_APP_START__ = false;
+
+// ✅ เก็บฟังก์ชันจริงไว้
+let realInitAppSecurityFunction = null;
+
+/* ดักทุกการเรียก initAppSecurity */
+window.initAppSecurity = function () {
+
+    // ยังไม่อนุญาต
+    if (!window.__ALLOW_APP_START__) {
+        console.log('⛔ Blocked initAppSecurity ยังไม่ถึงเวลา');
+        // จำไว้ว่ามีคนพยายามเรียก
+        window.__PENDING_APP_START__ = true;
+        return;
     }
+
+    // ✅ เรียกฟังก์ชันจริง
+    console.log('✅ อนุญาตแล้ว เรียก initAppSecurity จริง');
+    if (realInitAppSecurityFunction) {
+        realInitAppSecurityFunction();
+    } else if (typeof window.realInitAppSecurity === 'function') {
+        window.realInitAppSecurity();
+    } else {
+        console.error('❌ ไม่พบฟังก์ชัน initAppSecurity จริง');
+    }
+};
+
+/* =========================
+   Splash Logic
+========================= */
+
+let hasStartedApp = false;
+let timeLeft = 5;
+let adTimer = null;
+
+const countdownEl = document.getElementById('adCountdown');
+const splashAdEl = document.getElementById('splashAd');
+
+// คลังโปรโมชั่น
+const splashPromos = [
+    { img: "splash-gold.jpg", title: "", desc: "" },
+    { img: "promo-bonus.jpg", title: "", desc: "" },
+    { img: "promo-vip.jpg", title: "", desc: "" },
+    { img: "s1.jpg", title: "", desc: "" },
+    { img: "s2.jpg", title: "", desc: "" },
+    { img: "s3.jpg", title: "", desc: "" },
+    { img: "s4.jpg", title: "", desc: "" },
+    { img: "s5.jpg", title: "", desc: "" },
+    { img: "s6.jpg", title: "", desc: "" }
 ];
 
-function randomizeSplash(){
-
-const img = document.getElementById("splashDynamicImg");
-const title = document.getElementById("splashDynamicTitle");
-const desc = document.getElementById("splashDynamicDesc");
-
-if(!img || !title || !desc) return;
-
-const randomIndex = Math.floor(Math.random()*splashPromos.length);
-const selected = splashPromos[randomIndex];
-
-img.src = selected.img;
-title.innerText = selected.title;
-desc.innerText = selected.desc;
-
+// สุ่มรูป
+function randomizeSplash() {
+    const img = document.getElementById("splashDynamicImg");
+    const title = document.getElementById("splashDynamicTitle");
+    const desc = document.getElementById("splashDynamicDesc");
+    if (!img || !title || !desc) return;
+    const randomIndex = Math.floor(Math.random() * splashPromos.length);
+    const selected = splashPromos[randomIndex];
+    img.src = selected.img;
+    title.innerText = selected.title;
+    desc.innerText = selected.desc;
 }
 
-randomizeSplash();
-    
-// สคริปต์ควบคุมโฆษณา
-    let timeLeft = 5; // ตั้งเวลาแสดงโฆษณา (วินาที)
-    const countdownEl = document.getElementById('adCountdown');
-    const splashAdEl = document.getElementById('splashAd');
-
-    // ฟังก์ชันปิดโฆษณา
-    function closeSplashAd() {
-        splashAdEl.style.display = 'none';
-    }
-
-    // นับเวลาถอยหลัง
-    const adTimer = setInterval(() => {
+// เริ่มนับถอยหลัง
+function startAdCountdown() {
+    timeLeft = 5;
+    if (countdownEl) countdownEl.innerText = timeLeft;
+    if (adTimer) clearInterval(adTimer);
+    adTimer = setInterval(() => {
         timeLeft--;
-        countdownEl.innerText = timeLeft;
+        if (countdownEl) countdownEl.innerText = timeLeft;
         if (timeLeft <= 0) {
             clearInterval(adTimer);
-            closeSplashAd(); // พอหมดเวลา ให้ปิดโฆษณาอัตโนมัติ
+            closeSplashAd();
         }
     }, 1000);
+}
+
+// ปิดโฆษณา
+function closeSplashAd() {
+    if (adTimer) clearInterval(adTimer);
+    if (splashAdEl) splashAdEl.style.display = 'none';
+    
+    if (hasStartedApp) return;
+    hasStartedApp = true;
+
+    // อนุญาตให้เข้าแอพแล้ว
+    window.__ALLOW_APP_START__ = true;
+    
+    console.log('🔓 ปิดโฆษณา กำลังเรียก initAppSecurity จริง');
+    
+    // ✅ เรียกฟังก์ชันจริง
+    if (realInitAppSecurityFunction) {
+        realInitAppSecurityFunction();
+    } else if (typeof window.originalInitAppSecurity === 'function') {
+        window.originalInitAppSecurity();
+    } else {
+        console.error('❌ ไม่พบฟังก์ชัน initAppSecurity จริง');
+    }
+}
+
+/* =========================
+   เริ่มทำงาน
+========================= */
+
+window.addEventListener('load', function () {
+    const splash = document.getElementById('splashScreen');
+    randomizeSplash();
+    
+    // ✅ เก็บฟังก์ชัน initAppSecurity จริงไว้
+    if (typeof window.realInitAppSecurity === 'undefined') {
+        window.realInitAppSecurity = window.initAppSecurity;
+    }
+    
+    setTimeout(() => {
+        if (!splash) return;
+        splash.style.opacity = '0';
+        setTimeout(() => {
+            splash.style.display = 'none';
+            if (splashAdEl) {
+                splashAdEl.style.display = 'flex';
+            }
+            startAdCountdown();
+        }, 400);
+    }, 2500);
+});
+
+// ✅ เปิดโอกาสให้โค้ดหลักมา register ฟังก์ชันจริง
+window.registerRealInitAppSecurity = function(fn) {
+    realInitAppSecurityFunction = fn;
+    console.log('✅ ลงทะเบียน initAppSecurity จริงเรียบร้อย');
+};
 </script>
-
-
     <svg style="display:none;">
         <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></symbol>
         ```
@@ -3123,39 +3262,47 @@ setInterval(initMarketPrices, 2000);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            try {
-                initAppSecurity();
-                setInterval(simulateLiveMarket, 1000);
-            } catch (e) {
-                console.error("App init error:", e);
-                alert("ระบบโหลดไม่สำเร็จ กรุณาลองรีเฟรชอีกครั้ง");
-            }
-        });
+    try {
 
-        function initAppSecurity() {
-            appState.activeUid = null;
-            saveState();
+        // ❌ เอาออก ไม่ให้เด้งก่อน Splash
+        //initAppSecurity();
 
-            const mainHeader = document.getElementById('mainHeader');
-            const bottomNav = document.getElementById('bottomNav');
-            if (mainHeader) mainHeader.style.display = 'none';
-            if (bottomNav) bottomNav.style.display = 'none';
+        // ✅ ให้ตลาดทำงานปกติ
+        setInterval(simulateLiveMarket, 1000);
 
-            hideViews([
-                'homeView', 'walletView', 'marketView', 'tradeChartView', 'orderEntryView',
-                'depositView', 'withdrawView', 'profileView',
-                'pinLockView', 'kycView', 'accountListView'
-            ]);
+    } catch (e) {
+        console.error("App init error:", e);
+        alert("ระบบโหลดไม่สำเร็จ กรุณาลองรีเฟรชอีกครั้ง");
+    }
+});
 
-            const accCount = Object.keys(appState.accounts).length;
-            if (accCount === 0) {
-                document.getElementById('kycView').style.display = 'block';
-            } else {
-                showAccountList();
-            }
-        }
+   function initAppSecurity() {
+    appState.activeUid = null;
+    saveState();
 
-  function showAccountList() {
+    const mainHeader = document.getElementById('mainHeader');
+    const bottomNav = document.getElementById('bottomNav');
+    if (mainHeader) mainHeader.style.display = 'none';
+    if (bottomNav) bottomNav.style.display = 'none';
+
+    hideViews([
+        'homeView', 'walletView', 'marketView', 'tradeChartView', 'orderEntryView',
+        'depositView', 'withdrawView', 'profileView',
+        'pinLockView', 'kycView', 'accountListView'
+    ]);
+
+    const accCount = Object.keys(appState.accounts).length;
+    if (accCount === 0) {
+        document.getElementById('kycView').style.display = 'block';
+    } else {
+        showAccountList();
+    }
+    
+    // ✅ เพิ่ม log เพื่อ debug
+    console.log('✅ initAppSecurity จริงทำงานแล้ว');
+}
+
+function showAccountList() {
     hideViews(['pinLockView', 'kycView']);
     const c = document.getElementById('accountListContainer');
     c.innerHTML = '';
@@ -3218,6 +3365,12 @@ setInterval(initMarketPrices, 2000);
     }
 
     document.getElementById('accountListView').style.display = 'block';
+}
+
+// ✅ เพิ่มตรงนี้ (ด้านล่างสุด)
+if (typeof registerRealInitAppSecurity === 'function') {
+    registerRealInitAppSecurity(initAppSecurity);
+    console.log('📝 ลงทะเบียน initAppSecurity เรียบร้อย');
 }
         function startNewAccount() {
             document.getElementById('accountListView').style.display = 'none';
