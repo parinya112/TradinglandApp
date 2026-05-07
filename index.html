@@ -2326,6 +2326,59 @@ window.registerRealInitAppSecurity = function(fn) {
         left: 160%;
     }
 }
+
+/* ✅ หัวข้อ Favorite (สีแดง) */
+.title-badge-hot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 12px;
+    background: #EB5757 !important;
+    border-radius: 20px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.title-badge-hot .title-content {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff !important;
+    gap: 6px;
+}
+
+/* ✅ หัวข้อ Leaderboard (สีทอง) */
+.title-badge-glow {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: #FFD700 !important;
+    border-radius: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.title-badge-glow .title-content {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ffffff !important;
+    gap: 6px;
+}
+
+.title-badge-hot .title-content svg,
+.title-badge-glow .title-content svg {
+    width: 14px;
+    height: 14px;
+}
+
+.title-badge-glow .title-content svg {
+    stroke: #ffffff;
+}
 </style>
     <!-- ส่วนหัว Favorite (อยู่บนสุด) -->
     <div class="title-badge-hot" style="display: flex; justify-content: space-between; align-items: center;">
