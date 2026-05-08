@@ -3158,137 +3158,122 @@ function showChatButton() {
         </div>
     </div>
 
-<!-- ✅ Live View (ห้องถ่ายทอดสด) -->
+<!-- ✅ Live View (ห้องถ่ายทอดสด แบบ VJ) -->
 <div id="liveView" style="display: none;">
     
     <!-- หัวข้อ -->
     <div style="padding: 16px; border-bottom: 1px solid var(--border-color);">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2 style="margin: 0; font-size: 20px;">ห้อง Live</h2>
-            <span style="font-size: 12px; color: var(--text-muted);">12 ห้องกำลังออกอากาศ</span>
+            <span style="font-size: 12px; color: var(--text-muted);">2 ห้องกำลังออกอากาศ</span>
         </div>
-        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">เรียนกลยุทธ์เทรดจากเซียนตัวจริง</p>
+        <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-muted);">
+            เรียนกลยุทธ์เทรดจากเซียนตัวจริง
+        </p>
     </div>
-
-    <!-- ห้องแบบ Grid แถวละ 2 -->
+<style>
+    @keyframes livePulse {
+        0% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
+        }
+        70% {
+            opacity: 0.9;
+            box-shadow: 0 0 0 6px rgba(255, 59, 48, 0);
+        }
+        100% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
+        }
+    }
+    
+    .live-badge {
+        animation: livePulse 1.2s infinite;
+    }
+</style>
+    <!-- ห้องแบบ Grid -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px;">
 
-        <!-- การ์ดห้องที่ 1 -->
-        <div class="live-room-card" onclick="joinLiveRoom('room_1')" style="
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        ">
+        <!-- ห้อง 1 -->
+        <div class="live-room-card" onclick="joinLiveRoom('room_1')" style="background: #1B1F2A; border-radius: 18px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.08);">
             <div style="position: relative;">
-                <img src="https://placehold.co/400x240/2B3139/FFD700?text=Gold+Analysis" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                <div style="position: absolute; top: 8px; left: 8px; background: #FF3B30; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">LIVE</div>
-                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 12px; font-size: 10px; display: flex; align-items: center; gap: 4px;">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>1.2k</span>
-                </div>
-            </div>
-            <div style="padding: 10px;">
-                <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">วิเคราะห์กราฟทองคำ</div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div style="width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
+                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
+              <div class="live-badge" style="position: absolute; top: 10px; left: 10px; background: #FF3B30; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 999px;">LIVE</div>
+                <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 999px;">1.2k</div>
+                <div style="position: absolute; left: 12px; right: 12px; bottom: 14px;">
+                    <div style="font-size: 20px; font-weight: bold; color: #FFD700; margin-bottom: 4px;">Gold Analysis</div>
+                    <div style="color: #fff; font-size: 13px; margin-bottom: 8px;">วิเคราะห์กราฟทองคำ</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="position: relative; width: 34px; height: 34px; flex-shrink: 0;">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700;">
+                            <div style="position: absolute; right: -5px; bottom: -3px; background: #00C853; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.9);">✓</div>
+                        </div>
+                        <div style="color: #fff; font-size: 12px; font-weight: 600;">พี่เนส เทรดเดอร์</div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted);">พี่เนส เทรดเดอร์</span>
                 </div>
             </div>
         </div>
 
-        <!-- การ์ดห้องที่ 2 -->
-        <div class="live-room-card" onclick="joinLiveRoom('room_2')" style="
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        ">
+        <!-- ห้อง 2 -->
+        <div class="live-room-card" onclick="joinLiveRoom('room_2')" style="background: #1B1F2A; border-radius: 18px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.08);">
             <div style="position: relative;">
-                <img src="https://placehold.co/400x240/2B3139/FFD700?text=Stock+Analysis" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                <div style="position: absolute; top: 8px; left: 8px; background: #F0B90B; color: #0B0E11; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">20:00 น.</div>
-            </div>
-            <div style="padding: 10px;">
-                <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">วิเคราะห์หุ้นเด่นรายตัว</div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div style="width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
-                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                        </svg>
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
+                <div style="position: absolute; top: 10px; left: 10px; background: #F0B90B; color: #111; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 999px;">20:00 น.</div>
+                <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 999px;">0</div>
+                <div style="position: absolute; left: 12px; right: 12px; bottom: 14px;">
+                    <div style="font-size: 20px; font-weight: bold; color: #FFD700; margin-bottom: 4px;">Stock Analysis</div>
+                    <div style="color: #fff; font-size: 13px; margin-bottom: 8px;">วิเคราะห์หุ้นเด่นรายตัว</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="position: relative; width: 34px; height: 34px; flex-shrink: 0;">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700;">
+                            <div style="position: absolute; right: -5px; bottom: -3px; background: #00C853; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.9);">✓</div>
+                        </div>
+                        <div style="color: #fff; font-size: 12px; font-weight: 600;">อาจารย์อั๋น</div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted);">อาจารย์อั๋น</span>
                 </div>
             </div>
         </div>
 
-        <!-- การ์ดห้องที่ 3 -->
-        <div class="live-room-card" onclick="joinLiveRoom('room_3')" style="
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        ">
+        <!-- ห้อง 3 -->
+        <div class="live-room-card" onclick="joinLiveRoom('room_3')" style="background: #1B1F2A; border-radius: 18px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.08);">
             <div style="position: relative;">
-                <img src="https://placehold.co/400x240/2B3139/FFD700?text=Portfolio+Review" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                <div style="position: absolute; top: 8px; left: 8px; background: #FF3B30; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">LIVE</div>
-                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 12px; font-size: 10px; display: flex; align-items: center; gap: 4px;">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                    </svg>
-                    <span>856</span>
-                </div>
-            </div>
-            <div style="padding: 10px;">
-                <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">รีวิวพอร์ตหลังเทรด</div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div style="width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
+                <img src="https://images.unsplash.com/photo-1559526324-593bc073d938?q=80&w=1200&auto=format&fit=crop" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
+                <div class="live-badge" style="position: absolute; top: 10px; left: 10px; background: #FF3B30; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 999px;">LIVE</div>
+                <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 999px;">856</div>
+                <div style="position: absolute; left: 12px; right: 12px; bottom: 14px;">
+                    <div style="font-size: 20px; font-weight: bold; color: #FFD700; margin-bottom: 4px;">Portfolio Review</div>
+                    <div style="color: #fff; font-size: 13px; margin-bottom: 8px;">รีวิวพอร์ตหลังเทรด</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="position: relative; width: 34px; height: 34px; flex-shrink: 0;">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700;">
+                            <div style="position: absolute; right: -5px; bottom: -3px; background: #00C853; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.9);">✓</div>
+                        </div>
+                        <div style="color: #fff; font-size: 12px; font-weight: 600;">ครูแนนนี่</div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted);">ครูแนนนี่</span>
                 </div>
             </div>
         </div>
 
-        <!-- การ์ดห้องที่ 4 -->
-        <div class="live-room-card" onclick="joinLiveRoom('room_4')" style="
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        ">
+        <!-- ห้อง 4 -->
+        <div class="live-room-card" onclick="joinLiveRoom('room_4')" style="background: #1B1F2A; border-radius: 18px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.08);">
             <div style="position: relative;">
-                <img src="https://placehold.co/400x240/2B3139/FFD700?text=Trading+Psychology" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;">
-                <div style="position: absolute; top: 8px; left: 8px; background: #F0B90B; color: #0B0E11; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: bold;">21:30 น.</div>
-            </div>
-            <div style="padding: 10px;">
-                <div style="font-weight: bold; font-size: 14px; margin-bottom: 4px;">จิตวิทยาการเทรด</div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <div style="width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
-                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                        </svg>
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.15), rgba(0,0,0,0.05));"></div>
+                <div style="position: absolute; top: 10px; left: 10px; background: #F0B90B; color: #111; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 999px;">21:30 น.</div>
+                <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 999px;">0</div>
+                <div style="position: absolute; left: 12px; right: 12px; bottom: 14px;">
+                    <div style="font-size: 20px; font-weight: bold; color: #FFD700; margin-bottom: 4px;">Trading Psychology</div>
+                    <div style="color: #fff; font-size: 13px; margin-bottom: 8px;">จิตวิทยาการเทรด</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="position: relative; width: 34px; height: 34px; flex-shrink: 0;">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" style="width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #FFD700;">
+                            <div style="position: absolute; right: -5px; bottom: -3px; background: #00C853; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.9);">✓</div>
+                        </div>
+                        <div style="color: #fff; font-size: 12px; font-weight: 600;">โค้ชแบงค์</div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted);">โค้ชแบงค์</span>
                 </div>
             </div>
         </div>
