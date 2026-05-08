@@ -2509,14 +2509,54 @@ function showChatButton() {
         </div>
     </div>
     
-    <div id="sliderBanner" class="home-banner" style="background-image: url('gold-banner.jpg'); background-size: cover; background-position: center; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position: relative; transition: background-image 1s ease-in-out;">
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); border-radius: 16px;"></div>
+   <div id="sliderBanner" class="home-banner" style="
+    background-image: url('gold-banner.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    position: relative;
+    transition: background-image 1s ease-in-out;
+">
+    
+    <!-- Gradient จางสุด -->
+<div style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.05));
+    border-radius: 16px;
+"></div>
+    
+    <div style="position: relative; z-index: 1;">
         
-        <div style="position: relative; z-index: 1;">
-            <h2 id="homeWelcomeName" style="color: #ffd700; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); font-weight: bold;">ยินดีต้อนรับ</h2>
-            <p style="color: #ffffff; margin-bottom: 0; font-size: 0.9em; text-shadow: 1px 1px 3px rgba(0,0,0,0.9);">เข้าถึงตลาดสินทรัพย์ดิจิทัลและสินค้าโภคภัณฑ์โลก</p>
+        <!-- ไอคอนเล็ก + ข้อความต้อนรับ -->
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <div style="width: 28px; height: 28px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
+            <h2 id="homeWelcomeName" style="margin: 0; font-size: 18px; font-weight: 700; color: #F0B90B; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                ยินดีต้อนรับ
+            </h2>
         </div>
+        
+        <!-- ข้อความใต้ -->
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 24px; height: 1px; background: rgba(255,255,255,0.5);"></div>
+            <p style="margin: 0; font-size: 12px; color: #FFFFFF; text-shadow: 0 1px 2px rgba(0,0,0,0.5); font-weight: 500;">
+                เข้าถึงตลาดสินทรัพย์ดิจิทัลและสินค้าโภคภัณฑ์โลก
+            </p>
+        </div>
+        
     </div>
+</div>
 
      <div class="quick-menu">
         <div class="quick-btn" onclick="openDeposit()"><div class="quick-icon"><svg width="24" height="24" stroke="var(--green)"><use href="#icon-deposit"></use></svg></div><span class="quick-label">ฝากเงิน</span></div>
@@ -5265,10 +5305,12 @@ function updateProfitUI() {
     
     // 💡 ตรงนี้ลูกพี่ไปทำรูปมาเพิ่ม แล้วใส่ชื่อไฟล์ลงไปได้เลยครับ
     const bannerImages = [
-        "gold-banner.jpg",    // รูปที่ 1 
-        "xr.png",    // รูปที่ 2 (ตัวอย่าง)
-        "pro1.jpg"       // รูปที่ 3 (ตัวอย่าง)
-    ];
+        "go4.png",    // รูปที่ 1 
+        "007.png",    // รูปที่ 2 (ตัวอย่าง)
+        "pro1.png",       // รูปที่ 3 (ตัวอย่าง)
+        "191.png",
+        "192.png"
+];
     
     let currentBannerIndex = 0;
 
