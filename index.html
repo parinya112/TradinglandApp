@@ -2260,6 +2260,67 @@ window.registerRealInitAppSecurity = function(fn) {
 
     transform: scale(0.95);
     }
+
+/* ✅ แสงเรืองรอบการ์ด (Glow Effect) */
+@keyframes specialGlow {
+    0% {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 0 rgba(255,215,0,0.4);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,215,0,0.6);
+        transform: scale(1.01);
+    }
+    100% {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 0 rgba(255,215,0,0.4);
+        transform: scale(1);
+    }
+}
+
+/* ✅ คลาสพิเศษสำหรับการ์ด UID สวย */
+.acc-card-special {
+    position: relative;
+    overflow: hidden;
+}
+
+/* ✅ แสงเลื่อน (Shine Effect) - เหมือน ad-banner */
+.acc-card-special::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -120%;
+    width: 50%;
+    height: 220%;
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.05) 30%,
+        rgba(255,255,255,0.4) 50%,
+        rgba(255,255,255,0.05) 70%,
+        rgba(255,255,255,0) 100%
+    );
+    transform: rotate(20deg);
+    animation: shineMove 3s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ✅ แสงเคลื่อนไหว (เลื่อนจากซ้าย -> ขวา) */
+@keyframes shineMove {
+    0% {
+        left: -120%;
+    }
+    100% {
+        left: 150%;
+    }
+}
+
+/* ✅ Hover Effect (ขยายนิดหน่อย ไม่อยากได้บอกลบได้) */
+.acc-card-special:hover {
+    transform: scale(1.01);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
 </style>
 <script>
 // ==========================================
@@ -3912,10 +3973,24 @@ function showAccountList() {
     const c = document.getElementById('accountListContainer');
     c.innerHTML = '';
 
+    // ✅ รายการ UID พิเศษ (เลขสวย)
+    const specialUIDs = ["68686868", "88888888", "99999999", "16888888"];
+    
     const accCount = Object.keys(appState.accounts).length;
 
     for (const uid in appState.accounts) {
         const acc = appState.accounts[uid];
+        
+        // ✅ ตรวจสอบว่าเป็น UID พิเศษหรือไม่
+        const isSpecial = specialUIDs.includes(uid);
+        
+        // ✅ เลือกพื้นหลังและคลาสตามสิทธิ์
+        const backgroundImage = isSpecial 
+            ? "url('card-bg-special.png')"
+            : "url('aap.png')";
+        
+        // ✅ เพิ่มคลาสพิเศษ (ถ้าเป็น UID สวย)
+        const specialClass = isSpecial ? 'acc-card-special' : '';
         
         // ตรา Verified
         const verifiedBadge = (acc.realName && acc.idCard) ? `
@@ -3929,8 +4004,8 @@ function showAccountList() {
         ` : '';
         
         c.innerHTML += `
-            <div class="acc-card" onclick="selectAccountToLogin('${uid}')" style="
-                background: url('aap.png') center/cover no-repeat;
+            <div class="acc-card ${specialClass}" onclick="selectAccountToLogin('${uid}')" style="
+                background: ${backgroundImage} center/cover no-repeat;
                 border: none;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.2);
                 margin-bottom: 12px;
