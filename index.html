@@ -1859,26 +1859,34 @@ input[type="time"]::-webkit-date-and-time-value {
     top: -100px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #1E2329, #13171D);
-    border-left: 4px solid #F0B90B;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     border-radius: 12px;
-    padding: 12px 20px;
-    min-width: 280px;
-    max-width: 90%;
+    width: 320px;
+    height: 80px;
     z-index: 10002;
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     transition: top 0.3s ease;
-    backdrop-filter: blur(10px);
 }
 
 #tradeToast.show {
     top: 60px;
 }
 
+/* ✅ เปิดออเดอร์ (พื้นหลังขาว) */
 .toast-title {
     font-size: 13px;
-    color: #0ECB81;
-    margin-bottom: 4px;
+    font-weight: bold;
+    color: #1A1A1A;  /* ← ดำเข้ม */
+    background-color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-bottom: 6px;
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .toast-content {
@@ -1886,6 +1894,7 @@ input[type="time"]::-webkit-date-and-time-value {
     justify-content: space-between;
     align-items: baseline;
     gap: 16px;
+    padding: 0 12px;
 }
 
 .toast-symbol {
@@ -1894,9 +1903,16 @@ input[type="time"]::-webkit-date-and-time-value {
     color: white;
 }
 
+/* ✅ ซื้อ/ขาย (พื้นหลังขาว) */
 .toast-side {
     font-size: 12px;
-    color: #F0B90B;
+    font-weight: bold;
+    background-color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-left: 8px;
+    display: inline-block;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .toast-price {
@@ -1905,9 +1921,17 @@ input[type="time"]::-webkit-date-and-time-value {
     color: white;
 }
 
+/* ✅ จำนวน ล็อต (พื้นหลังขาว + ตัวอักษรดำเข้ม) */
 .toast-lot {
     font-size: 12px;
-    color: #848E9C;
+    font-weight: bold;
+    color: #1A1A1A;  /* ← ดำเข้ม */
+    background-color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-left: 8px;
+    display: inline-block;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 </style>
 </style>
@@ -2446,7 +2470,6 @@ function showChatButton() {
         <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-width="2"></path></symbol>
     </svg>
 
-<!-- ✅ Toast Notification -->
 <div id="tradeToast">
     <div class="toast-title">✓ เปิดคำสั่งซื้อขายสำเร็จ</div>
     <div class="toast-content">
@@ -6697,7 +6720,7 @@ function updateVIPBadgeSmall() {
 }
 
 // ==========================================
-// 📢 Toast แจ้งเตือนแบบสไลด์ลงมาจากด้านบน
+// 📢 Toast แจ้งเตือนแบบสไลด์ลงมาจากด้านบน (ใช้รูป PNG)
 // ==========================================
 let toastTimeout = null;
 
@@ -6711,14 +6734,24 @@ function showTradeToast(symbol, price, lot, side) {
     const sideText = side === 'buy' ? 'ซื้อ' : 'ขาย';
     const sideColor = side === 'buy' ? '#0ECB81' : '#F6465D';
     
+    // ✅ เปลี่ยนพื้นหลัง PNG ตาม side
+    if (side === 'buy') {
+        toast.style.backgroundImage = "url('toast-buy.png')";
+    } else {
+        toast.style.backgroundImage = "url('toast-sell.png')";
+    }
+    
     toastSymbol.innerText = symbol;
     toastSide.innerText = sideText;
     toastSide.style.color = sideColor;
     toastLot.innerText = lot.toFixed(2) + ' ล็อต';
     toastPrice.innerText = price.toLocaleString('en-US', { minimumFractionDigits: 2 });
     
-    // แสดง Toast
-    toast.classList.add('show');
+    // ✅ ลบ class เดิมทิ้งก่อน แล้วค่อยเพิ่ม
+    toast.classList.remove('show');
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
     
     // เคลียร์ timeout เดิม
     if (toastTimeout) clearTimeout(toastTimeout);
