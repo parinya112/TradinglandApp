@@ -1852,7 +1852,65 @@ input[type="time"] {
 input[type="time"]::-webkit-date-and-time-value {
     text-align: left;
 }
-    </style>
+    
+/* ✅ Toast Notification แบบสไลด์ลงจากด้านบน */
+#tradeToast {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #1E2329, #13171D);
+    border-left: 4px solid #F0B90B;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-width: 280px;
+    max-width: 90%;
+    z-index: 10002;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: top 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+#tradeToast.show {
+    top: 60px;
+}
+
+.toast-title {
+    font-size: 13px;
+    color: #0ECB81;
+    margin-bottom: 4px;
+}
+
+.toast-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.toast-symbol {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.toast-side {
+    font-size: 12px;
+    color: #F0B90B;
+}
+
+.toast-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.toast-lot {
+    font-size: 12px;
+    color: #848E9C;
+}
+</style>
+</style>
 </head>
 <body>
 
@@ -2387,6 +2445,22 @@ function showChatButton() {
         <symbol id="icon-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12" stroke-width="2"></line></symbol>
         <symbol id="icon-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-width="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-width="2"></path></symbol>
     </svg>
+
+<!-- ✅ Toast Notification -->
+<div id="tradeToast">
+    <div class="toast-title">✓ เปิดคำสั่งซื้อขายสำเร็จ</div>
+    <div class="toast-content">
+        <div>
+            <span class="toast-symbol" id="toastSymbol">BTC</span>
+            <span class="toast-side" id="toastSide">ซื้อ</span>
+            <span class="toast-lot" id="toastLot">0.00 ล็อต</span>
+        </div>
+        <div>
+            <span class="toast-price" id="toastPrice">0.00</span>
+        </div>
+    </div>
+</div>
+
 
         <div id="accountListView" style="display:none;">
     
@@ -4926,38 +5000,38 @@ function calcLotFromAmount() {
         }
 
 function submitOrder() {
-            const price = parseFloat(document.getElementById('oePrice').value);
-            const lot = parseFloat(document.getElementById('oeLot').value);
-            const amount = parseFloat(document.getElementById('oeAmount').value);
-            const acc = getMyAccount();
+    const price = parseFloat(document.getElementById('oePrice').value);
+    const lot = parseFloat(document.getElementById('oeLot').value);
+    const amount = parseFloat(document.getElementById('oeAmount').value);
+    const acc = getMyAccount();
 
-            if (!price || price <= 0 || !lot || lot <= 0 || !amount || amount <= 0) {
-                return showCustomPopup('ข้อผิดพลาด', 'กรุณาระบุข้อมูลให้ถูกต้อง', null, 'red');
-            }
+    if (!price || price <= 0 || !lot || lot <= 0 || !amount || amount <= 0) {
+        return showCustomPopup('ข้อผิดพลาด', 'กรุณาระบุข้อมูลให้ถูกต้อง', null, 'red');
+    }
 
-            const m = (price * lot) / 100;  // margin ที่ต้องใช้
-            if (m > acc.thb) {
-                return showCustomPopup('มาร์จิ้นไม่พอ', `ยอดเงินของคุณมีเพียง THB ${acc.thb.toLocaleString()}`, null, 'red');
-            }
+    const m = (price * lot) / 100;
+    if (m > acc.thb) {
+        return showCustomPopup('มาร์จิ้นไม่พอ', `ยอดเงินของคุณมีเพียง THB ${acc.thb.toLocaleString()}`, null, 'red');
+    }
 
-           
+    acc.thb -= m;
+    acc.positions.push({
+        id: Date.now(),
+        symbol: activeAsset.symbol,
+        side: currentOrderSide,
+        entryPrice: price,
+        lot: lot,
+        margin: m,
+        amount: amount,
+        time: new Date().toLocaleTimeString()
+    });
 
-            acc.thb -= m;
-            acc.positions.push({
-                id: Date.now(),
-                symbol: activeAsset.symbol,
-                side: currentOrderSide,
-                entryPrice: price,
-                lot: lot,
-                margin: m,
-                amount: amount,  // เก็บจำนวนเงินที่ใช้ด้วย
-                time: new Date().toLocaleTimeString()
-            });
-
-            saveState();
-            saveHistory('trade', `เปิดออเดอร์ ${activeAsset.symbol}`, `${currentOrderSide === 'buy' ? 'Long' : 'Short'} ${lot} Lot`, true);
-            showCustomPopup('ส่งคำสั่งสำเร็จ', `ใช้เงิน ${amount.toLocaleString('en-US', { maximumFractionDigits: 2 })} THB`, 'wallet', 'green');
-        }
+    saveState();
+    saveHistory('trade', `เปิดออเดอร์ ${activeAsset.symbol}`, `${currentOrderSide === 'buy' ? 'Long' : 'Short'} ${lot} Lot`, true);
+    
+    // ✅ เปลี่ยนจาก showCustomPopup เป็น showTradeToast
+    showTradeToast(activeAsset.symbol, price, lot, currentOrderSide);
+}
        function updateWalletUI() {
     const acc = getMyAccount();
     if (!acc) return;
@@ -6620,6 +6694,39 @@ function updateVIPBadgeSmall() {
             badge.style.display = 'none';
         }
     }
+}
+
+// ==========================================
+// 📢 Toast แจ้งเตือนแบบสไลด์ลงมาจากด้านบน
+// ==========================================
+let toastTimeout = null;
+
+function showTradeToast(symbol, price, lot, side) {
+    const toast = document.getElementById('tradeToast');
+    const toastSymbol = document.getElementById('toastSymbol');
+    const toastSide = document.getElementById('toastSide');
+    const toastLot = document.getElementById('toastLot');
+    const toastPrice = document.getElementById('toastPrice');
+    
+    const sideText = side === 'buy' ? 'ซื้อ' : 'ขาย';
+    const sideColor = side === 'buy' ? '#0ECB81' : '#F6465D';
+    
+    toastSymbol.innerText = symbol;
+    toastSide.innerText = sideText;
+    toastSide.style.color = sideColor;
+    toastLot.innerText = lot.toFixed(2) + ' ล็อต';
+    toastPrice.innerText = price.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    
+    // แสดง Toast
+    toast.classList.add('show');
+    
+    // เคลียร์ timeout เดิม
+    if (toastTimeout) clearTimeout(toastTimeout);
+    
+    // ซ่อนหลังจาก 3 วินาที
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
     </script>
 </body>
