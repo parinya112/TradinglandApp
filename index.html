@@ -1938,31 +1938,61 @@ input[type="time"]::-webkit-date-and-time-value {
 </head>
 <body>
 
-<!-- Splash Screen (หน้าโลโก้แอพ) -->
-<div id="splashScreen"
-     style="
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100dvh;
-        background: #0B0E11;
-        z-index: 999999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        transition: opacity 0.4s ease;
-     ">
-    <img src="Splash.png"
-         alt="TradingLand"
-         style="
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-         ">
+<!-- Splash Screen (พื้นหลังขาว + มาสคอตโยก + ตัวอักษรกระพริบ) -->
+<div id="splashScreen" style="
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    background: radial-gradient(circle at center, #FFFFFF 0%, #E8E8E8 100%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.4s ease;
+">
+    <!-- มาสคอต (โยก) -->
+    <img src="mascot.png" alt="TradingLand Mascot" style="
+        width: 280px;
+        height: auto;
+        animation: sway 2s ease-in-out infinite;
+        margin-bottom: 30px;
+    ">
+    
+    <!-- ตัวอักษร PNG (แสงสีขาวกระพริบ) -->
+    <img src="logo-text.png" alt="TradingLand" style="
+        width: 260px;
+        height: auto;
+        display: block;
+        animation: whiteGlow 1.2s ease-in-out infinite;
+    ">
 </div>
 
+<style>
+    @keyframes sway {
+        0% { transform: translateX(0) rotate(-3deg); }
+        50% { transform: translateX(8px) rotate(3deg); }
+        100% { transform: translateX(0) rotate(-3deg); }
+    }
+    
+    /* ✅ แสงสีขาวกระพริบบนตัวอักษร */
+    @keyframes whiteGlow {
+        0% {
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+            opacity: 0.9;
+        }
+        50% {
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.9));
+            opacity: 1;
+        }
+        100% {
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+            opacity: 0.9;
+        }
+    }
+</style>
 <!-- Splash Ad (โฆษณา) -->
 <div id="splashAd"
      style="
