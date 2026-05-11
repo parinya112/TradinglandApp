@@ -1938,7 +1938,7 @@ input[type="time"]::-webkit-date-and-time-value {
 </head>
 <body>
 
-<!-- Splash Screen (พื้นหลังขาว + มาสคอตโยก + ตัวอักษรกระพริบ) -->
+<!-- Splash Screen (พื้นหลังขาว + มาสคอตโยก + เหรียญ PNG ร่วง) -->
 <div id="splashScreen" style="
     position: fixed;
     inset: 0;
@@ -1953,21 +1953,43 @@ input[type="time"]::-webkit-date-and-time-value {
     overflow: hidden;
     transition: opacity 0.4s ease;
 ">
+    
     <!-- มาสคอต (โยก) -->
     <img src="mascot.png" alt="TradingLand Mascot" style="
         width: 280px;
         height: auto;
         animation: sway 2s ease-in-out infinite;
         margin-bottom: 30px;
+        z-index: 2;
     ">
     
-    <!-- ตัวอักษร PNG (แสงสีขาวกระพริบ) -->
+    <!-- ตัวอักษร PNG (แสงสว่างใสดั่งคริสตัล) -->
     <img src="logo-text.png" alt="TradingLand" style="
         width: 260px;
         height: auto;
         display: block;
-        animation: whiteGlow 1.2s ease-in-out infinite;
+        animation: crystalGlow 1.5s ease-in-out infinite;
+        z-index: 2;
     ">
+    
+    <!-- เหรียญ PNG ร่วง -->
+    <div class="rain-coins" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+        <img src="coin-gold.png" class="coin" style="width: 30px; height: 30px;">
+    </div>
 </div>
 
 <style>
@@ -1977,19 +1999,65 @@ input[type="time"]::-webkit-date-and-time-value {
         100% { transform: translateX(0) rotate(-3deg); }
     }
     
-    /* ✅ แสงสีขาวกระพริบบนตัวอักษร */
-    @keyframes whiteGlow {
+    /* ✅ แสงตัวอักษรสีสว่างใส คริสตัล */
+    @keyframes crystalGlow {
         0% {
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
-            opacity: 0.9;
+            filter: drop-shadow(0 0 5px rgba(255,215,0,0.4)) 
+                    drop-shadow(0 0 10px rgba(255,255,255,0.3));
+            opacity: 0.95;
+            transform: scale(1);
         }
         50% {
-            filter: drop-shadow(0 0 20px rgba(255,255,255,0.9));
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.8)) 
+                    drop-shadow(0 0 30px rgba(255,255,255,0.6));
             opacity: 1;
+            transform: scale(1.02);
         }
         100% {
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
-            opacity: 0.9;
+            filter: drop-shadow(0 0 5px rgba(255,215,0,0.4)) 
+                    drop-shadow(0 0 10px rgba(255,255,255,0.3));
+            opacity: 0.95;
+            transform: scale(1);
+        }
+    }
+    
+    /* เหรียญร่วง */
+    .coin {
+        position: absolute;
+        top: -50px;
+        animation: coinFall linear infinite;
+        opacity: 0.8;
+    }
+    
+    .coin:nth-child(1) { left: 5%; animation-duration: 2.5s; animation-delay: 0s; }
+    .coin:nth-child(2) { left: 12%; animation-duration: 3.5s; animation-delay: 1s; }
+    .coin:nth-child(3) { left: 20%; animation-duration: 4s; animation-delay: 0.5s; }
+    .coin:nth-child(4) { left: 28%; animation-duration: 3s; animation-delay: 1.8s; }
+    .coin:nth-child(5) { left: 35%; animation-duration: 4.5s; animation-delay: 0.3s; }
+    .coin:nth-child(6) { left: 42%; animation-duration: 2.8s; animation-delay: 2s; }
+    .coin:nth-child(7) { left: 50%; animation-duration: 3.8s; animation-delay: 0.8s; }
+    .coin:nth-child(8) { left: 58%; animation-duration: 3.2s; animation-delay: 1.5s; }
+    .coin:nth-child(9) { left: 65%; animation-duration: 4.2s; animation-delay: 0.2s; }
+    .coin:nth-child(10) { left: 72%; animation-duration: 2.6s; animation-delay: 2.2s; }
+    .coin:nth-child(11) { left: 80%; animation-duration: 3.6s; animation-delay: 1.2s; }
+    .coin:nth-child(12) { left: 88%; animation-duration: 4.8s; animation-delay: 0.6s; }
+    .coin:nth-child(13) { left: 95%; animation-duration: 3.3s; animation-delay: 1.5s; }
+    .coin:nth-child(14) { left: 45%; animation-duration: 5s; animation-delay: 2.5s; }
+    .coin:nth-child(15) { left: 15%; animation-duration: 2.2s; animation-delay: 3s; }
+    
+    @keyframes coinFall {
+        0% {
+            top: -50px;
+            transform: rotate(0deg);
+            opacity: 1;
+        }
+        80% {
+            opacity: 0.8;
+        }
+        100% {
+            top: 110%;
+            transform: rotate(360deg);
+            opacity: 0;
         }
     }
 </style>
@@ -3044,84 +3112,267 @@ function showChatButton() {
         <button class="btn-submit-order" id="btnSubmitOrder" style="background-color: var(--green);" onclick="submitOrder()">ส่งคำสั่ง (Submit)</button>
     </div>
 
-    <div id="depositView" style="display:none; padding:15px; padding-top:30px;">
-        <div class="flex-between" style="margin-bottom:20px;">
-            <div style="font-size:14px; color:var(--text-muted); cursor:pointer; display:flex; align-items:center;" onclick="switchTab('wallet')">
-                <svg width="16" height="16" stroke="currentColor"><use href="#icon-back"></use></svg> กลับ
+   <div id="depositView" style="display:none;">
+    
+    <!-- HEADER สวยงาม -->
+    <div style="
+        background: linear-gradient(135deg, #1E2329, #13171D);
+        padding: 20px 20px 40px 20px;
+        border-bottom: 1px solid rgba(255,215,0,0.2);
+    ">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div onclick="switchTab('wallet')" style="
+                width: 36px;
+                height: 36px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+            ">
+                <svg width="20" height="20" stroke="white" fill="none">
+                    <polyline points="15 18 9 12 15 6" stroke-width="2"/>
+                </svg>
             </div>
-        </div>
-
-        <div class="card" id="depositStep1Card">
-            <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> ฝากเงินเข้าพอร์ต
-            </h3>
-
-            <div style="background:rgba(246,70,93,0.1); border-left:3px solid var(--red); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:20px; line-height:1.5;">
-                <strong class="text-red">กฎฝากเงิน:</strong><br>
-                ฝากได้สูงสุด 2 ครั้งต่อวัน และยอดฝากรวมต่อวันต้องไม่เกิน 100,000 THB ต่อ 1 บัญชี
-            </div>
-
-            <div class="deposit-note">
-                เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
-            </div>
-
-           <div class="input-group">
-                <label>ระบุจำนวนเงิน (THB)</label>
-                <input type="number" id="depositAmount" placeholder="ยอดเงินที่ต้องการฝาก">
-            </div>
-
-            <button class="btn btn-gold" onclick="prepareDeposit()">ถัดไป</button>
-        </div>
-
-       <div class="card" id="depositStep2Card" style="display:none;">
-    <h3 style="margin-top:0; color: var(--gold); display:flex; align-items:center; gap:8px;">
-        <svg width="20" height="20" stroke="currentColor"><use href="#icon-deposit"></use></svg> โอนเงินเข้าบัญชีที่กำหนด
-    </h3>
-
-    <div style="background:rgba(240,185,11,0.1); border-left:3px solid var(--gold); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.5;">
-        กรุณาโอนภายในเวลาที่กำหนด หากหมดเวลาให้เริ่มรายการใหม่
-    </div>
-
-    <div class="bank-box">
-        <div><strong class="text-gold">บัญชีรับโอนสำหรับฝากเงิน</strong></div>
-        
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 5px; margin-bottom: 5px;">
-            <div>เลขบัญชี: <strong id="copyAccText">8004912687</strong></div>
-            <button onclick="copyAccNumber()" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;">คัดลอก</button>
-        </div>
-
-        <!-- ✅ เพิ่มโลโก้ธนาคารวงกลมตรงนี้ -->
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-            <img src="bank-logo.png" alt="ธนาคารกรุงศรี" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: white; padding: 2px;">
-            <div>ธนาคาร: <strong>กรุงศรี</strong></div>
-        </div>
-        
-        <div>ชื่อบัญชี: <strong>นาย.Parinya</strong></div>
-        
-        <div style="margin-top: 10px;">
-            ยอดที่ต้องโอน: <strong id="depositConfirmAmount">0.00 THB</strong>
-        </div>
-    </div>
-            <div id="customToast" style="visibility: hidden; min-width: 200px; background-color: rgba(30, 35, 41, 0.95); color: #D4AF37; text-align: center; border: 1px solid #D4AF37; border-radius: 8px; padding: 12px 16px; position: fixed; z-index: 9999; left: 50%; bottom: 40px; transform: translateX(-50%); font-size: 14px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s, visibility 0.3s;">
-                ✅ คัดลอกเลขบัญชีเรียบร้อย!
-            </div>
-
-            <div style="background:rgba(14,203,129,0.08); border-left:3px solid var(--green); padding:10px; font-size:12px; color:var(--text-main); margin-bottom:16px; line-height:1.6;">
-                เลขบัญชีผู้โอนต้องตรงกับที่ใส่ตอน KYC ไม่งั้นเงินจะไม่เข้า
-            </div>
-
-
-            <div style="text-align:center; margin-bottom:18px;">
-                <div style="font-size:12px; color:var(--text-muted);">เวลาที่เหลือในการโอน</div>
-                <div id="depositTransferTimer" style="font-size:32px; font-weight:bold; color:var(--gold); margin-top:6px;">15:00</div>
-            </div>
-
-            <div style="display:flex; gap:12px;">
-                <button class="btn btn-gray" style="margin-bottom:0;" onclick="cancelPreparedDeposit()">ยกเลิก</button>
-                <button class="btn btn-gold" style="margin-bottom:0;" onclick="confirmTransferred()">โอนแล้ว</button>
+            <div>
+                <h2 style="margin: 0; font-size: 24px; color: white;">ฝากเงิน</h2>
+                <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">เติมเงินเข้าพอร์ตของคุณ</p>
             </div>
         </div>
     </div>
+
+    <div style="padding: 20px;">
+        
+        <!-- STEP 1 CARD -->
+        <div id="depositStep1Card" style="
+            background: linear-gradient(145deg, #1E2329, #181C24);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,215,0,0.15);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        ">
+            
+            <!-- หัวข้อพร้อมไอคอน -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+                <div style="
+                    width: 44px;
+                    height: 44px;
+                    background: rgba(240,185,11,0.15);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <svg width="22" height="22" stroke="#F0B90B" fill="none">
+                        <line x1="12" y1="5" x2="12" y2="19" stroke-width="2"/>
+                        <polyline points="19 12 12 19 5 12" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 18px; color: white;">กรอกจำนวนเงิน</h3>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">ระบุยอดเงินที่ต้องการฝาก</p>
+                </div>
+            </div>
+
+            <!-- กฎการฝากเงิน (Badge style) -->
+            <div style="
+                background: rgba(246,70,93,0.08);
+                border-radius: 12px;
+                padding: 12px;
+                margin-bottom: 20px;
+                border-left: 3px solid #F6465D;
+            ">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="
+                        background: #F6465D;
+                        color: white;
+                        font-size: 10px;
+                        font-weight: bold;
+                        padding: 2px 8px;
+                        border-radius: 20px;
+                    ">กฎการฝาก</span>
+                    <span style="font-size: 11px; color: #848E9C;">2 ครั้ง/วัน • สูงสุด 100,000 THB</span>
+                </div>
+                <div style="font-size: 12px; color: #EAECEF;">ฝากได้สูงสุด 2 ครั้งต่อวัน และยอดฝากรวมต่อวันไม่เกิน 100,000 THB</div>
+            </div>
+
+            <!-- ช่องใส่จำนวนเงิน -->
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; color: #848E9C; font-size: 13px; margin-bottom: 8px;">จำนวนเงิน (THB)</label>
+                <div style="
+                    background: #2C2C2E;
+                    border-radius: 16px;
+                    border: 1px solid #38383A;
+                    padding: 4px 16px;
+                    display: flex;
+                    align-items: center;
+                ">
+                    <span style="color: #F0B90B; font-weight: bold; margin-right: 8px;">฿</span>
+                    <input type="number" id="depositAmount" placeholder="0.00" style="
+                        width: 100%;
+                        background: transparent;
+                        border: none;
+                        color: white;
+                        font-size: 20px;
+                        padding: 14px 0;
+                        outline: none;
+                    ">
+                </div>
+            </div>
+
+            <!-- ปุ่มถัดไป -->
+            <button onclick="prepareDeposit()" style="
+                width: 100%;
+                padding: 16px;
+                background: linear-gradient(135deg, #F0B90B, #DCAE0A);
+                border: none;
+                border-radius: 40px;
+                color: #0B0E11;
+                font-weight: bold;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.2s;
+                box-shadow: 0 4px 12px rgba(240,185,11,0.3);
+            " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                ดำเนินการต่อ
+            </button>
+        </div>
+
+        <!-- STEP 2 CARD (โอนเงิน) -->
+        <div id="depositStep2Card" style="display: none; margin-top: 20px;">
+            <div style="
+                background: linear-gradient(145deg, #1E2329, #181C24);
+                border-radius: 24px;
+                padding: 24px;
+                border: 1px solid rgba(255,215,0,0.15);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            ">
+                
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                    <div style="
+                        width: 44px;
+                        height: 44px;
+                        background: rgba(240,185,11,0.15);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    ">
+                        <svg width="22" height="22" stroke="#F0B90B" fill="none">
+                            <line x1="12" y1="5" x2="12" y2="19" stroke-width="2"/>
+                            <polyline points="19 12 12 19 5 12" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 18px; color: white;">โอนเงิน</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">โอนภายในเวลาที่กำหนด</p>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลธนาคาร -->
+                <div style="
+                    background: linear-gradient(135deg, rgba(240,185,11,0.08), rgba(240,185,11,0.02));
+                    border-radius: 20px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                ">
+                    <div style="font-size: 12px; color: #848E9C; margin-bottom: 12px;">บัญชีรับโอน</div>
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="bank-logo.png" style="width: 40px; height: 40px; border-radius: 50%; background: white; padding: 4px;">
+                            <div>
+                                <div style="font-size: 13px; color: #848E9C;">ธนาคารกรุงศรี</div>
+                                <div style="font-size: 18px; font-weight: bold; color: white;" id="copyAccText">8004912687</div>
+                            </div>
+                        </div>
+                        <button onclick="copyAccNumber()" style="
+                            background: rgba(240,185,11,0.15);
+                            border: 1px solid rgba(240,185,11,0.3);
+                            border-radius: 30px;
+                            padding: 8px 16px;
+                            color: #F0B90B;
+                            font-size: 12px;
+                            cursor: pointer;
+                        ">คัดลอก</button>
+                    </div>
+
+                    <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0;"></div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <span style="color: #848E9C; font-size: 13px;">ชื่อบัญชี</span>
+                        <span style="color: white; font-weight: bold;">นาย Parinya S.</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #848E9C; font-size: 13px;">ยอดที่ต้องโอน</span>
+                        <span id="depositConfirmAmount" style="color: #F0B90B; font-weight: bold; font-size: 18px;">0.00 THB</span>
+                    </div>
+                </div>
+
+                <!-- Timer -->
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="font-size: 12px; color: #848E9C; margin-bottom: 8px;">เวลาที่เหลือในการโอน</div>
+                    <div id="depositTransferTimer" style="
+                        font-size: 36px;
+                        font-weight: bold;
+                        color: #F0B90B;
+                        font-family: monospace;
+                        letter-spacing: 4px;
+                    ">15:00</div>
+                </div>
+
+                <!-- ปุ่มยกเลิก/โอนแล้ว -->
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="cancelPreparedDeposit()" style="
+                        flex: 1;
+                        padding: 14px;
+                        background: rgba(255,255,255,0.05);
+                        border: 1px solid #38383A;
+                        border-radius: 40px;
+                        color: #848E9C;
+                        font-weight: bold;
+                        cursor: pointer;
+                    ">ยกเลิก</button>
+                    <button onclick="confirmTransferred()" style="
+                        flex: 1;
+                        padding: 14px;
+                        background: linear-gradient(135deg, #0ECB81, #0A9C62);
+                        border: none;
+                        border-radius: 40px;
+                        color: white;
+                        font-weight: bold;
+                        cursor: pointer;
+                    ">ยืนยันการโอน</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast คัดลอก -->
+        <div id="customToast" style="
+            visibility: hidden;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E2329;
+            color: #F0B90B;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 10000;
+            border: 1px solid rgba(240,185,11,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        ">
+            คัดลอกเลขบัญชีเรียบร้อย
+        </div>
+
+    </div>
+</div>
 
 
     <div id="withdrawView" style="display:none; padding:15px; padding-top:30px;">
