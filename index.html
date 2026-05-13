@@ -3794,7 +3794,7 @@ function joinLiveRoom(roomId) {
     );
 }
 </script>
-<!-- Reels View (เต็มจอแนวตั้ง แบบ TikTok + เสียง) -->
+<!-- Reels View (เต็มจอแนวตั้ง + 双击ไลก์) -->
 <div id="reelsView" style="display: none; background: #000; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; overflow-y: scroll; scroll-snap-type: y mandatory;">
 
     <!-- ปุ่มกลับซ้ายบน -->
@@ -3812,7 +3812,7 @@ function joinLiveRoom(roomId) {
     </div>
 
     <!-- คลิปที่ 1 -->
-    <div style="height: 100vh; scroll-snap-align: start; position: relative; background: #000;">
+    <div class="reel-item" style="height: 100vh; scroll-snap-align: start; position: relative; background: #000;">
         
         <video src="reels.mov" loop playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover;"></video>
         
@@ -3843,7 +3843,7 @@ function joinLiveRoom(roomId) {
 
             <!-- ปุ่มขวา (ไลก์, คอมเมนต์, แชร์) -->
             <div style="position: absolute; bottom: 80px; right: 16px; text-align: center;">
-                <div style="margin-bottom: 16px; cursor: pointer;">
+                <div id="likeBtn1" class="like-btn" style="margin-bottom: 16px; cursor: pointer;" onclick="likeVideo(this)">
                     <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -3871,7 +3871,7 @@ function joinLiveRoom(roomId) {
                 </div>
             </div>
 
-            <!-- ปุ่มเปิด/ปิดเสียง (มุมขวาล่าง) -->
+            <!-- ปุ่มเปิด/ปิดเสียง -->
             <div id="soundBtn1" onclick="toggleSound(this, 'reels.mov')" style="position: absolute; bottom: 20px; right: 16px; cursor: pointer;">
                 <div style="background: rgba(0,0,0,0.5); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -3880,11 +3880,18 @@ function joinLiveRoom(roomId) {
                     </svg>
                 </div>
             </div>
+
+            <!-- เอฟเฟกต์หัวใจ双击 -->
+            <div class="double-tap-heart" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; pointer-events: none; z-index: 20;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="#FF3B30" stroke="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
         </div>
     </div>
 
-    <!-- คลิปที่ 2 -->
-    <div style="height: 100vh; scroll-snap-align: start; position: relative; background: #000;">
+    <!-- คลิปที่ 2 (ทำเหมือนกัน) -->
+    <div class="reel-item" style="height: 100vh; scroll-snap-align: start; position: relative; background: #000;">
         
         <video src="reels1.mov" loop playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover;"></video>
         
@@ -3911,7 +3918,7 @@ function joinLiveRoom(roomId) {
             </div>
 
             <div style="position: absolute; bottom: 80px; right: 16px; text-align: center;">
-                <div style="margin-bottom: 16px; cursor: pointer;">
+                <div id="likeBtn2" class="like-btn" style="margin-bottom: 16px; cursor: pointer;" onclick="likeVideo(this)">
                     <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -3939,7 +3946,6 @@ function joinLiveRoom(roomId) {
                 </div>
             </div>
 
-            <!-- ปุ่มเปิด/ปิดเสียง (มุมขวาล่าง) -->
             <div id="soundBtn2" onclick="toggleSound(this, 'reels1.mov')" style="position: absolute; bottom: 20px; right: 16px; cursor: pointer;">
                 <div style="background: rgba(0,0,0,0.5); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -3948,31 +3954,77 @@ function joinLiveRoom(roomId) {
                     </svg>
                 </div>
             </div>
+
+            <div class="double-tap-heart" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; pointer-events: none; z-index: 20;">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="#FF3B30" stroke="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-// เล่นวิดีโออัตโนมัติเมื่อเข้า view และเปิดเสียงแรกเริ่ม
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        const video = entry.target.querySelector('video');
-        if (entry.isIntersecting) {
-            video.muted = false;  // เปิดเสียง
-            video.play();
-        } else {
-            video.pause();
-        }
-    });
-}, { threshold: 0.5 });
+// 双击ไลก์
+const reelItems = document.querySelectorAll('.reel-item');
+let lastTap = 0;
 
-document.querySelectorAll('#reelsView > div[style*="height: 100vh"]').forEach(item => {
-    observer.observe(item);
+reelItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        
+        if (tapLength < 500 && tapLength > 0) {
+            // 双击 ไลก์
+            const likeBtn = item.querySelector('.like-btn');
+            likeVideo(likeBtn);
+            
+            // แสดงเอฟเฟกต์หัวใจ
+            const heart = item.querySelector('.double-tap-heart');
+            heart.style.transform = 'translate(-50%, -50%) scale(1)';
+            heart.style.opacity = '1';
+            heart.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            
+            setTimeout(() => {
+                heart.style.transform = 'translate(-50%, -50%) scale(0)';
+                heart.style.opacity = '0';
+            }, 800);
+        }
+        lastTap = currentTime;
+    });
 });
+
+// ฟังก์ชันไลก์
+function likeVideo(btnElement) {
+    const likeCountSpan = btnElement.querySelector('span');
+    let count = parseInt(likeCountSpan.innerText);
+    const svg = btnElement.querySelector('svg');
+    
+    if (btnElement.classList.contains('liked')) {
+        // ไม่ไลก์
+        btnElement.classList.remove('liked');
+        likeCountSpan.innerText = count - 1;
+        svg.style.fill = 'none';
+        svg.style.stroke = 'white';
+    } else {
+        // ไลก์
+        btnElement.classList.add('liked');
+        likeCountSpan.innerText = count + 1;
+        svg.style.fill = '#FF3B30';
+        svg.style.stroke = '#FF3B30';
+        
+        // เอฟเฟกต์กระเพื่อม
+        const heartDiv = btnElement.querySelector('div');
+        heartDiv.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            heartDiv.style.transform = 'scale(1)';
+        }, 150);
+    }
+}
 
 // ฟังก์ชันเปิด/ปิดเสียง
 function toggleSound(btnElement, videoSrc) {
-    const video = btnElement.closest('div').querySelector('video');
+    const video = btnElement.closest('.reel-item').querySelector('video');
     if (video.muted) {
         video.muted = false;
         btnElement.innerHTML = '<div style="background: rgba(0,0,0,0.5); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>';
@@ -3982,7 +4034,24 @@ function toggleSound(btnElement, videoSrc) {
     }
 }
 
-// เปิดเสียงเริ่มต้นให้ทุกวิดีโอ (muted = false)
+// เล่นวิดีโออัตโนมัติ
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (entry.isIntersecting) {
+            video.muted = false;
+            video.play();
+        } else {
+            video.pause();
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.reel-item').forEach(item => {
+    observer.observe(item);
+});
+
+// เปิดเสียงเริ่มต้น
 document.querySelectorAll('#reelsView video').forEach(video => {
     video.muted = false;
 });
