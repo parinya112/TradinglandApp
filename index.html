@@ -4112,7 +4112,7 @@ function joinLiveRoom(roomId) {
     );
 }
 </script>
-<!-- Reels View (เต็มจอแนวตั้ง + 双击ไลก์ + เก็บไลก์อัตโนมัติ) -->
+<!-- Reels View (เต็มจอแนวตั้ง + 双击ไลก์ + เก็บไลก์อัตโนมัติ + Display Card) -->
 <div id="reelsView" style="display: none; background: #000; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1000; overflow-y: scroll; scroll-snap-type: y mandatory;">
 
     <!-- ปุ่มกลับซ้ายบน -->
@@ -4278,27 +4278,74 @@ function renderReels() {
                 
                 <video src="${reel.video}" loop playsinline preload="auto" style="width: 100%; height: 100%; object-fit: cover;"></video>
                 
-                <div style="position: absolute; inset: 0; z-index: 10;">
-                    
-                    <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.3);">
-                        <div style="width: 0%; height: 100%; background: #F0B90B;"></div>
-                    </div>
+               <!-- Display Card (โฆษณา แบบ TikTok - กึ่งกลางด้านล่าง) -->
+<div class="display-card" style="
+    position: absolute;
+    bottom: 28%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 300px;
+    background: rgba(30, 35, 41, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    overflow: hidden;
+    display: none;
+    z-index: 25;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,215,0,0.2);
+">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 12px;">
+        <!-- รูปโปรไฟล์หรือโลโก้ -->
+        <div style="width: 44px; height: 44px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </div>
+        
+        <!-- เนื้อหา -->
+        <div style="flex: 1;">
+            <div style="color: white; font-size: 14px; font-weight: 600;">Fight. Loot. Upgrade.</div>
+            <div style="color: #848E9C; font-size: 11px; margin-top: 2px;">The Divi... • ได้รับการสนับสนุน</div>
+            <div style="color: #F0B90B; font-size: 12px; margin-top: 4px;">Lyna Phetsayam Sione 🎵</div>
+        </div>
+        
+        <!-- ปุ่มติดตาม -->
+        <button onclick="alert('ติดตามแล้ว!')" style="
+            background: transparent;
+            border: 1px solid #F0B90B;
+            border-radius: 30px;
+            padding: 6px 16px;
+            color: #F0B90B;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+        ">ติดตาม</button>
+    </div>
+</div>
 
-                    <div style="position: absolute; bottom: 20px; left: 16px; right: 80px;">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                            <div style="width: 40px; height: 40px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0B0E11;">${reel.avatar}</div>
-                            <div>
-                                <div style="color: white; font-weight: bold; font-size: 15px;">${reel.name}</div>
-                                <div style="color: #848E9C; font-size: 12px;">${reel.role}</div>
-                            </div>
-                            <button style="background: #F0B90B; border: none; border-radius: 20px; padding: 6px 14px; color: #0B0E11; font-weight: bold; font-size: 12px; margin-left: 8px; cursor: pointer;">ติดตาม</button>
-                        </div>
-                        <div style="color: white; font-size: 14px; margin-bottom: 4px;">${reel.desc}</div>
-                        <div>
-                            ${reel.tags.map(tag => `<span style="color: #F0B90B; font-size: 12px; margin-right: 8px;">${tag}</span>`).join('')}
-                        </div>
-                    </div>
+<div style="position: absolute; inset: 0; z-index: 10;">
+    
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.3);">
+        <div style="width: 0%; height: 100%; background: #F0B90B;"></div>
+    </div>
 
+    <div style="position: absolute; bottom: 20px; left: 16px; right: 80px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <div style="width: 40px; height: 40px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0B0E11;">${reel.avatar}</div>
+            <div>
+                <div style="color: white; font-weight: bold; font-size: 15px;">${reel.name}</div>
+                <div style="color: #848E9C; font-size: 12px;">${reel.role}</div>
+            </div>
+            <button style="background: #F0B90B; border: none; border-radius: 20px; padding: 6px 14px; color: #0B0E11; font-weight: bold; font-size: 12px; margin-left: 8px; cursor: pointer;">ติดตาม</button>
+        </div>
+        <div style="color: white; font-size: 14px; margin-bottom: 4px;">${reel.desc}</div>
+        <div>
+            ${reel.tags.map(tag => `<span style="color: #F0B90B; font-size: 12px; margin-right: 8px;">${tag}</span>`).join('')}
+        </div>
+    </div>
                     <div style="position: absolute; bottom: 80px; right: 16px; text-align: center;">
                         <div id="likeBtn${index}" class="like-btn ${isLikedClass}" style="margin-bottom: 16px; cursor: pointer;" onclick="likeVideo(this, '${reel.id}', this.querySelector('span'))">
                             <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px;">
@@ -4350,6 +4397,58 @@ function renderReels() {
     // เรียก observer ใหม่
     observeVideos();
     setupDoubleTap();
+    setupDisplayCards();
+}
+
+// ==========================================
+// 🃏 ระบบ Display Card (โฆษณาสไลด์ใต้คลิป)
+// ==========================================
+function setupDisplayCards() {
+    const reelItems = document.querySelectorAll('.reel-item');
+    
+    reelItems.forEach(item => {
+        const video = item.querySelector('video');
+        const displayCard = item.querySelector('.display-card');
+        let cardTimeout = null;
+        
+        if (!video || !displayCard) return;
+        
+        // เมื่อวิดีโอเริ่มเล่น ให้ตั้งเวลาแสดง Display Card
+        video.addEventListener('play', () => {
+            if (cardTimeout) clearTimeout(cardTimeout);
+            cardTimeout = setTimeout(() => {
+                displayCard.style.display = 'block';
+                // ซ่อน Display Card หลังจาก 5 วินาที
+                setTimeout(() => {
+                    displayCard.style.display = 'none';
+                }, 5000);
+            }, 3000); // แสดงหลังจากเล่นวิดีโอ 3 วินาที
+        });
+        
+        // เมื่อวิดีโอหยุด ให้ยกเลิกการตั้งเวลา
+        video.addEventListener('pause', () => {
+            if (cardTimeout) {
+                clearTimeout(cardTimeout);
+                cardTimeout = null;
+            }
+            displayCard.style.display = 'none';
+        });
+        
+        // ซ่อน Display Card เมื่อเลื่อนออก
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    displayCard.style.display = 'none';
+                    if (cardTimeout) {
+                        clearTimeout(cardTimeout);
+                        cardTimeout = null;
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(item);
+    });
 }
 
 // ==========================================
