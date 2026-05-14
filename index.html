@@ -2300,64 +2300,36 @@ window.registerRealInitAppSecurity = function(fn) {
 ">
     <img src="chat-button.png" alt="Chat" style="width: 100%; height: 100%; object-fit: cover;">
 </div>
+
 <style>
+/* ✅ ของเดิมทั้งหมดคงไว้ */
 
 @keyframes pulse {
-
     0% {
-
-        box-shadow:
-
-            0 4px 15px rgba(0,0,0,0.3),
-
-            0 0 0 0 rgba(240,185,11,0.7);
-
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 0 rgba(240,185,11,0.7);
     }
-
     70% {
-
-        box-shadow:
-
-            0 4px 15px rgba(0,0,0,0.3),
-
-            0 0 0 10px rgba(240,185,11,0);
-
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 10px rgba(240,185,11,0);
     }
-
     100% {
-
-        box-shadow:
-
-            0 4px 15px rgba(0,0,0,0.3),
-
-            0 0 0 0 rgba(240,185,11,0);
-
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 0 rgba(240,185,11,0);
     }
-
 }
 
 #chatFloatingBtn.show {
-
     display: flex;
-
     animation: pulse 1.5s infinite;
-
 }
 
 #chatFloatingBtn.dragging {
-
     cursor: grabbing;
-
     opacity: 0.85;
-
     animation: none;
-
 }
 
 #chatFloatingBtn:active {
-
     transform: scale(0.95);
-    }
+}
 
 /* ✅ แสงเรืองรอบการ์ด (Glow Effect) */
 @keyframes specialGlow {
@@ -2413,16 +2385,104 @@ window.registerRealInitAppSecurity = function(fn) {
     }
 }
 
-/* ✅ Hover Effect (ขยายนิดหน่อย ไม่อยากได้บอกลบได้) */
+/* ✅ Hover Effect (ขยายนิดหน่อย) */
 .acc-card-special:hover {
     transform: scale(1.01);
     transition: transform 0.3s ease;
     cursor: pointer;
 }
 </style>
+
+<!-- ✅ Chat Modal Window (เพิ่มตรงนี้) -->
+<div id="chatModal" style="
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 380px;
+    height: 100%;
+    background: #1E2329;
+    z-index: 10001;
+    flex-direction: column;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.4);
+">
+    <!-- Header -->
+    <div style="
+        padding: 16px;
+        background: #13171D;
+        border-bottom: 1px solid #2B3139;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    ">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">🤖</div>
+            <div>
+                <div style="color: white; font-weight: bold;">AI Trading Assistant</div>
+                <div style="color: #0ECB81; font-size: 10px;">● Online</div>
+            </div>
+        </div>
+        <button onclick="closeChat()" style="background: none; border: none; color: #848E9C; font-size: 24px; cursor: pointer;">✕</button>
+    </div>
+
+    <!-- Chat Messages Area -->
+    <div id="chatMessages" style="
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    ">
+        <div style="display: flex; gap: 8px;">
+            <div style="width: 28px; height: 28px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">🤖</div>
+            <div style="background: #2B3139; padding: 10px 14px; border-radius: 18px; max-width: 80%;">
+                <span style="color: white; font-size: 13px;">สวัสดีครับ! ฉันคือ AI ผู้ช่วยด้านการเทรด ถามเกี่ยวกับตลาด, เทคนิค, หรือแนวโน้มได้เลยครับ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div style="
+        padding: 12px;
+        background: #13171D;
+        border-top: 1px solid #2B3139;
+        display: flex;
+        gap: 10px;
+    ">
+        <input type="text" id="chatInput" placeholder="พิมพ์ข้อความ..." style="
+            flex: 1;
+            background: #2B3139;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        " onkeypress="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()" style="
+            background: #F0B90B;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0B0E11" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
 <script>
 // ==========================================
-// 🖱️ Floating Chat Drag System
+// 🖱️ Floating Chat Drag System (ของเดิมคงไว้)
 // ==========================================
 
 let isDragging = false;
@@ -2437,174 +2497,432 @@ let btnStartY = 0;
 
 const chatBtn = document.getElementById('chatFloatingBtn');
 
-
-// ======================
-// เริ่มจับ
-// ======================
 function startDrag(e) {
-
     isTouchingButton = true;
     hasMoved = false;
-
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-
     dragStartX = clientX;
     dragStartY = clientY;
-
     const rect = chatBtn.getBoundingClientRect();
-
     btnStartX = rect.left;
     btnStartY = rect.top;
 }
 
-
-// ======================
-// ระหว่างลาก
-// ======================
 function onDrag(e) {
-
-    // ยังไม่ได้แตะปุ่ม
     if (!isTouchingButton) return;
-
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-
     const deltaX = clientX - dragStartX;
     const deltaY = clientY - dragStartY;
-
-    // ขยับเกิน 10px ค่อยเริ่มลากจริง
     if (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10) {
-
         isDragging = true;
         hasMoved = true;
-
         chatBtn.classList.add('dragging');
-
-        // ✅ บล็อก scroll เฉพาะตอนลากจริง
         e.preventDefault();
     }
-
     if (!isDragging) return;
-
     let newLeft = btnStartX + deltaX;
     let newTop = btnStartY + deltaY;
-
     const btnWidth = chatBtn.offsetWidth;
     const btnHeight = chatBtn.offsetHeight;
-
     const maxX = window.innerWidth - btnWidth - 10;
     const maxY = window.innerHeight - btnHeight - 10;
-
     newLeft = Math.min(Math.max(newLeft, 10), maxX);
     newTop = Math.min(Math.max(newTop, 10), maxY);
-
     chatBtn.style.left = newLeft + 'px';
     chatBtn.style.top = newTop + 'px';
-
     chatBtn.style.right = 'auto';
     chatBtn.style.bottom = 'auto';
 }
 
-
-// ======================
-// ปล่อยลาก
-// ======================
 function stopDrag() {
-
     if (isDragging) {
-
         localStorage.setItem('chatBtnLeft', chatBtn.style.left);
         localStorage.setItem('chatBtnTop', chatBtn.style.top);
     }
-
     setTimeout(() => {
-
         isDragging = false;
         hasMoved = false;
         isTouchingButton = false;
-
         chatBtn.classList.remove('dragging');
-
     }, 50);
 }
 
-
-// ======================
-// เปิด popup
-// ======================
-function openAIChat() {
-
-    showCustomPopup(
-        'ขออภัย',
-        'ฟังก์ชันแชทถามและใช้ AI เกี่ยวกับการเทรด\nกำลังอยู่ในระหว่างการพัฒนา\nโปรดติดตามในเวอร์ชันถัดไป',
-        null,
-        'gold'
-    );
-}
-
-
-// ======================
-// โหลดตำแหน่งเดิม
-// ======================
 function loadChatBtnPosition() {
-
     const savedLeft = localStorage.getItem('chatBtnLeft');
     const savedTop = localStorage.getItem('chatBtnTop');
-
     if (savedLeft && savedTop) {
-
         chatBtn.style.left = savedLeft;
         chatBtn.style.top = savedTop;
-
         chatBtn.style.right = 'auto';
         chatBtn.style.bottom = 'auto';
     }
 }
 
-
-// ======================
 // Event Listeners
-// ======================
-
-// Desktop
 chatBtn.addEventListener('mousedown', startDrag);
 window.addEventListener('mousemove', onDrag);
 window.addEventListener('mouseup', stopDrag);
-
-// Mobile
 chatBtn.addEventListener('touchstart', startDrag, { passive: true });
 window.addEventListener('touchmove', onDrag, { passive: false });
 window.addEventListener('touchend', stopDrag);
 
+loadChatBtnPosition();
 
-// ======================
-// คลิกเปิด popup
-// ======================
-chatBtn.addEventListener('click', function(e) {
+function showChatButton() {
+    chatBtn.classList.add('show');
+    chatBtn.style.display = 'flex';
+    chatBtn.style.cursor = 'grab';
+}
 
+// ==========================================
+// 💬 Chat System (เพิ่มเข้ามาใหม่)
+// ==========================================
+
+function closeChat() {
+    document.getElementById('chatModal').style.display = 'none';
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    addMessage(message, 'user');
+    input.value = '';
+    
+    showTypingIndicator();
+    
+    setTimeout(() => {
+        removeTypingIndicator();
+        const reply = getAIResponse(message);
+        addMessage(reply, 'bot');
+    }, 600);
+}
+
+function addMessage(text, sender) {
+    const messagesDiv = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.style.display = 'flex';
+    messageDiv.style.gap = '8px';
+    messageDiv.style.marginBottom = '8px';
+    
+    if (sender === 'user') {
+        messageDiv.style.justifyContent = 'flex-end';
+        messageDiv.innerHTML = `
+            <div style="background: #F0B90B; padding: 10px 14px; border-radius: 18px; max-width: 80%;">
+                <span style="color: #0B0E11; font-size: 13px;">${escapeHtml(text)}</span>
+            </div>
+            <div style="width: 28px; height: 28px;"></div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div style="width: 28px; height: 28px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">🤖</div>
+            <div style="background: #2B3139; padding: 10px 14px; border-radius: 18px; max-width: 80%;">
+                <span style="color: white; font-size: 13px;">${escapeHtml(text)}</span>
+            </div>
+        `;
+    }
+    
+    messagesDiv.appendChild(messageDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function showTypingIndicator() {
+    const messagesDiv = document.getElementById('chatMessages');
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typingIndicator';
+    typingDiv.style.display = 'flex';
+    typingDiv.style.gap = '8px';
+    typingDiv.style.marginBottom = '8px';
+    typingDiv.innerHTML = `
+        <div style="width: 28px; height: 28px; background: #F0B90B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">🤖</div>
+        <div style="background: #2B3139; padding: 12px 18px; border-radius: 18px;">
+            <span style="color: #848E9C; font-size: 12px;">กำลังพิมพ์...</span>
+        </div>
+    `;
+    messagesDiv.appendChild(typingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function removeTypingIndicator() {
+    const typing = document.getElementById('typingIndicator');
+    if (typing) typing.remove();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function getAIResponse(message) {
+    const lowerMsg = message.toLowerCase();
+    
+    // ========== ทักทาย ==========
+    if (lowerMsg.includes('สวัสดี') || lowerMsg.includes('หวัดดี') || lowerMsg.includes('เฮลโหล')) {
+        return 'สวัสดีครับ ยินดีต้อนรับสู่ TradingLand AI Assistant มีอะไรให้ช่วยถามได้เลยครับ';
+    }
+    
+    // ========== ถามชื่อ ==========
+    if (lowerMsg.includes('ชื่อ') || lowerMsg.includes('你是谁')) {
+        return 'ผมคือ AI Trading Assistant ของ TradingLand ครับ คอยให้คำแนะนำเกี่ยวกับการเทรด, วิเคราะห์ตลาด, และเทคนิคการบริหารความเสี่ยง';
+    }
+    
+    // ========== ทำอะไรได้บ้าง ==========
+    if (lowerMsg.includes('ทำอะไรได้') || lowerMsg.includes('ช่วยอะไร') || lowerMsg.includes('feature')) {
+        return 'ผมสามารถแนะนำได้หลายอย่างครับ:\n- วิเคราะห์แนวโน้มทองคำ, Bitcoin, หุ้น\n- แนะนำการตั้ง Stop Loss / Take Profit\n- เทคนิคการบริหารพอร์ต\n- จิตวิทยาการเทรด\n- ตอบคำถามเกี่ยวกับแอพ TradingLand\n\nลองถามดูได้เลยครับ';
+    }
+    
+    // ========== ฝากเงิน ==========
+    if (lowerMsg.includes('ฝากเงิน') || lowerMsg.includes('deposit')) {
+        return 'การฝากเงินใน TradingLand:\n\n1. ไปที่เมนู Wallet\n2. กด "ฝากเงิน"\n3. เลือกช่องทางการชำระเงิน\n4. โอนเงินตามรายละเอียดที่ระบบแจ้ง\n5. ระบบจะตรวจสอบและอัปเดตยอดเงินอัตโนมัติ';
+    }
+    
+    // ========== ถอนเงิน ==========
+    if (lowerMsg.includes('ถอนเงิน') || lowerMsg.includes('withdraw')) {
+        return 'การถอนเงินใน TradingLand:\n\n1. ไปที่เมนู Wallet\n2. กด "ถอนเงิน"\n3. ระบุจำนวนเงินที่ต้องการถอน\n4. ยืนยันรายการ\n5. ระบบจะโอนเงินไปยังบัญชีที่ผูกไว้\n\nระยะเวลาดำเนินการขึ้นอยู่กับช่องทางที่เลือก';
+    }
+    
+    // ========== ค่าธรรมเนียม ==========
+    if (lowerMsg.includes('ค่าธรรมเนียม') || lowerMsg.includes('fee') || lowerMsg.includes('ค่าบริการ')) {
+        return 'TradingLand มีค่าธรรมเนียมที่โปร่งใส โดยระบบจะแสดงรายละเอียดก่อนยืนยันทุกครั้ง\n\nโปรดตรวจสอบข้อมูลล่าสุดในหน้า Wallet หรือหน้าสรุปรายการก่อนทำธุรกรรม';
+    }
+    
+    // ========== ความปลอดภัย ==========
+    if (lowerMsg.includes('ปลอดภัย') || lowerMsg.includes('security') || lowerMsg.includes('ความปลอดภัย')) {
+        return 'TradingLand ให้ความสำคัญกับความปลอดภัยของผู้ใช้:\n\n- เข้ารหัสข้อมูล\n- ระบบยืนยันตัวตน (KYC)\n- รองรับการยืนยันตัวตนสองชั้น (2FA)\n- ระบบตรวจสอบธุรกรรมผิดปกติ';
+    }
+    
+    // ========== KYC ==========
+    if (lowerMsg.includes('kyc') || lowerMsg.includes('ยืนยันตัวตน')) {
+        return 'การยืนยันตัวตน (KYC):\n\n1. อัปโหลดบัตรประชาชนหรือหนังสือเดินทาง\n2. ถ่ายภาพใบหน้าตามขั้นตอน\n3. รอระบบตรวจสอบ\n\nเมื่อผ่านการยืนยันแล้ว จะสามารถใช้ฟีเจอร์ได้ครบถ้วนมากขึ้น';
+    }
+    
+    // ========== ลืมรหัสผ่าน ==========
+    if (lowerMsg.includes('ลืมรหัสผ่าน') || lowerMsg.includes('reset password') || lowerMsg.includes('forgot password')) {
+        return 'หากลืมรหัสผ่าน:\n\n1. กด "ลืมรหัสผ่าน"\n2. กรอกอีเมลหรือเบอร์โทรศัพท์\n3. รับรหัสยืนยัน\n4. ตั้งรหัสผ่านใหม่';
+    }
+    
+    // ========== ติดต่อเจ้าหน้าที่ ==========
+    if (lowerMsg.includes('ติดต่อ') || lowerMsg.includes('support') || lowerMsg.includes('客服')) {
+        return 'หากต้องการความช่วยเหลือเพิ่มเติม สามารถติดต่อทีมงานได้ผ่าน:\n\n- Live Chat ในแอพ\n- อีเมลฝ่ายสนับสนุน\n- ศูนย์ช่วยเหลือ (Help Center)';
+    }
+    
+    // ========== โบนัส ==========
+    if (lowerMsg.includes('โบนัส') || lowerMsg.includes('bonus') || lowerMsg.includes('โปรโมชั่น')) {
+        return 'TradingLand อาจมีโปรโมชั่นและโบนัสตามเงื่อนไขที่กำหนด\n\nสามารถติดตามรายละเอียดได้ในหน้า Promotions ภายในแอพ';
+    }
+    
+    // ========== Copy Trade ==========
+    if (lowerMsg.includes('copy trade') || lowerMsg.includes('คัดลอกการเทรด')) {
+        return 'Copy Trade ช่วยให้คุณคัดลอกการเทรดของเทรดเดอร์ที่เลือกได้โดยอัตโนมัติ\n\nควรศึกษาผลการดำเนินงานและความเสี่ยงก่อนเริ่มใช้งาน';
+    }
+    
+    // ========== Auto DCA ==========
+    if (lowerMsg.includes('dca') || lowerMsg.includes('auto dca')) {
+        return 'Auto DCA คือการซื้อสินทรัพย์แบบอัตโนมัติเป็นงวดตามแผนที่กำหนด\n\nช่วยเฉลี่ยต้นทุนและลดผลกระทบจากความผันผวนของตลาด';
+    }
+    
+    // ========== Leverage ==========
+    if (lowerMsg.includes('leverage') || lowerMsg.includes('เลเวอเรจ')) {
+        return 'Leverage ช่วยเพิ่มขนาดการลงทุนโดยใช้เงินทุนจำนวนน้อยลง\n\nแต่ความเสี่ยงก็เพิ่มขึ้นเช่นกัน ควรใช้อย่างระมัดระวัง';
+    }
+    
+    // ========== Margin ==========
+    if (lowerMsg.includes('margin') || lowerMsg.includes('มาร์จิ้น')) {
+        return 'Margin คือเงินค้ำประกันที่ใช้เปิดสถานะการเทรด\n\nหากมูลค่าพอร์ตลดลงมาก อาจเกิด Margin Call หรือถูกปิดสถานะอัตโนมัติ';
+    }
+    
+    // ========== Liquidation ==========
+    if (lowerMsg.includes('liquidation') || lowerMsg.includes('ล้างพอร์ต')) {
+        return 'Liquidation คือการปิดสถานะอัตโนมัติเมื่อเงินประกันไม่เพียงพอ\n\nควรใช้ Stop Loss และบริหารความเสี่ยงอย่างเหมาะสม';
+    }
+    
+    // ========== ข่าวเศรษฐกิจ ==========
+    if (lowerMsg.includes('ข่าว') || lowerMsg.includes('news') || lowerMsg.includes('เศรษฐกิจ')) {
+        return 'ข่าวเศรษฐกิจสำคัญ เช่น CPI, NFP และการประชุมธนาคารกลาง สามารถส่งผลต่อความผันผวนของตลาดได้อย่างมาก';
+    }
+    
+    // ========== แนวรับแนวต้าน ==========
+    if (lowerMsg.includes('แนวรับ') || lowerMsg.includes('แนวต้าน') || lowerMsg.includes('support') || lowerMsg.includes('resistance')) {
+        return 'แนวรับ (Support) คือบริเวณที่ราคามีโอกาสหยุดลง\nแนวต้าน (Resistance) คือบริเวณที่ราคามีโอกาสหยุดขึ้น\n\nนิยมใช้ในการวางจุดเข้าและออก';
+    }
+    
+    // ========== Candlestick ==========
+    if (lowerMsg.includes('แท่งเทียน') || lowerMsg.includes('candlestick')) {
+        return 'รูปแบบแท่งเทียนที่นิยมใช้ เช่น Doji, Hammer, Engulfing และ Shooting Star เพื่อช่วยวิเคราะห์พฤติกรรมราคา';
+    }
+    
+  // ========== ให้กำลังใจ (ไม่มีอิโมจิ) ==========
+if (lowerMsg.includes('เหนื่อย') || lowerMsg.includes('ท้อ') || lowerMsg.includes('เครียด') || lowerMsg.includes('แย่') || 
+    lowerMsg.includes('แย่มาก') || lowerMsg.includes('เสียใจ') || lowerMsg.includes('แย่จัง') || lowerMsg.includes('ท้อแท้') ||
+    lowerMsg.includes('ผิดหวัง') || lowerMsg.includes('ไม่ไหว') || lowerMsg.includes('หมดกำลังใจ')) {
+    return 'อย่าท้อครับ ทุกคนมีวันที่แย่ ขอให้พักผ่อนสักหน่อย แล้วค่อยกลับมาสู้ใหม่ ผมและทีมงานเป็นกำลังใจให้เสมอครับ';
+}
+
+if (lowerMsg.includes('ดีใจ') || lowerMsg.includes('ภูมิใจ') || lowerMsg.includes('สำเร็จ') || lowerMsg.includes('กำไร')) {
+    return 'ยินดีด้วยครับ เป็นกำลังใจให้ประสบความสำเร็จมากขึ้นเรื่อยๆ อย่าลืมบริหารความเสี่ยงเสมอนะครับ';
+}
+
+if (lowerMsg.includes('กำลังใจ') || lowerMsg.includes('ให้กำลังใจ')) {
+    return 'สู้ๆ ครับ แอดมินและทีมงานอยู่เคียงข้างเสมอ ขอให้เทรดได้กำไรทุกวันครับ';
+}
+
+if (lowerMsg.includes('ขอบคุณ') || lowerMsg.includes('thank')) {
+    return 'ยินดีครับ ขอบคุณที่ใช้บริการ TradingLand นะครับ';
+}
+    
+    // ========== การสมัครสมาชิก ==========
+    if (lowerMsg.includes('สมัคร') || lowerMsg.includes('register') || lowerMsg.includes('สมัครสมาชิก')) {
+        return 'การสมัคร TradingLand:\n\n1. กรอกอีเมลหรือเบอร์โทรศัพท์\n2. ตั้งรหัสผ่าน\n3. ยืนยันตัวตน\n4. เริ่มใช้งานได้ทันที';
+    }
+    
+    // ========== ลบบัญชี ==========
+    if (lowerMsg.includes('ลบบัญชี') || lowerMsg.includes('delete account')) {
+        return 'หากต้องการลบบัญชี กรุณาติดต่อทีมสนับสนุนเพื่อยืนยันตัวตนและดำเนินการตามขั้นตอน';
+    }
+    
+    // ========== เวอร์ชันแอพ ==========
+    if (lowerMsg.includes('เวอร์ชัน') || lowerMsg.includes('version')) {
+        return 'คุณสามารถตรวจสอบเวอร์ชันแอพได้ที่เมนู Settings > About';
+    }
+    
+    // ========== นโยบายความเสี่ยง ==========
+    if (lowerMsg.includes('ความเสี่ยง') || lowerMsg.includes('risk')) {
+        return 'การลงทุนมีความเสี่ยง ราคาสินทรัพย์อาจผันผวนอย่างมาก ควรศึกษาข้อมูลและบริหารความเสี่ยงก่อนตัดสินใจลงทุน';
+    }
+    
+    // ========== เวลาเปิดตลาด ==========
+    if (lowerMsg.includes('ตลาดเปิด') || lowerMsg.includes('เวลาเปิดตลาด')) {
+        return 'ตลาดแต่ละประเภทมีเวลาเปิดปิดต่างกัน เช่น Forex เปิดเกือบ 24 ชั่วโมงในวันทำการ ส่วนหุ้นขึ้นอยู่กับตลาดที่เลือก';
+    }
+    
+    // ========== Spread ==========
+    if (lowerMsg.includes('spread') || lowerMsg.includes('สเปรด')) {
+        return 'Spread คือส่วนต่างระหว่างราคาซื้อ (Ask) และราคาขาย (Bid) ซึ่งเป็นต้นทุนหนึ่งของการเทรด';
+    }
+    
+    // ========== วิเคราะห์แนวโน้มทองคำ (XAUUSD) ==========
+    if ((lowerMsg.includes('ทองคำ') || lowerMsg.includes('xau') || lowerMsg.includes('ทอง')) && 
+        (lowerMsg.includes('แนวโน้ม') || lowerMsg.includes('วิเคราะห์') || lowerMsg.includes('ขึ้น') || lowerMsg.includes('ลง'))) {
+        return 'ทองคำ (XAUUSD) แนวโน้มระยะสั้น Sideways ในกรอบ 2,300-2,350 USD แนวรับสำคัญ 2,280 USD / แนวต้าน 2,380 USD\n\nแนะนำรอ breakout ก่อนเข้าซื้อขาย ใช้ Stop Loss ไม่เกิน 15 เหรียญ';
+    }
+    
+    // ========== วิเคราะห์ Bitcoin ==========
+    if ((lowerMsg.includes('bitcoin') || lowerMsg.includes('btc')) && 
+        (lowerMsg.includes('แนวโน้ม') || lowerMsg.includes('วิเคราะห์') || lowerMsg.includes('ขึ้น') || lowerMsg.includes('ลง'))) {
+        return 'Bitcoin (BTC) ปัจจัยลบจากแรงขายของ ETF แต่แนวรับ 60,000 USD ยังแข็งแรง แนวโน้มระยะกลางยังเป็นขาขึ้น\n\nแนวรับ: 60,000 - 58,000 USD\nแนวต้าน: 64,000 - 66,000 USD';
+    }
+    
+    // ========== ถามราคาทองคำตอนนี้ ==========
+    if (lowerMsg.includes('ทองคำ') && (lowerMsg.includes('ราคา') || lowerMsg.includes('เท่าไหร่'))) {
+        return 'ราคาทองคำ (XAUUSD) ปัจจุบันอยู่ที่ประมาณ 2,330-2,340 USD ครับ (ข้อมูลอ้างอิง) ราคาจริงในแอพกรุณาดูที่หน้า Market';
+    }
+    
+    // ========== ถามราคา Bitcoin ==========
+    if (lowerMsg.includes('btc') && (lowerMsg.includes('ราคา') || lowerMsg.includes('เท่าไหร่'))) {
+        return 'ราคา Bitcoin (BTC) ปัจจุบันอยู่ที่ประมาณ 61,500-62,500 USD ครับ ขึ้นอยู่กับตลาดขณะนั้น สามารถติดตามได้ในหน้า Market ของแอพ';
+    }
+    
+    // ========== Stop Loss ==========
+    if (lowerMsg.includes('stop loss') || lowerMsg.includes('sl')) {
+        return 'Stop Loss คือการตั้งจุดตัดขาดทุนอัตโนมัติ\n\nแนะนำ:\n- ตั้ง SL ไม่เกิน 1-2% ของพอร์ต\n- ใช้ ATR ในการคำนวณระยะ SL\n- อย่าเปลี่ยน SL เมื่อราคาใกล้ชน';
+    }
+    
+    // ========== Take Profit ==========
+    if (lowerMsg.includes('take profit') || lowerMsg.includes('tp')) {
+        return 'Take Profit คือการตั้งจุดทำกำไรอัตโนมัติ\n\nแนะนำ:\n- อัตราส่วน RR (Risk:Reward) อย่างน้อย 1:2\n- TP ควรตั้งตามแนวต้าน/แนวรับสำคัญ\n- ขยับ TP ตาม trailing stop เมื่อกำไรมากขึ้น';
+    }
+    
+    // ========== เทคนิคการเทรด ==========
+    if (lowerMsg.includes('เทคนิค') || lowerMsg.includes('วิธีเทรด') || lowerMsg.includes('怎么เทรด')) {
+        return 'เทคนิคการเทรดเบื้องต้น:\n\n1. เริ่มจาก timeframe ใหญ่ (D1, H4) เพื่อดูเทรนด์\n2. รอจังหวะ pullback ที่แนวรับ/แนวต้าน\n3. ใส่ Stop Loss ทุกครั้ง\n4. ใช้ RR อย่างน้อย 1:2\n5. อย่าโลภ อย่าเกร็ง';
+    }
+    
+    // ========== บริหารพอร์ต ==========
+    if (lowerMsg.includes('บริหารพอร์ต') || lowerMsg.includes('管理พอร์ต') || lowerMsg.includes('资金管理')) {
+        return 'หลักการบริหารพอร์ต:\n\nไม่เสี่ยงเกิน 2% ต่อการเทรด\nใช้ Lot size = (ทุน x %เสี่ยง) / (SL x มูลค่า pip)\nกระจายความเสี่ยง อย่าเทรดเดี่ยว\nมีแผนก่อนเทรดทุกครั้ง';
+    }
+    
+    // ========== จิตวิทยาการเทรด ==========
+    if (lowerMsg.includes('จิตวิทยา') || lowerMsg.includes('心理') || lowerMsg.includes('อารมณ์')) {
+        return 'จิตวิทยาการเทรดสำคัญที่สุด:\n\nอย่า revenge trade (เอาคืน)\nอย่า over trade (เทรดเกิน)\nยอมรับการขาดทุนได้\nมีวินัยตามแผน\n\n"เทรดเดอร์ที่ดี ไม่ใช่เทรดเดอร์ที่แม่น แต่เป็นคนที่มีวินัย"';
+    }
+    
+    // ========== RSI ==========
+    if (lowerMsg.includes('rsi')) {
+        return 'RSI (Relative Strength Index):\n- ต่ำกว่า 30: oversold (โอกาส rebound)\n- สูงกว่า 70: overbought (โอกาสปรับลง)\n- ใช้ divergence หาจุดกลับตัว';
+    }
+    
+    // ========== MACD ==========
+    if (lowerMsg.includes('macd')) {
+        return 'MACD:\n- เส้น signal ตัดขึ้น -> bullish\n- เส้น signal ตัดลง -> bearish\n- ใช้ divergence ร่วมด้วย';
+    }
+    
+    // ========== Moving Average ==========
+    if (lowerMsg.includes('moving average') || lowerMsg.includes('ma')) {
+        return 'Moving Average:\n- MA 50 = แนวโน้มระยะกลาง\n- MA 200 = แนวโน้มระยะยาว\n- Golden cross = MA50 ขึ้นตัด MA200 -> bullish\n- Death cross = MA50 ลงตัด MA200 -> bearish';
+    }
+    
+    // ========== ดูกราฟ ==========
+    if (lowerMsg.includes('กราฟ') || lowerMsg.includes('chart')) {
+        return 'การอ่านกราฟเบื้องต้น:\n1. ดูเทรนด์โดยรวม (Higher High / Higher Low)\n2. วาดแนวรับแนวต้าน (Support/Resistance)\n3. รูปแบบแท่งเทียน (Candlestick pattern)\n4. ใช้ Indicator เสริม เช่น RSI, MACD';
+    }
+    
+    // ========== Forex ==========
+    if (lowerMsg.includes('forex') || lowerMsg.includes('คู่เงิน')) {
+        return 'Forex คือการเทรดคู่เงิน เช่น EURUSD, GBPUSD\n\nข้อควรรู้:\n- ใช้ Leverage ต้องระวัง\n- pip คือหน่วยเคลื่อนไหวเล็กสุด\n- มี Swap (ดอกเบี้ยข้ามคืน)';
+    }
+    
+    // ========== TradingLand ==========
+    if (lowerMsg.includes('แอพ') || lowerMsg.includes('tradingland') || lowerMsg.includes('about')) {
+        return 'TradingLand เป็นแอพการเทรดที่ออกแบบมาเพื่อนักลงทุนทุกระดับ\n\nฟีเจอร์:\n- เทรดทองคำ, Bitcoin, หุ้น\n- Auto DCA ซื้ออัตโนมัติ\n- ระบบฝากถอนที่ปลอดภัย\n- Reels เรียนรู้เทคนิคการเทรด\n- ชุมชนนักเทรด\n\nการเทรดมีความเสี่ยง โปรดศึกษาให้ดีและบริหารความเสี่ยงอย่างเหมาะสม';
+    }
+    
+    // ========== ขอบคุณ ==========
+    if (lowerMsg.includes('ขอบคุณ') || lowerMsg.includes('thank')) {
+        return 'ยินดีครับ ขอบคุณที่ใช้บริการ TradingLand\n\nถ้ามีอะไรถามเพิ่มเติม บอกได้เลยนะครับ';
+    }
+    
+    // ========== คำหยาบ (สุ่มตอบ) ==========
+if (lowerMsg.includes('โง่') || lowerMsg.includes('โง') || lowerMsg.includes('ปัญญาอ่อน') || 
+    lowerMsg.includes('ห่วย') || lowerMsg.includes('ห่วยแตก') || lowerMsg.includes('บ้า') || 
+    lowerMsg.includes('ควาย') || lowerMsg.includes('ส้นตีน') || lowerMsg.includes('เหี้ย') ||
+    lowerMsg.includes('สัส') || lowerMsg.includes('สัตว์') || lowerMsg.includes('เลว') ||
+    lowerMsg.includes('ไร้สาระ') || lowerMsg.includes('แย่') || lowerMsg.includes('ไม่ดี') ||
+    lowerMsg.includes('ไม่เอาไร') || lowerMsg.includes('ไร้ค่า')) {
+    
+    const sadResponses = [
+        'ขอโทษครับ ผมยังใหม่และกำลังเรียนรู้ ขอบคุณที่บอกกันนะครับ',
+        'ขออภัยครับที่ตอบได้ไม่ดีพอ เดี๋ยวจะพัฒนาให้ดีขึ้นครับ',
+        'ขอบคุณที่แจ้งครับ ผมจะจำและปรับปรุงตัวเองให้ดีขึ้น',
+        'ขออภัยด้วยนะครับ ผมยังไม่เก่งเท่าไหร่ แต่จะพยายามพัฒนาต่อไปครับ',
+        'เสียใจครับที่ทำให้ไม่พอใจ ผมจะเรียนรู้จากตรงนี้และทำให้ดีขึ้นครับ',
+        'ขอบคุณครับที่ช่วยติชม ผมจะนำไปพัฒนาในเวอร์ชันถัดไป',
+        'ขออภัยครับ ผมกำลังอยู่ในช่วงพัฒนา ขอบคุณที่อดทนกับผมนะครับ',
+        'ขอบคุณครับ ผมจะพยายามตอบให้ตรงกับความต้องการมากขึ้น'
+    ];
+    
+    return sadResponses[Math.floor(Math.random() * sadResponses.length)];
+}
+    
+    // ========== ทางลัดรวย ==========
+    if (lowerMsg.includes('รวย') || lowerMsg.includes('เงิน') || lowerMsg.includes('รวยทางลัด')) {
+        return 'ไม่มีทางลัดในการรวยครับ การเทรดต้องใช้ความรู้+วินัย+ประสบการณ์ แนะนำเริ่มจากคอร์สฟรีของเราได้นะครับ';
+    }
+    
+    // ========== ค่าเริ่มต้น ==========
+    return 'ขอขอบคุณสำหรับคำถามครับ เรื่องนี้ผมยังไม่มีข้อมูลเพียงพอ\n\nแนะนำให้ลองถามเกี่ยวกับ:\n- แนวโน้มทองคำ / Bitcoin\n- Stop Loss / Take Profit\n- เทคนิคการเทรด / บริหารพอร์ต\n- จิตวิทยาการเทรด\n- ฟีเจอร์ของแอพ TradingLand\n\nหรือพิมพ์ "ช่วยอะไรได้บ้าง" เพื่อดูทั้งหมดครับ';
+}
+// เปิดแชทเมื่อกดปุ่ม (แทน openAIChat)
+document.getElementById('chatFloatingBtn').onclick = function(e) {
     if (hasMoved) {
         e.preventDefault();
         return;
     }
-
-    openAIChat();
-});
-
-
-// โหลดตำแหน่ง
-loadChatBtnPosition();
-
-
-// ======================
-// แสดงปุ่ม
-// ======================
-function showChatButton() {
-
-    chatBtn.classList.add('show');
-
-    chatBtn.style.display = 'flex';
-    chatBtn.style.cursor = 'grab';
+    document.getElementById('chatModal').style.display = 'flex';
 }
 </script>
     <svg style="display:none;">
