@@ -5407,8 +5407,8 @@ function onLoginSuccess() {
             const bonus = checkAndGiveBonus(amt);
             if (bonus > 0) {
                 acc.thb += bonus;
-                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัสชดเชย', `+${bonus} THB`, true);
-                showCustomPopup('ยินดีด้วยคุณได้รับโบนัสชดเชย', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
+                saveHistory('deposit', 'ยินดีด้วยคุณได้รับโบนัส', `+${bonus} THB`, true);
+                showCustomPopup('ยินดีด้วยคุณได้รับโบนัส', `คุณได้รับโบนัส ${bonus} บาท`, 'wallet', 'gold');
             }
             
             saveState();
@@ -6875,8 +6875,8 @@ function speakWelcome() {
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
     { min: 1000, max: 10000, bonus: 35000 },
-    { min: 0, max: 0, bonus: 0 },
-    { min: 0, max: 0, bonus: 0 },
+    { min: 600, max: 0, bonus: 0 },
+    { min: 0, max: 900, bonus: 1000 },
     { min: 0, max: 0, bonus: 0 }
 ];
 
