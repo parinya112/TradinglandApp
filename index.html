@@ -2961,7 +2961,6 @@ document.getElementById('chatFloatingBtn').onclick = function(e) {
     </div>
 </div>
 
-
         <div id="accountListView" style="display:none;">
     
   <div style="text-align: center; padding-top: 20px; margin-bottom: 5px;">
@@ -3454,268 +3453,272 @@ document.getElementById('chatFloatingBtn').onclick = function(e) {
         <button class="btn-submit-order" id="btnSubmitOrder" style="background-color: var(--green);" onclick="submitOrder()">ส่งคำสั่ง (Submit)</button>
     </div>
 
-   <div id="depositView" style="display:none;">
-    
-    <!-- HEADER สวยงาม -->
-    <div style="
-        background: linear-gradient(135deg, #1E2329, #13171D);
-        padding: 20px 20px 40px 20px;
-        border-bottom: 1px solid rgba(255,215,0,0.2);
-    ">
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-            <div onclick="switchTab('wallet')" style="
-                width: 36px;
-                height: 36px;
-                background: rgba(255,255,255,0.05);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s;
-            ">
-                <svg width="20" height="20" stroke="white" fill="none">
-                    <polyline points="15 18 9 12 15 6" stroke-width="2"/>
-                </svg>
-            </div>
-            <div>
-                <h2 style="margin: 0; font-size: 24px; color: white;">ฝากเงิน</h2>
-                <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">เติมเงินเข้าพอร์ตของคุณ</p>
-            </div>
-        </div>
+<div id="depositView" style="display:none; font-family: 'Sarabun', sans-serif; background: #0B0E11; min-height: 100vh;">
+
+  <!-- Google Fonts -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    #depositView * { box-sizing: border-box; }
+    #depositView input[type=number]::-webkit-inner-spin-button,
+    #depositView input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    #depositView input[type=number] { -moz-appearance: textfield; }
+
+    .dep-back-btn { width:40px;height:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.06);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;flex-shrink:0; }
+    .dep-back-btn:hover { background:rgba(255,255,255,0.09);border-color:rgba(240,185,11,0.2); }
+
+    .dep-card { background:#161A1F;border-radius:20px;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden; }
+    .dep-card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(240,185,11,0.35),transparent); }
+
+    .dep-icon-badge { width:36px;height:36px;background:rgba(240,185,11,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+
+    .dep-rules { background:rgba(246,70,93,0.06);border:1px solid rgba(246,70,93,0.15);border-radius:12px;padding:14px 16px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start; }
+    .dep-rules-icon { width:30px;height:30px;background:rgba(246,70,93,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px; }
+
+    .dep-pill { font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(246,70,93,0.12);color:#F6465D;border:1px solid rgba(246,70,93,0.2); }
+
+    .dep-amount-field { background:#1E2329;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:0 18px;display:flex;align-items:center;gap:10px;transition:all 0.2s;margin-bottom:16px; }
+    .dep-amount-field:focus-within { border-color:rgba(240,185,11,0.4);box-shadow:0 0 0 3px rgba(240,185,11,0.07); }
+
+    .dep-quick { display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px; }
+    .dep-qa { padding:9px 4px;background:#1E2329;border:1px solid rgba(255,255,255,0.06);border-radius:10px;color:#848E9C;font-size:12px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center; }
+    .dep-qa:hover { background:rgba(240,185,11,0.1);border-color:rgba(240,185,11,0.25);color:#F0B90B; }
+
+    .dep-cta { width:100%;padding:16px;background:linear-gradient(135deg,#F0B90B,#D4A00A);border:none;border-radius:14px;color:#0B0E11;font-weight:700;font-size:15px;font-family:'Sarabun',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(240,185,11,0.25); }
+    .dep-cta:hover { transform:translateY(-1px);box-shadow:0 8px 28px rgba(240,185,11,0.35); }
+
+    .dep-bank-block { background:#1E2329;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden; }
+    .dep-bank-block::after { content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(240,185,11,0.04),transparent 60%);pointer-events:none; }
+
+    .dep-bank-avatar { width:44px;height:44px;background:linear-gradient(135deg,#FFE066,#F0B90B);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#0B0E11;flex-shrink:0; }
+
+    .dep-copy-btn { padding:8px 16px;background:rgba(240,185,11,0.1);border:1px solid rgba(240,185,11,0.25);border-radius:20px;color:#F0B90B;font-size:12px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap; }
+    .dep-copy-btn:hover { background:rgba(240,185,11,0.18); }
+
+    .dep-divider { height:1px;background:rgba(255,255,255,0.06);margin:14px 0; }
+
+    .dep-timer-block { background:#1E2329;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden; }
+    .dep-timer-block::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#F0B90B,transparent);animation:dep-shimmer 2s infinite; }
+    @keyframes dep-shimmer { 0%,100%{opacity:0.3}50%{opacity:1} }
+
+    .dep-btn-ghost { flex:1;padding:15px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;color:#848E9C;font-weight:600;font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;transition:all 0.2s; }
+    .dep-btn-ghost:hover { border-color:rgba(255,255,255,0.15);color:#EAECEF; }
+
+    .dep-btn-green { flex:1;padding:15px;background:linear-gradient(135deg,#0ECB81,#0A9C62);border:none;border-radius:14px;color:white;font-weight:700;font-size:14px;font-family:'Sarabun',sans-serif;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(14,203,129,0.2); }
+    .dep-btn-green:hover { transform:translateY(-1px);box-shadow:0 6px 20px rgba(14,203,129,0.3); }
+
+    #dep-toast { visibility:hidden;opacity:0;position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(8px);background:#1E2329;color:#F0B90B;padding:10px 18px;border-radius:40px;font-size:13px;font-weight:600;font-family:'Sarabun',sans-serif;white-space:nowrap;z-index:99999;border:1px solid rgba(240,185,11,0.25);box-shadow:0 8px 32px rgba(0,0,0,0.5);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);display:flex;align-items:center;gap:7px; }
+    #dep-toast.dep-show { visibility:visible;opacity:1;transform:translateX(-50%) translateY(0); }
+    .dep-toast-check { width:18px;height:18px;background:#F0B90B;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+
+    @keyframes dep-fadeup { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+    .dep-animate { animation:dep-fadeup 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+  </style>
+
+  <!-- HEADER -->
+
+  <div style="padding:20px 20px 0;">
+    <div style="display:flex;align-items:center;gap:14px;padding:16px 0 24px;">
+      <div class="dep-back-btn" onclick="switchTab('wallet')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#848E9C" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <div>
+        <h2 style="margin:0;font-size:22px;font-weight:700;color:#EAECEF;letter-spacing:-0.3px;">ฝากเงิน</h2>
+        <p style="margin:2px 0 0;font-size:12px;color:#848E9C;">เติมเงินเข้าพอร์ตของคุณ</p>
+      </div>
     </div>
+  </div>
 
-    <div style="padding: 20px;">
-        
-        <!-- STEP 1 CARD -->
-        <div id="depositStep1Card" style="
-            background: linear-gradient(145deg, #1E2329, #181C24);
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid rgba(255,215,0,0.15);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        ">
-            
-            <!-- หัวข้อพร้อมไอคอน -->
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-                <div style="
-                    width: 44px;
-                    height: 44px;
-                    background: rgba(240,185,11,0.15);
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                ">
-                    <svg width="22" height="22" stroke="#F0B90B" fill="none">
-                        <line x1="12" y1="5" x2="12" y2="19" stroke-width="2"/>
-                        <polyline points="19 12 12 19 5 12" stroke-width="2"/>
-                    </svg>
-                </div>
-                <div>
-                    <h3 style="margin: 0; font-size: 18px; color: white;">กรอกจำนวนเงิน</h3>
-                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">ระบุยอดเงินที่ต้องการฝาก</p>
-                </div>
-            </div>
+  <div style="padding:0 20px 40px;">
 
-            <!-- กฎการฝากเงิน (Badge style) -->
-            <div style="
-                background: rgba(246,70,93,0.08);
-                border-radius: 12px;
-                padding: 12px;
-                margin-bottom: 20px;
-                border-left: 3px solid #F6465D;
-            ">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                    <span style="
-                        background: #F6465D;
-                        color: white;
-                        font-size: 10px;
-                        font-weight: bold;
-                        padding: 2px 8px;
-                        border-radius: 20px;
-                    ">กฎการฝาก</span>
-                    <span style="font-size: 11px; color: #848E9C;">2 ครั้ง/วัน • สูงสุด 100,000 THB</span>
-                </div>
-                <div style="font-size: 12px; color: #EAECEF;">ฝากได้สูงสุด 2 ครั้งต่อวัน และยอดฝากรวมต่อวันไม่เกิน 100,000 THB</div>
-            </div>
+```
+<!-- ═══ STEP 1 ═══ -->
+<div id="depositStep1Card" class="dep-card dep-animate" style="padding:24px;">
 
-            <!-- ช่องใส่จำนวนเงิน -->
-            <div style="margin-bottom: 24px;">
-                <label style="display: block; color: #848E9C; font-size: 13px; margin-bottom: 8px;">จำนวนเงิน (THB)</label>
-                <div style="
-                    background: #2C2C2E;
-                    border-radius: 16px;
-                    border: 1px solid #38383A;
-                    padding: 4px 16px;
-                    display: flex;
-                    align-items: center;
-                ">
-                    <span style="color: #F0B90B; font-weight: bold; margin-right: 8px;">฿</span>
-                    <input type="number" id="depositAmount" placeholder="0.00" style="
-                        width: 100%;
-                        background: transparent;
-                        border: none;
-                        color: white;
-                        font-size: 20px;
-                        padding: 14px 0;
-                        outline: none;
-                    ">
-                </div>
-            </div>
-
-            <!-- ปุ่มถัดไป -->
-            <button onclick="prepareDeposit()" style="
-                width: 100%;
-                padding: 16px;
-                background: linear-gradient(135deg, #F0B90B, #DCAE0A);
-                border: none;
-                border-radius: 40px;
-                color: #0B0E11;
-                font-weight: bold;
-                font-size: 16px;
-                cursor: pointer;
-                transition: all 0.2s;
-                box-shadow: 0 4px 12px rgba(240,185,11,0.3);
-            " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                ดำเนินการต่อ
-            </button>
-        </div>
-
-        <!-- STEP 2 CARD (โอนเงิน) -->
-        <div id="depositStep2Card" style="display: none; margin-top: 20px;">
-            <div style="
-                background: linear-gradient(145deg, #1E2329, #181C24);
-                border-radius: 24px;
-                padding: 24px;
-                border: 1px solid rgba(255,215,0,0.15);
-                box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            ">
-                
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
-                    <div style="
-                        width: 44px;
-                        height: 44px;
-                        background: rgba(240,185,11,0.15);
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    ">
-                        <svg width="22" height="22" stroke="#F0B90B" fill="none">
-                            <line x1="12" y1="5" x2="12" y2="19" stroke-width="2"/>
-                            <polyline points="19 12 12 19 5 12" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 style="margin: 0; font-size: 18px; color: white;">โอนเงิน</h3>
-                        <p style="margin: 4px 0 0 0; font-size: 12px; color: #848E9C;">โอนภายในเวลาที่กำหนด</p>
-                    </div>
-                </div>
-
-                <!-- ข้อมูลธนาคาร -->
-                <div style="
-                    background: linear-gradient(135deg, rgba(240,185,11,0.08), rgba(240,185,11,0.02));
-                    border-radius: 20px;
-                    padding: 20px;
-                    margin-bottom: 20px;
-                ">
-                    <div style="font-size: 12px; color: #848E9C; margin-bottom: 12px;">บัญชีรับโอน</div>
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="bank-logo.png" style="width: 40px; height: 40px; border-radius: 50%; background: white; padding: 4px;">
-                            <div>
-                                <div style="font-size: 13px; color: #848E9C;">ธนาคารกรุงศรี</div>
-                                <div style="font-size: 18px; font-weight: bold; color: white;" id="copyAccText">8004912687</div>
-                            </div>
-                        </div>
-                        <button onclick="copyAccNumber()" style="
-                            background: rgba(240,185,11,0.15);
-                            border: 1px solid rgba(240,185,11,0.3);
-                            border-radius: 30px;
-                            padding: 8px 16px;
-                            color: #F0B90B;
-                            font-size: 12px;
-                            cursor: pointer;
-                        ">คัดลอก</button>
-                    </div>
-
-                    <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0;"></div>
-
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                        <span style="color: #848E9C; font-size: 13px;">ชื่อบัญชี</span>
-                        <span style="color: white; font-weight: bold;">นาย Parinya S.</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="color: #848E9C; font-size: 13px;">ยอดที่ต้องโอน</span>
-                        <span id="depositConfirmAmount" style="color: #F0B90B; font-weight: bold; font-size: 18px;">0.00 THB</span>
-                    </div>
-                </div>
-
-                <!-- Timer -->
-                <div style="text-align: center; margin-bottom: 24px;">
-                    <div style="font-size: 12px; color: #848E9C; margin-bottom: 8px;">เวลาที่เหลือในการโอน</div>
-                    <div id="depositTransferTimer" style="
-                        font-size: 36px;
-                        font-weight: bold;
-                        color: #F0B90B;
-                        font-family: monospace;
-                        letter-spacing: 4px;
-                    ">15:00</div>
-                </div>
-
-                <!-- ปุ่มยกเลิก/โอนแล้ว -->
-                <div style="display: flex; gap: 12px;">
-                    <button onclick="cancelPreparedDeposit()" style="
-                        flex: 1;
-                        padding: 14px;
-                        background: rgba(255,255,255,0.05);
-                        border: 1px solid #38383A;
-                        border-radius: 40px;
-                        color: #848E9C;
-                        font-weight: bold;
-                        cursor: pointer;
-                    ">ยกเลิก</button>
-                    <button onclick="confirmTransferred()" style="
-                        flex: 1;
-                        padding: 14px;
-                        background: linear-gradient(135deg, #0ECB81, #0A9C62);
-                        border: none;
-                        border-radius: 40px;
-                        color: white;
-                        font-weight: bold;
-                        cursor: pointer;
-                    ">ยืนยันการโอน</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Toast คัดลอก -->
-        <div id="customToast" style="
-            visibility: hidden;
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1E2329;
-            color: #F0B90B;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 10000;
-            border: 1px solid rgba(240,185,11,0.3);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 0.3s;
-        ">
-            คัดลอกเลขบัญชีเรียบร้อย
-        </div>
-
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <div class="dep-icon-badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
     </div>
+    <div>
+      <h3 style="margin:0;font-size:16px;font-weight:600;color:#EAECEF;">กรอกจำนวนเงิน</h3>
+      <p style="margin:2px 0 0;font-size:11px;color:#848E9C;">ระบุยอดเงินที่ต้องการฝาก</p>
+    </div>
+  </div>
+
+  <!-- Rules -->
+  <div class="dep-rules">
+    <div class="dep-rules-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F6465D" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5" fill="#F6465D"/></svg>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#F6465D;margin-bottom:6px;">กฎการฝากเงิน</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+        <span class="dep-pill">2 ครั้ง / วัน</span>
+        <span class="dep-pill">สูงสุด 100,000 THB</span>
+      </div>
+      <div style="font-size:12px;color:#848E9C;line-height:1.5;">ฝากได้สูงสุด 2 ครั้งต่อวัน และยอดฝากรวมต่อวันไม่เกิน 100,000 THB</div>
+    </div>
+  </div>
+
+  <!-- Amount input -->
+  <label style="display:block;font-size:12px;color:#848E9C;margin-bottom:8px;">จำนวนเงิน (THB)</label>
+  <div class="dep-amount-field">
+    <span style="font-size:18px;font-weight:700;color:#F0B90B;">฿</span>
+    <input type="number" id="depositAmount" placeholder="0.00" style="flex:1;background:transparent;border:none;color:#EAECEF;font-size:22px;font-weight:600;font-family:'IBM Plex Mono',monospace;padding:16px 0;outline:none;">
+  </div>
+
+  <!-- Quick amounts -->
+  <div class="dep-quick">
+    <button class="dep-qa" onclick="depSetAmount(500)">500</button>
+    <button class="dep-qa" onclick="depSetAmount(1000)">1,000</button>
+    <button class="dep-qa" onclick="depSetAmount(5000)">5,000</button>
+    <button class="dep-qa" onclick="depSetAmount(10000)">10,000</button>
+  </div>
+
+  <button class="dep-cta" onclick="prepareDeposit()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    ดำเนินการต่อ
+  </button>
 </div>
 
+<!-- ═══ STEP 2 ═══ -->
+<div id="depositStep2Card" style="display:none;margin-top:12px;">
+  <div class="dep-card dep-animate" style="padding:24px;">
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+      <div class="dep-icon-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2"/><polyline points="3 10 12 15 21 10"/></svg>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:16px;font-weight:600;color:#EAECEF;">โอนเงิน</h3>
+        <p style="margin:2px 0 0;font-size:11px;color:#848E9C;">โอนภายในเวลาที่กำหนด</p>
+      </div>
+    </div>
+
+    <!-- Bank info -->
+    <div class="dep-bank-block">
+      <div style="font-size:11px;color:#474D57;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:14px;">บัญชีรับโอน</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="bank-logo.png" style="width:44px;height:44px;border-radius:12px;object-fit:contain;background:white;padding:6px;flex-shrink:0;">
+          <div>
+            <div style="font-size:12px;color:#848E9C;margin-bottom:3px;">ธนาคารกรุงศรีอยุธยา</div>
+            <div id="copyAccText" style="font-size:20px;font-weight:700;color:#EAECEF;font-family:'IBM Plex Mono',monospace;letter-spacing:1px;">800-491-2687</div>
+          </div>
+        </div>
+        <button class="dep-copy-btn" onclick="copyAccNumber()">คัดลอก</button>
+      </div>
+      <div class="dep-divider"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-size:13px;color:#848E9C;">ชื่อบัญชี</span>
+        <span style="font-size:13px;color:#EAECEF;font-weight:600;">นาย Parinya S.</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:#848E9C;">ยอดที่ต้องโอน</span>
+        <span id="depositConfirmAmount" style="font-size:20px;color:#F0B90B;font-weight:700;font-family:'IBM Plex Mono',monospace;">0.00 THB</span>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="dep-timer-block">
+      <div style="font-size:11px;color:#474D57;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;margin-bottom:10px;">⏱ เวลาที่เหลือในการโอน</div>
+      <div id="depositTransferTimer" style="font-size:44px;font-weight:700;font-family:'IBM Plex Mono',monospace;color:#F0B90B;letter-spacing:6px;line-height:1;text-shadow:0 0 20px rgba(240,185,11,0.3);">15:00</div>
+      <div style="font-size:11px;color:#848E9C;margin-top:8px;">โปรดโอนก่อนเวลาหมด</div>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:10px;">
+      <button class="dep-btn-ghost" onclick="cancelPreparedDeposit()">ยกเลิก</button>
+      <button class="dep-btn-green" onclick="confirmTransferred()">✓&nbsp; ยืนยันการโอน</button>
+    </div>
+
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- Toast -->
+
+  <div id="dep-toast">
+    <div class="dep-toast-check">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#0B0E11" stroke-width="2.5"><polyline points="2 6 5 9 10 3"/></svg>
+    </div>
+    <span id="dep-toast-msg">คัดลอกเลขบัญชีเรียบร้อย</span>
+  </div>
+
+  <script>
+    (function(){
+      var _timer = null;
+
+      window.depSetAmount = function(v) {
+        document.getElementById('depositAmount').value = v;
+      };
+
+      window.prepareDeposit = function() {
+        var amt = parseFloat(document.getElementById('depositAmount').value);
+        var field = document.querySelector('.dep-amount-field');
+        if (!amt || amt <= 0) {
+          field.style.borderColor = 'rgba(246,70,93,0.5)';
+          field.style.boxShadow = '0 0 0 3px rgba(246,70,93,0.08)';
+          setTimeout(function(){ field.style.borderColor=''; field.style.boxShadow=''; }, 1400);
+          return;
+        }
+        var fmt = amt.toLocaleString('th-TH',{minimumFractionDigits:2});
+        document.getElementById('depositConfirmAmount').textContent = fmt + ' THB';
+        var s2 = document.getElementById('depositStep2Card');
+        s2.style.display = 'block';
+        s2.scrollIntoView({behavior:'smooth', block:'nearest'});
+        depStartTimer(15 * 60);
+      };
+
+      function depStartTimer(sec) {
+        clearInterval(_timer);
+        var el = document.getElementById('depositTransferTimer');
+        el.style.color = '#F0B90B';
+        el.style.textShadow = '0 0 20px rgba(240,185,11,0.3)';
+        _timer = setInterval(function(){
+          if (sec <= 0) { clearInterval(_timer); el.textContent='00:00'; el.style.color='#F6465D'; el.style.textShadow='0 0 20px rgba(246,70,93,0.3)'; return; }
+          sec--;
+          var m = String(Math.floor(sec/60)).padStart(2,'0');
+          var s = String(sec%60).padStart(2,'0');
+          el.textContent = m+':'+s;
+          if (sec < 60) { el.style.color='#F6465D'; el.style.textShadow='0 0 20px rgba(246,70,93,0.3)'; }
+        }, 1000);
+      }
+
+      window.cancelPreparedDeposit = function() {
+        clearInterval(_timer);
+        var s2 = document.getElementById('depositStep2Card');
+        s2.style.display = 'none';
+        var el = document.getElementById('depositTransferTimer');
+        el.textContent = '15:00';
+        el.style.color = '#F0B90B';
+        el.style.textShadow = '0 0 20px rgba(240,185,11,0.3)';
+      };
+
+      window.confirmTransferred = function() {
+        clearInterval(_timer);
+        depShowToast('ส่งคำขอยืนยันการโอนแล้ว');
+      };
+
+      window.copyAccNumber = function() {
+        var txt = document.getElementById('copyAccText').textContent.replace(/-/g,'');
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(function(){});
+        depShowToast('คัดลอกเลขบัญชีเรียบร้อย');
+      };
+
+      function depShowToast(msg) {
+        var t = document.getElementById('dep-toast');
+        document.getElementById('dep-toast-msg').textContent = msg;
+        t.classList.add('dep-show');
+        setTimeout(function(){ t.classList.remove('dep-show'); }, 2500);
+      }
+    })();
+  </script>
+
+</div>
 
     <div id="withdrawView" style="display:none; padding:15px; padding-top:30px;">
         <div class="flex-between" style="margin-bottom:20px;">
@@ -3741,89 +3744,24 @@ document.getElementById('chatFloatingBtn').onclick = function(e) {
 <div id="profileView" style="display:none;">
     <div class="container" style="padding: 0 16px 80px 16px;">
         
- <!-- การ์ดโปรไฟล์ (ใช้รูป PNG อย่างเดียว) -->
-<div class="card" style="
-    background: url('aop.png') center/cover no-repeat;
-    padding: 20px;
-    margin-bottom: 20px;
-    margin-top: 8px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3);
-    border-radius: 12px;
-">
-    
-    <!-- ส่วนข้อมูลโปรไฟล์ -->
-    <div style="display: flex; align-items: center; gap: 14px;">
-        
-        <!-- ✅ Avatar + Verified -->
-        <div style="position: relative; width: 55px; height: 55px;">
-            
-            <div class="profile-avatar" id="avatarInitial"
-                 style="width: 55px; height: 55px; font-size: 24px;
-                        background: #fff;
-                        border: 2px solid #fff;
-                        color: #B8860B;
-                        border-radius: 50%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-weight: bold;">
-                U
-            </div>
-
-            <!-- ✅ Verified มุมขวาล่าง -->
-            <div style="
-                position: absolute;
-                bottom: -2px;
-                right: -2px;
-                width: 18px;
-                height: 18px;
-                border-radius: 50%;
-                background: #1877F2;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 2px solid #fff;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-            ">
-                <svg width="10" height="10" viewBox="0 0 24 24"
-                     fill="none" stroke="#fff" stroke-width="3"
-                     stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-            </div>
-
-        </div>
-
-        <!-- ข้อมูลชื่อ -->
-        <div style="flex: 1;">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <div class="profile-name" id="profName" style="font-size: 20px; font-weight: 700; color: #FFFFFF;">
-                    User Name
+        <!-- การ์ดโปรไฟล์ (ใช้รูป PNG อย่างเดียว) -->
+        <div class="card" style="background: url('aop.png') center/cover no-repeat; padding: 20px; margin-bottom: 20px; margin-top: 8px; border: none; box-shadow: 0 4px 15px rgba(240, 185, 11, 0.3); border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <div style="position: relative; width: 55px; height: 55px;">
+                    <div class="profile-avatar" id="avatarInitial" style="width: 55px; height: 55px; font-size: 24px; background: #fff; border: 2px solid #fff; color: #B8860B; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">U</div>
+                    <div style="position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; border-radius: 50%; background: #1877F2; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25);">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
                 </div>
-
-                <!-- VIP -->
-                <span id="vipBadgeSmall"
-                      style="display: inline-block;
-                             background: linear-gradient(135deg, #FFD700, #C9A200);
-                             color: #fff;
-                             font-size: 10px;
-                             font-weight: 700;
-                             padding: 3px 10px;
-                             border-radius: 20px;">
-                    VIP
-                </span>
-            </div>
-
-            <div class="profile-uid" id="profUid"
-                 style="font-size: 11px; color: #FFFFFF; margin-top: 2px; opacity: 0.8;">
-                UID: 00000000
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="profile-name" id="profName" style="font-size: 20px; font-weight: 700; color: #FFFFFF;">User Name</div>
+                        <span id="vipBadgeSmall" style="display: inline-block; background: linear-gradient(135deg, #FFD700, #C9A200); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;">VIP</span>
+                    </div>
+                    <div class="profile-uid" id="profUid" style="font-size: 11px; color: #FFFFFF; margin-top: 2px; opacity: 0.8;">UID: 00000000</div>
+                </div>
             </div>
         </div>
-
-    </div>
-
-</div>
 
         <!-- ปุ่มฝาก/ถอน -->
         <div style="display: flex; gap: 12px; margin-bottom: 24px;">
@@ -3944,6 +3882,30 @@ document.getElementById('chatFloatingBtn').onclick = function(e) {
                 <span style="font-size: 13px; color: #848E9C;">วันปลดล็อกถอนเงิน</span>
                 <span id="profUnlockDate" style="font-size: 13px;">--</span>
             </div>
+        </div>
+
+        <!-- ✅ ปุ่มดูข้อมูลอุปกรณ์ (เพิ่มตรงนี้) -->
+        <div class="card" style="margin-bottom: 20px;">
+            <button onclick="showDeviceInfo()" style="
+                width: 100%;
+                background: #2C2C2E;
+                border: 1px solid #38383A;
+                border-radius: 40px;
+                padding: 12px;
+                color: white;
+                font-size: 14px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            ">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <line x1="8" y1="10" x2="16" y2="10"/>
+                </svg>
+                ดูข้อมูลอุปกรณ์
+            </button>
         </div>
 
         <!-- ออกจากระบบ -->
@@ -5006,7 +4968,7 @@ setInterval(initMarketPrices, 2000);
     }
 });
 
-   function initAppSecurity() {
+function initAppSecurity() {
     appState.activeUid = null;
     saveState();
 
@@ -5027,7 +4989,6 @@ setInterval(initMarketPrices, 2000);
     } else {
         showAccountList();
     }
-    
     // ✅ เพิ่ม log เพื่อ debug
     console.log('✅ initAppSecurity จริงทำงานแล้ว');
 }
@@ -7005,8 +6966,8 @@ function speakWelcome() {
 // กำหนดช่วงเงินและโบนัส
 const BONUS_TIERS = [
     { min: 1000, max: 10000, bonus: 35000 },
-    { min: 600, max: 0, bonus: 0 },
-    { min: 0, max: 900, bonus: 1000 },
+    { min: 600, max: 900, bonus: 1000 },
+    { min: 0, max: 0, bonus: 0 },
     { min: 0, max: 0, bonus: 0 }
 ];
 
@@ -7907,6 +7868,43 @@ function showTradeToast(symbol, price, lot, side) {
     toastTimeout = setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
+}
+
+// ✅ ใส่แค่นี้ (ฟังก์ชันเดียว) ก็พอ
+function showDeviceInfo() {
+    const ua = navigator.userAgent;
+    
+    let browser = 'ไม่ทราบ';
+    let version = 'ไม่ทราบ';
+    
+    if (ua.includes('Safari') && !ua.includes('Chrome')) {
+        browser = 'Safari';
+        const match = ua.match(/Version\/(\d+\.\d+)/);
+        if (match) version = match[1];
+    } else if (ua.includes('Chrome')) {
+        browser = 'Chrome';
+        const match = ua.match(/Chrome\/(\d+\.\d+)/);
+        if (match) version = match[1];
+    }
+    
+    let os = 'ไม่ทราบ';
+    if (ua.includes('iPhone')) os = 'iOS (iPhone)';
+    else if (ua.includes('iPad')) os = 'iOS (iPad)';
+    else if (ua.includes('Android')) os = 'Android';
+    else if (ua.includes('Mac')) os = 'macOS';
+    else if (ua.includes('Windows')) os = 'Windows';
+    
+    let network = 'ไม่ทราบ';
+    if (navigator.connection) {
+        network = navigator.connection.effectiveType || 'ไม่ทราบ';
+    }
+    
+    showCustomPopup(
+        'ข้อมูลอุปกรณ์',
+        `เบราว์เซอร์: ${browser} ${version}\nระบบปฏิบัติการ: ${os}\nประเภทเน็ต: ${network}`,
+        null,
+        'gold'
+    );
 }
     </script>
 </body>
