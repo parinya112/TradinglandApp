@@ -7894,9 +7894,23 @@ function showDeviceInfo() {
     else if (ua.includes('Mac')) os = 'macOS';
     else if (ua.includes('Windows')) os = 'Windows';
     
+    // ✅ ส่วนที่แก้ไข (แทนที่ของเดิม)
     let network = 'ไม่ทราบ';
     if (navigator.connection) {
-        network = navigator.connection.effectiveType || 'ไม่ทราบ';
+        const type = navigator.connection.effectiveType;
+        const speed = navigator.connection.downlink;
+        
+        if (type === 'wifi') {
+            network = `WiFi (${speed} Mbps)`;
+        } else if (type === '4g') {
+            network = `Mobile 4G (${speed} Mbps)`;
+        } else if (type === '5g') {
+            network = `Mobile 5G (${speed} Mbps)`;
+        } else if (type === '3g') {
+            network = `Mobile 3G (${speed} Mbps)`;
+        } else {
+            network = `${type || 'ไม่ทราบ'} (${speed || '?'} Mbps)`;
+        }
     }
     
     showCustomPopup(
